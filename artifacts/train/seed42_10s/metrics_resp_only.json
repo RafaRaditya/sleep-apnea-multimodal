@@ -1,0 +1,100 @@
+{
+  "model": "resp_only",
+  "params": 74946,
+  "duration_s": 10,
+  "seed": 42,
+  "train_windows": 116199,
+  "train_subjects": 26,
+  "val_windows": 14407,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.5644,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5923,
+      "val_loss": 0.5644,
+      "lr": 0.000997,
+      "train_s": 291.8,
+      "val_s": 6.9
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5747,
+      "val_loss": 0.6368,
+      "lr": 0.000963,
+      "train_s": 295.3,
+      "val_s": 7.0
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5692,
+      "val_loss": 0.6196,
+      "lr": 0.000895,
+      "train_s": 293.9,
+      "val_s": 7.3
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5596,
+      "val_loss": 0.6165,
+      "lr": 0.000796,
+      "train_s": 296.5,
+      "val_s": 7.7
+    }
+  ],
+  "class_weights": [
+    0.6311,
+    2.4065
+  ],
+  "threshold": 0.14,
+  "threshold_val_f1": 0.1931,
+  "val_overall": {
+    "accuracy": 0.3863,
+    "sensitivity": 0.8397,
+    "specificity": 0.3429,
+    "precision": 0.1091,
+    "f1": 0.1931,
+    "roc_auc": 0.5907,
+    "tp": 1058,
+    "tn": 4508,
+    "fp": 8639,
+    "fn": 202,
+    "n": 14407,
+    "positives": 1260
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.2332,
+      "sensitivity": 0.87,
+      "specificity": 0.1113,
+      "precision": 0.1579,
+      "f1": 0.2673,
+      "roc_auc": 0.3768,
+      "tp": 629,
+      "tn": 420,
+      "fp": 3355,
+      "fn": 94,
+      "n": 4498,
+      "positives": 723
+    },
+    "UCDDB": {
+      "accuracy": 0.4558,
+      "sensitivity": 0.7989,
+      "specificity": 0.4362,
+      "precision": 0.0751,
+      "f1": 0.1373,
+      "roc_auc": 0.6845,
+      "tp": 429,
+      "tn": 4088,
+      "fp": 5284,
+      "fn": 108,
+      "n": 9909,
+      "positives": 537
+    }
+  },
+  "inference_ms_per_window": 0.51,
+  "checkpoint": "artifacts\\train\\seed42_10s\\checkpoints\\resp_only.pt",
+  "wall_minutes": 20.26
+}

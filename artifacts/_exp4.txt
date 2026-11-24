@@ -1,0 +1,44 @@
+notation structures among the UCDDB, MIT-BIH 
+Polysomnographic, and Apnea-ECG datasets. Dataset 
+availability and compatibility will be assessed before 
+harmonization and model development. The lack of 
+standardized access across sleep repositories limits 
+reproducibility and multi-dataset research [25], and 
+standardization of physiological data is a recognized 
+prerequisite for robust machine learning [26]. These 
+investigations are informed by previous studies on 
+physiological data harmonization and preprocessing [23]–
+[28]. 
+ 
+To operationalize Experiment 4, the harmonization 
+comparison will involve the following training and 
+evaluation configurations, subject to verification of signal 
+availability and annotation compatibility during the dataset 
+audit: (i) single-dataset training evaluated on held-out 
+subjects from the same dataset; (ii) combined-dataset training 
+evaluated on held-out subjects across all datasets; and, where 
+dataset compatibility permits, (iii) leave-one-dataset-out 
+evaluation, in which one dataset is entirely excluded from 
+training and used only for testing, following the logic of [27] 
+and [23]. 
+ 
+In terms of variables, the independent variables are the model 
+configuration (proposed, ECG-only, respiratory-only, simple 
+fusion), window duration (10 s vs. 30 s), and preprocessing 
+
+setting. The dependent variables are accuracy, sensitivity, 
+specificity, precision, F1-score, and the area under the 
+receiver operating characteristic curve (AUC). Controlled 
+variables are the subject-level data partitions, optimizer, 
+training budget, batch size, learning-rate tuning rule, labeling 
+strategy, evaluation protocol, and random seeds, which are 
+held constant across comparisons for a fair assessment. 
+Through this design, the study aims to provide an empirical 
+evaluation of the combined effects of harmonization, 
+preprocessing, temporal window reduction, and cross-
+attention fusion on sleep apnea detection. 
+ 
+3.2 Research Flow 
+ 
+The research begins with auditing three candidate datasets: 
+UCDDB, MIT-BIH PSG, and Apnea-ECG to examine 

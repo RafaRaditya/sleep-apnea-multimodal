@@ -1,0 +1,18 @@
+{
+  "stage": "7b",
+  "run_at": "2026-11-24 11:39:55",
+  "seeds": [
+    42,
+    1337,
+    2024
+  ],
+  "duration_s": 10,
+  "source": [
+    "artifacts/test/seed42_10s",
+    "artifacts/test/seed1337_10s",
+    "artifacts/test/seed2024_10s"
+  ],
+  "summary": "mean and sample SD (ddof=1) across seeds",
+  "n_boot": 2000,
+  "caution": "each seed has 6 test subjects; bootstrap intervals are wide and ignore within-subject autocorrelation, so they are optimistic in width"
+}

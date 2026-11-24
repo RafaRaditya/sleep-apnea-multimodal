@@ -1,0 +1,188 @@
+{
+  "42": {
+    "10s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.346391,
+          "n_values": 79898000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 2e-05,
+          "std": 5.043664,
+          "n_values": 19974500,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.168449,
+          "n_values": 36301000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -2.7e-05,
+          "std": 0.15918,
+          "n_values": 9075250,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    },
+    "30s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.346388,
+          "n_values": 79866000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 0.000573,
+          "std": 5.04091,
+          "n_values": 19966500,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.168449,
+          "n_values": 36267000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -3.3e-05,
+          "std": 0.159193,
+          "n_values": 9066750,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    }
+  },
+  "1337": {
+    "10s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": 1e-06,
+          "std": 0.367399,
+          "n_values": 80144000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 0.000149,
+          "std": 5.113444,
+          "n_values": 20036000,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": 0.0,
+          "std": 0.181933,
+          "n_values": 37810000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -1.5e-05,
+          "std": 0.337309,
+          "n_values": 9452500,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    },
+    "30s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": 0.0,
+          "std": 0.3674,
+          "n_values": 80112000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 0.000797,
+          "std": 5.110797,
+          "n_values": 20028000,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": 0.0,
+          "std": 0.181947,
+          "n_values": 37770000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -1.9e-05,
+          "std": 0.337427,
+          "n_values": 9442500,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    }
+  },
+  "2024": {
+    "10s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.347173,
+          "n_values": 79868000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 2.4e-05,
+          "std": 5.146217,
+          "n_values": 19967000,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": 0.0,
+          "std": 0.175216,
+          "n_values": 36901000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -2.9e-05,
+          "std": 0.189993,
+          "n_values": 9225250,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    },
+    "30s": {
+      "UCDDB": {
+        "ecg": {
+          "mean": -0.0,
+          "std": 0.347171,
+          "n_values": 79836000,
+          "dataset": "UCDDB"
+        },
+        "resp": {
+          "mean": 0.00061,
+          "std": 5.143305,
+          "n_values": 19959000,
+          "dataset": "UCDDB"
+        }
+      },
+      "MIT-BIH_PSG": {
+        "ecg": {
+          "mean": 0.0,
+          "std": 0.175218,
+          "n_values": 36867000,
+          "dataset": "MIT-BIH_PSG"
+        },
+        "resp": {
+          "mean": -3e-05,
+          "std": 0.189997,
+          "n_values": 9216750,
+          "dataset": "MIT-BIH_PSG"
+        }
+      }
+    }
+  }
+}

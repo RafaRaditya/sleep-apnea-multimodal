@@ -1,0 +1,3 @@
+dataset,accuracy,sensitivity,specificity,precision,f1,roc_auc,tp,tn,fp,fn,n,positives
+MIT-BIH_PSG,0.6121,0.3458,0.7394,0.3881,0.3657,0.579,444,1986,700,840,3970,1284
+UCDDB,0.4787,0.9043,0.4431,0.1195,0.2111,0.7377,699,4099,5151,74,10023,773

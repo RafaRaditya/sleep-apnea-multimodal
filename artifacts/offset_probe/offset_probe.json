@@ -1,0 +1,10 @@
+{
+  "stage": "6c",
+  "seed": 42,
+  "duration_s": 10,
+  "status": "post-hoc diagnostic, no training, must not be used to select a model",
+  "exposure": "per-record offset AFTER dataset-level z-score; the model receives this",
+  "record_count": 39,
+  "caution": "n is the number of records (~14 with scores). These correlations are leads, not conclusions, and multiple features are tested without correction.",
+  "next_step_if_confirmed": "refit normalization per record inside the training split, then retrain all models before touching test again"
+}

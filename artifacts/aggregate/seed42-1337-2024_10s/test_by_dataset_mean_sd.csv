@@ -1,0 +1,9 @@
+model,dataset,roc_auc,roc_auc_sd,f1,f1_sd
+ecg_only,MIT-BIH_PSG,0.4409,0.058,0.3446,0.1011
+ecg_only,UCDDB,0.5419,0.114,0.1829,0.0393
+proposed,MIT-BIH_PSG,0.4567,0.1062,0.2769,0.078
+proposed,UCDDB,0.7634,0.0359,0.3285,0.1316
+resp_only,MIT-BIH_PSG,0.6656,0.0497,0.5141,0.0344
+resp_only,UCDDB,0.7449,0.0294,0.3055,0.119
+simple_fusion,MIT-BIH_PSG,0.4595,0.0447,0.3154,0.0792
+simple_fusion,UCDDB,0.702,0.0077,0.2842,0.0971

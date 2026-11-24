@@ -1,0 +1,22 @@
+{
+  "stage": 5,
+  "frozen_at": "2026-11-20 15:17:01",
+  "seed": 42,
+  "duration_s": 10,
+  "rule": "checkpoint, decision threshold, and hyperparameters are fixed before any test prediction",
+  "test_split_read": false,
+  "models": {
+    "proposed": {
+      "checkpoint": "artifacts\\train\\_smoke\\checkpoints\\proposed.pt",
+      "threshold": 0.35,
+      "best_epoch": 1,
+      "best_val_loss": 0.5946
+    },
+    "ecg_only": {
+      "checkpoint": "artifacts\\train\\_smoke\\checkpoints\\ecg_only.pt",
+      "threshold": 0.5,
+      "best_epoch": 1,
+      "best_val_loss": 0.674
+    }
+  }
+}

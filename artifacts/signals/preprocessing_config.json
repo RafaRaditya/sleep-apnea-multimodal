@@ -1,0 +1,20 @@
+{
+  "ecg": {
+    "bandpass_hz": [
+      0.5,
+      40.0
+    ],
+    "order": 4,
+    "zero_phase": true,
+    "notch": "detected mains frequency, Q=30",
+    "target_fs_hz": 100.0
+  },
+  "resp": {
+    "lowpass_hz": 0.7,
+    "order": 4,
+    "detrend": "linear",
+    "target_fs_hz": 25.0
+  },
+  "normalization": "not applied here; training-only z-score at window materialisation",
+  "status": "provisional"
+}

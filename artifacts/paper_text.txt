@@ -1,0 +1,1108 @@
+XXX-X-XXXX-XXXX-X/XX/$XX.00 ©20XX IEEE 
+Multimodal Sleep Apnea Detection Using ECG and 
+Respiratory Signals with Multi-Dataset 
+Harmonization and Reduced Temporal Windowing 
+ 
+Muhammad Fariz Rayhan Ramadhan  
+School of Computer Science 
+BINUS University 
+Bekasi, Indonesia 
+muhammad.ramadhan113@binus.ac.id
+Muhammad Fatih Rafa Raditya Hasan 
+School of Computer Science 
+BINUS University 
+Bekasi, Indonesia 
+muhammad.hasan002@binus.ac.id 
+Raden Reyski Azka Rakhmadya  
+School of Computer Science 
+BINUS University 
+Bekasi, Indonesia 
+raden.rakhmadya@binus.ac.id 
+I. INTRODUCTION 
+Sleep apnea is a sleep disorder characterized by repeated 
+pauses or reductions in airflow during sleep, potentially 
+disrupting breathing patterns and sleep quality. Its detection 
+can utilize physiological signals, including electrocardiogram 
+(ECG) and respiratory signals. ECG captures cardiac 
+electrical activity that may reflect physiological changes 
+associated with apnea, while respiratory signals provide 
+information about breathing patterns. Previous studies have 
+explored deep learning approaches for obstructive sleep apnea 
+detection using ECG [1], while incorporating respiratory 
+effort has been shown to improve ECG-based assessment of 
+sleep-disordered breathing [2]. These findings highlight the 
+potential of combining ECG and respiratory signals for 
+multimodal sleep apnea detection. 
+However, developing sleep apnea detection models across 
+multiple datasets presents challenges due to differences in 
+sampling rates, signal formats, recording quality, annotation 
+structures, and channel availability. These inconsistencies 
+may 
+affect 
+model 
+training 
+and 
+evaluation. 
+Signal 
+preprocessing, including filtering, amplitude normalization, 
+and clipping, may also influence the physiological 
+information learned by the model. Furthermore, temporal 
+window duration is an important consideration. A 30-second 
+window preserves longer temporal context, whereas a 10-
+second window enables analysis of shorter segments. 
+However, reducing window duration may alter the 
+information available for classification, requiring systematic 
+evaluation of its impact on detection performance. 
+Previous studies have investigated CNN-Transformer 
+architectures for ECG-based sleep apnea detection [1], 
+multichannel fusion networks [3], and multimodal multiscale 
+Transformer models for sleep apnea detection and severity 
+assessment [4]. Research has also explored the role of 
+temporal context in ECG-based detection [5]. Building on 
+these approaches, this study focuses on the combined 
+evaluation of multi-dataset harmonization, preprocessing 
+strategies, and reduced temporal windowing within a 
+multimodal framework. Specifically, a Multimodal Cross-
+Attention Transformer will be evaluated for integrating ECG 
+and respiratory signals and compared with single-modality 
+models and simple fusion approaches. 
+This study aims to develop and evaluate a multimodal 
+sleep apnea detection model using ECG and respiratory 
+signals through multi-dataset harmonization and reduced 
+temporal 
+windowing. 
+The 
+UCDDB, 
+MIT-BIH 
+Polysomnographic, and Apnea-ECG datasets will be assessed 
+for signal and annotation availability before harmonization. 
+The experiments will examine preprocessing strategies, 
+compare 30-second and 10-second windows, and evaluate the 
+proposed model against ECG-only, respiratory-only, and 
+simple fusion baselines. Performance will be measured using 
+accuracy, sensitivity, specificity, precision, F1-score, and area 
+under the curve (AUC). The expected contribution is an 
+empirical assessment of how dataset harmonization, 
+preprocessing, temporal window duration, and multimodal 
+integration influence sleep apnea detection performance. 
+II. RELATED WORK 
+A. ECG-Based Sleep Apnea Detection 
+Electrocardiography (ECG) has been investigated as a 
+source of physiological information for automated sleep apnea 
+detection. Liu et al. proposed a CNN-Transformer architecture 
+using single-channel ECG signals and incorporated adjacent 
+temporal epochs into the input representation [1]. Thompson 
+et al. investigated a one-dimensional convolutional neural 
+network using features extracted from segmented ECG time 
+series [6]. Other studies have examined ECG-based detection 
+using electrocardiographic signals [7], deep learning 
+classification [8], hybrid CNN-BiLSTM architectures [9], and 
+end-to-end learning from raw ECG recordings [10]. 
+Machine learning and deep learning approaches have also 
+been investigated using single-lead ECG and ECG-derived 
+features. Islam et al. explored sleep apnea detection through 
+HRV and SpO2-related analysis of single-lead ECG signals 
+[11], while Kumar et al. investigated a 1D-CNN-based 
+approach [12]. Duan et al. proposed a multi-context-scale 
+CNN-LSTM method combined with contrastive learning for 
+ECG-based sleep apnea detection [13]. Collectively, these 
+studies establish a foundation for automated ECG-based 
+detection. However, the use of ECG alone may limit the direct 
+availability 
+of 
+respiratory 
+information, 
+motivating 
+investigation of complementary physiological signals. 
+B. Multimodal Physiological Signal FusioN 
+Integrating complementary physiological signals is one 
+strategy for incorporating information that may not be fully 
+represented by a single modality. Xie et al. investigated the 
+use of respiratory effort to improve an ECG-based deep 
+learning algorithm for assessing sleep-disordered breathing 
+[2]. Zakizadeh Irdmousa et al. proposed ApneaTraNet, a deep 
+fusion model for sleep apnea-hypopnea detection using ECG 
+signals [14]. Fayyaz et al. examined multimodal sleep apnea 
+detection under missing or noisy modality conditions [15]. 
+These studies motivate further investigation of multimodal 
+
+learning while highlighting the importance of considering the 
+characteristics and availability of the input signals. 
+Several 
+studies 
+have 
+explored 
+different 
+fusion 
+architectures. Jiao et al. investigated deep attention networks 
+with multi-temporal information fusion for sleep apnea 
+detection [16]. Wang et al. proposed heterogeneous graph 
+fusion for automated obstructive sleep apnea-hypopnea 
+syndrome diagnosis [17], while Lv et al. developed a 
+multichannel fusion network for sleep apnea syndrome 
+detection [3]. Hemrajani et al. investigated integrating ECG, 
+nasal airflow, and abdominal respiratory effort through 
+SleepNet [18]. Zhang et al. proposed a multimodal signal-
+fusion multiscale Transformer model for sleep apnea 
+detection and severity assessment [4]. Zhu et al. examined the 
+fusion of ECG and biometric data for obstructive sleep apnea-
+hypopnea syndrome detection [19]. 
+Related work also includes multimodal representation 
+learning for broader sleep analysis. Lee et al. proposed a 
+multimodal hybrid self-supervised learning framework using 
+polysomnography signals [20]. ElKomy et al. studied 
+differential privacy in several neural network architectures for 
+heartbeat detection from multimodal data [21]. Lin et al. 
+investigated temporal fusion of ECG and PPG for continuous 
+respiratory rate monitoring [22]. Although these studies differ 
+in their tasks and input modalities, they provide 
+methodological 
+context 
+for 
+learning 
+from 
+multiple 
+physiological data sources. 
+The present study investigates cross-attention for 
+integrating ECG and respiratory representations. Cross-
+attention allows one modality’s representation to incorporate 
+information from another modality. Its potential benefit for 
+sleep apnea detection must be evaluated against appropriate 
+fusion baselines; it should not be assumed to outperform other 
+fusion strategies without experimental evidence. 
+C. Multi-Dataset Harmonization and Preprocessing 
+Training across multiple datasets can expose a model to a 
+broader range of physiological recordings, but differences in 
+acquisition 
+protocols, 
+sampling 
+frequencies, 
+channel 
+configurations, 
+signal 
+distributions, 
+and 
+annotation 
+conventions may complicate model development. Grieger et 
+al. introduced AnySleep, a channel-agnostic deep learning 
+system for high-resolution sleep staging in multicenter cohorts 
+[23]. Penzel discussed the research value of recorded sleep 
+data for improving the understanding of sleep [24], while 
+Ehrlich et al. described SleepPhases as a workflow framework 
+for sleep data harmonization, analysis, and machine learning 
+[25]. 
+Physiological data harmonization has also been studied in 
+other clinical contexts. Moberg et al. discussed challenges and 
+potential directions for harmonizing physiological data in 
+neurocritical care [26]. Kim and Shin investigated unified 
+multi-dataset training for ECG classification generalization 
+[27]. These studies provide relevant context for addressing 
+dataset heterogeneity, although their findings should not be 
+interpreted as direct evidence that harmonization alone 
+improves sleep apnea detection. 
+Preprocessing is another important consideration in 
+physiological signal analysis. Jia et al. reviewed preprocessing 
+and denoising techniques for ECG and magnetocardiography 
+signals [28]. Ancillon et al. reviewed machine learning 
+approaches for anxiety detection using biosignals, providing 
+broader context for physiological signal processing and 
+classification [29]. The appropriate preprocessing operations 
+may depend on the signal characteristics and the task; 
+therefore, their effects should be assessed within the intended 
+experimental setting. 
+In this study, ECG and respiratory signals are processed 
+using a common harmonization pipeline before model 
+training. Filtering, normalization, and amplitude clipping are 
+treated as separate components for evaluation. This enables 
+the experiments to examine whether each operation 
+contributes to performance, rather than attributing any 
+observed improvement to the entire preprocessing pipeline 
+without further analysis. 
+D. Temporal Windowing for Sleep Apnea Detection 
+Temporal windowing determines how much signal 
+information is provided to a model for each prediction. The 
+choice of window duration can affect the temporal context 
+available to the model and the amount of data processed per 
+prediction. Previous work has examined temporal context in 
+ECG-based sleep apnea detection [1], [13]. Yamane et al. 
+investigated the use of appropriate time windows for single-
+lead ECG-based screening, considering ECG information 
+before and after the target apnea occurrence [30]. Ryu et al. 
+investigated multi-window temporal context under limited 
+apnea-label availability [5]. 
+These studies support the importance of evaluating 
+temporal context, but they do not establish a universal optimal 
+window duration for every dataset, model, or prediction task. 
+Shorter windows may reduce the amount of input data 
+processed for each prediction, but may also provide less 
+temporal information. Longer windows provide more context 
+but increase the input duration. The practical trade-off 
+depends on the experimental setup and the target application. 
+Accordingly, this study compares 10-second and 30-
+second windows within a multimodal ECG-respiratory 
+detection pipeline. Both configurations should be evaluated 
+using consistent data partitions, preprocessing procedures, 
+model settings, and performance metrics. The resulting 
+comparison can then establish whether window duration 
+influences detection performance in the proposed setting. 
+E. Research Gap and Positioning of the Proposed Study 
+The reviewed literature covers ECG-based sleep apnea 
+detection, 
+multimodal 
+fusion, 
+physiological 
+data 
+harmonization, preprocessing, and temporal modeling. Based 
+on this literature, the proposed study focuses on four 
+methodological aspects. 
+First, multi-dataset harmonization of ECG and respiratory 
+signals is investigated because datasets can differ in recording 
+conditions, 
+signal 
+representations, 
+and 
+annotation 
+conventions. Prior studies have addressed sleep-data 
+workflows, physiological-data harmonization, and unified 
+multi-dataset ECG training [23], [25]–[27]. The present study 
+focuses on applying harmonization to ECG and respiratory 
+inputs within a common sleep apnea detection pipeline. 
+Second, reduced temporal windowing is investigated 
+through a direct comparison of 10-second and 30-second 
+windows. Previous studies have explored temporal context 
+and window selection in ECG-based sleep apnea detection [1], 
+[13], [30], [5]. However, the relevance of these durations to 
+the proposed multimodal pipeline must be established 
+
+experimentally rather than inferred from studies using 
+different temporal configurations. 
+Third, cross-attention-based ECG-respiratory fusion is 
+evaluated as a strategy for learning interactions between 
+modalities. Existing work has explored attention-based fusion, 
+multichannel networks, heterogeneous graph fusion, and 
+multimodal Transformer architectures [16]–[19]. The 
+proposed contribution is therefore an empirical evaluation of 
+cross-attention 
+in 
+combination 
+with 
+the 
+selected 
+harmonization and windowing strategy, rather than a claim 
+that multimodal fusion itself has not been studied. 
+Fourth, the individual contribution of preprocessing 
+components is examined through ablation experiments. Prior 
+research has reviewed physiological signal preprocessing and 
+denoising techniques [28]. This study evaluates filtering, 
+normalization, and amplitude clipping separately, where 
+feasible, to determine how each operation affects detection 
+performance. 
+In summary, the proposed study brings together multi-
+dataset harmonization, cross-attention-based ECG-respiratory 
+fusion, a comparison of 10-second and 30-second temporal 
+windows, and preprocessing ablation within one experimental 
+framework. Controlled experiments will be used to evaluate 
+the individual and combined contributions of these design 
+choices to multimodal sleep apnea detection. 
+ 
+ 
+III. RESEARCH METHODOLOGY 
+3.1 Research Design 
+  This study adopts a quantitative experimental research 
+design to develop and evaluate a multimodal sleep apnea 
+detection model using electrocardiogram (ECG) and 
+respiratory signals. The experimental approach is selected to 
+systematically investigate how multi-dataset harmonization, 
+preprocessing strategies, temporal window duration, and 
+multimodal fusion affect detection performance. Rather than 
+assuming that a particular configuration is superior, 
+controlled experiments are used to empirically assess the 
+contribution of each methodological component. The design 
+follows the logic of recent ECG-based apnea studies, which 
+compare model variants under identical data partitions and 
+report the effect of individual design choices [1], [5], [9]. 
+ 
+  The research is structured as a comparative experimental 
+study combined with ablation experiments, organized into 
+four experimental groups. Each experiment is guided by a 
+specific research question, as summarized below. 
+ 
+Experiment 1: modality and fusion comparison. The 
+proposed Multimodal Cross-Attention Transformer is 
+compared against ECG-only, respiratory-only, and simple 
+fusion baselines. This comparison is motivated by evidence 
+that adding respiratory information to ECG improves 
+detection. Handcrafted ECG and respiratory features 
+outperformed single-signal approaches [31], and adding 
+thoracic movement to ECG raised apnea event detection 
+accuracy from \(84.1\%\) to \(89.0\%\) [32]. Directly 
+measured respiratory effort has also been shown to be 
+superior to ECG-derived respiration [2], and combining 
+cardiac with audio signals can further improve assessment 
+[33]. Several fusion strategies have been reported, including 
+attention-based channel fusion [3], graph-based fusion [17], 
+multimodal fusion with airflow and abdominal effort [18], 
+ECG-SpO2 fusion [4], and ECG-biometric fusion [19]. These 
+studies motivate the question of whether cross-attention 
+provides a measurable difference over single-modality and 
+conventional fusion approaches [16]. 
+ 
+Experiment 2: temporal window duration. The influence of 
+temporal context is examined by comparing 10-second and 
+30-second segments under identical conditions. Previous 
+work shows that adjacent context and window length matter: 
+a 3-minute input improved a CNN-Transformer [1], temporal 
+context improved F1-scores under limited labels [5], and a 
+few minutes before and after an event improved estimation 
+[30]. The wavelet-based study in [34] also considered the 
+effect of input time window explicitly, and window size 
+affected both accuracy and speed in [6]. At the same time, 
+short segments of 10 s [10] and 5 s [14] have reported high 
+accuracy. This experiment therefore tests whether reduced 
+temporal windowing can maintain or improve performance 
+while reducing the amount of signal processed per prediction. 
+ 
+Experiment 3: preprocessing ablation. Filtering, 
+normalization, and amplitude clipping are removed or added 
+one at a time to determine their individual contributions. This 
+is relevant because raw single-lead ECG with minimal 
+preprocessing can already achieve strong results [35], while 
+respiratory and oximetry pipelines usually rely on careful 
+signal conditioning [36]. ECG denoising is also known to be 
+an important, noise-type-dependent step [28]. 
+ 
+Experiment 
+4: 
+multi-dataset 
+harmonization. 
+Harmonization 
+addresses 
+differences 
+in 
+sampling 
+frequencies, signal representations, recording conditions, and 
+annotation structures among the UCDDB, MIT-BIH 
+Polysomnographic, and Apnea-ECG datasets. Dataset 
+availability and compatibility will be assessed before 
+harmonization and model development. The lack of 
+standardized access across sleep repositories limits 
+reproducibility and multi-dataset research [25], and 
+standardization of physiological data is a recognized 
+prerequisite for robust machine learning [26]. These 
+investigations are informed by previous studies on 
+physiological data harmonization and preprocessing [23]–
+[28]. 
+ 
+To operationalize Experiment 4, the harmonization 
+comparison will involve the following training and 
+evaluation configurations, subject to verification of signal 
+availability and annotation compatibility during the dataset 
+audit: (i) single-dataset training evaluated on held-out 
+subjects from the same dataset; (ii) combined-dataset training 
+evaluated on held-out subjects across all datasets; and, where 
+dataset compatibility permits, (iii) leave-one-dataset-out 
+evaluation, in which one dataset is entirely excluded from 
+training and used only for testing, following the logic of [27] 
+and [23]. 
+ 
+In terms of variables, the independent variables are the model 
+configuration (proposed, ECG-only, respiratory-only, simple 
+fusion), window duration (10 s vs. 30 s), and preprocessing 
+
+setting. The dependent variables are accuracy, sensitivity, 
+specificity, precision, F1-score, and the area under the 
+receiver operating characteristic curve (AUC). Controlled 
+variables are the subject-level data partitions, optimizer, 
+training budget, batch size, learning-rate tuning rule, labeling 
+strategy, evaluation protocol, and random seeds, which are 
+held constant across comparisons for a fair assessment. 
+Through this design, the study aims to provide an empirical 
+evaluation of the combined effects of harmonization, 
+preprocessing, temporal window reduction, and cross-
+attention fusion on sleep apnea detection. 
+ 
+3.2 Research Flow 
+ 
+The research begins with auditing three candidate datasets: 
+UCDDB, MIT-BIH PSG, and Apnea-ECG to examine 
+recording 
+eligibility, 
+subject 
+information, 
+channel 
+availability, and annotations. Subsequently, the experimental 
+protocol is defined, including target labels, channel 
+configurations, and ablation settings. The data are then 
+partitioned at the subject level into training, validation, and 
+testing sets to prevent subject overlap. 
+ 
+Next, data harmonization and preprocessing are performed, 
+followed by temporal windowing using 10-second and 30-
+second configurations with corresponding label assignments. 
+The training and validation data are subsequently used to 
+train and tune the proposed model and three baseline models. 
+During this phase, the models are optimized through weight 
+updates, while validation is utilized for setting selections, 
+checkpoints, and threshold tuning. For the proposed model, 
+this process involves training the ECG and respiratory 
+encoder Transformers, the cross-attention fusion mechanism, 
+and the pooling and classification layers. Concurrently, the 
+baseline models consisting of ECG-only, respiration-only, 
+and simple fusion configurations are trained and validated 
+under the same conditions. 
+ 
+After the best model for each configuration is selected and 
+the configurations are finalized, the models are evaluated on 
+the held-out test subjects. These frozen models are used for 
+test-set prediction to ensure an unbiased evaluation. Finally, 
+classification metrics, including accuracy, sensitivity, 
+specificity, precision, F1-score, and ROC-AUC, are analyzed 
+to compare model performance. Where reference annotations 
+support it, an optional event or AHI analysis is also 
+performed, leading to the comparative analysis and 
+conclusions. 
+ 
+3.3 Dataset 
+The datasets used in this study are obtained from PhysioNet, 
+a publicly accessible repository of physiological signal 
+databases for biomedical research. Three publicly available 
+databases are considered: UCDDB (University College 
+Dublin Sleep Apnea Database), MIT-BIH Polysomnographic 
+Database (MIT-BIH PSG), and Apnea-ECG Database. These 
+databases contain physiological recordings relevant to sleep 
+apnea research, particularly electrocardiogram (ECG) and 
+respiratory-related signals. The combination of these datasets 
+is intended to provide a broader source of physiological data 
+for developing and evaluating the proposed multimodal sleep 
+apnea detection approach. 
+ 
+Because the proposed model requires both ECG and 
+respiratory inputs, the availability of these modalities in each 
+dataset is not assumed but will be verified through a dataset 
+audit. The audit will examine recording eligibility, subject 
+information, channel availability, annotation structure, and 
+signal quality. The following table serves as an audit template 
+and will be completed prior to harmonization and model 
+development. 
+3.4 Proposed Method 
+3.4.1 Method Overview 
+The proposed method detects sleep apnea by 
+integrating ECG and respiratory signals in a multimodal deep 
+learning pipeline. The pipeline has six stages: (1) multi-
+dataset harmonization, (2) preprocessing, (3) reduced 
+temporal windowing, (4) modality-specific Transformer 
+encoding, (5) cross-attention fusion, and (6) pooling and 
+window-level classification. Each window is classified as 
+sleep apnea or normal. Unlike approaches that convert signals 
+into time-frequency images before classification [41], [42], 
+the proposed model operates directly on one-dimensional 
+signal sequences, which keeps the pipeline simple and avoids 
+a separate image-construction step. 
+3.4.2  Multi Dataset Harmonization 
+1. Channel mapping. ECG and respiratory channels are 
+mapped to a unified naming scheme, so each recording 
+provides an ECG channel and a respiratory channel. 
+Respiratory sources differ in reliability and information 
+content (airflow, thoracic effort, abdominal effort) [37], and 
+a single effort signal can already support respiratory event 
+scoring [38]. 
+2. Resampling. Every signal is resampled to a modality-
+specific common rate after anti-aliasing filtering, so all 
+windows of a given duration have identical lengths in 
+samples. The target sampling rate for each modality will be 
+determined from the dataset audit and reported before model 
+development; ECG and respiratory signals are not required to 
+share the same rate. 
+
+3. Label unification. Event annotations are converted into a 
+binary label (apnea vs. normal). Datasets with per-minute 
+annotations propagate the label to the windows inside that 
+minute. Datasets with event-level annotations use an overlap 
+rule (Section 3.4.4). The difference in temporal precision 
+between 
+per-minute 
+and 
+event-level 
+annotations 
+is 
+acknowledged and will be reported as a potential source of 
+label noise. 
+4. Subject tracking. Each window keeps a subject identifier 
+and a dataset identifier for subject-level partitioning. Only de-
+identified public data are used, which respects the privacy 
+concerns raised for health data in machine learning [21]. 
+ 
+Training on unified multi-dataset data is expected to reduce 
+dataset-specific bias, which was shown to cause performance 
+degradation on unseen data [27], and heterogeneous multi-
+center data support more general models [23], [24]. 
+3.4.3 Signal Preprocessing 
+Three preprocessing operations are applied and 
+later examined by ablation. 
+ 
+- Filtering. ECG is band-pass filtered, with a notch filter 
+where power-line interference is present, to suppress baseline 
+wander, muscle noise, and mains interference [28], [7], [12]. 
+Respiratory signals are low-pass filtered and detrended. 
+Alternative decomposition-based spectral denoising exists, 
+such as EEMD-ICA [39], but fixed digital filters are preferred 
+here for their low computational cost. The specific filter cut-
+offs and notch frequency will be determined during the 
+dataset audit and preliminary experiments, and reported in the 
+final implementation. 
+- Normalization. Each recording is z-score normalized per 
+channel, 
+  
+ 
+𝑥′=𝑥−𝜇
+𝜎
+ 
+where x is the original signal value, is the mean, is the 
+standard deviation, and x' is the normalized value. To avoid 
+data leakage, normalization statistics are computed from the 
+training data only and applied consistently to the validation 
+and test sets. 
+- Amplitude clipping. After normalization, values are clipped 
+to a fixed range [-c,+c] (in units of standard deviation) to limit 
+the influence of motion artifacts and spikes. The value of c 
+will be fixed during preliminary experiments and reported. 
+3.4.4 Reduced Temporal Windowing 
+Signals are segmented into fixed-length windows of 
+L{10s,30s}, where the 10-second configuration is the main 
+reduced-window setting and the 30-second configuration is 
+the longer comparison. Longer contexts such as 3-minute 
+inputs are known to help [1], [30], but they increase input 
+size, memory, and latency. The reduced-window design tests 
+whether short windows, as used in [10] and [14], are 
+sufficient when two modalities are available. 
+ 
+For training, windows are extracted with overlap, since 
+overlapping slicing combined with sample weighting gave 
+the best segment-level detection in [40]. For validation and 
+testing, windows do not overlap, so every portion of a 
+recording is evaluated once. This asymmetry is applied 
+consistently across all configurations and is intended to 
+increase training-sample diversity while keeping evaluation 
+deterministic and comparable. When event-level annotations 
+are available, a window is labeled apnea if at least \(50\%\) of 
+its duration overlaps an annotated apnea or hypopnea event, 
+and normal otherwise. Both configurations use the same 
+labeling rule and subject-level splits, so any difference in 
+performance is attributable to window length. 
+ 
+3.4.5 Modality-Specific Transformer Encoder 
+  Each modality is processed by a dedicated Transformer 
+encoder, so that the different statistical properties of ECG and 
+respiration are modeled separately. A signal window xRLf is 
+first divided into non-overlapping patches of P samples, 
+which are linearly projected (equivalently, by a 1D 
+convolution with kernel size and stride P) into d-dimensional 
+tokens: 
+𝐻0 = [𝑥1𝑊; 𝑥2𝑊; … ; 𝑥𝑛𝑊] + 𝐸𝑝𝑜𝑠, 𝑁= 𝐿. 𝐹
+𝑃 
+ 
+  where L is the window duration, f is the sampling frequency, 
+P is the patch size, d is the embedding dimension, N is the 
+number of tokens, 𝑊  ∈ ℝ𝑝×𝑑 is the projection matrix, and 
+Epos is a learnable positional embedding. The window length 
+in samples is chosen so that Lf is divisible by P; if this is not 
+possible for a given configuration, padding or truncation is 
+applied and reported. 
+ 
+  Each encoder stacks M layers, each consisting of multi-head 
+self-attention (MHSA), a position-wise feed-forward 
+network 
+(FFN), 
+layer 
+normalization, 
+and 
+residual 
+connections: 
+𝐴𝑡𝑡𝑒𝑛𝑡𝑖𝑜𝑛(𝑄, 𝐾, 𝑉) = 𝑠𝑜𝑓𝑡max (𝑄𝐾𝑇
+√𝑑𝑘
+) 𝑉, 
+ 
+𝐻′ = 𝐿𝑁(𝐻+ 𝑀𝐻𝑆𝐴(𝐻)),  
+𝐻𝑜𝑢𝑡= 𝐿𝑁(𝐻′ + 𝐹𝐹𝑁(𝐻′)) 
+ 
+  Self-attention lets every token attend to the whole window, 
+which models global temporal context [1], [13]. Transformer 
+components have been used for ECG-based apnea detection 
+with strong results [14], [4], and also in large multimodal 
+PSG models [20]. In contrast to multi-scale CNN designs 
+with squeeze-and-excitation attention [43] or recurrent 
+spatio-temporal models [44], the  Transformer encoder here 
+captures long-range dependencies within a window in a 
+single mechanism. Two encoders (ECG and respiration) 
+produce the sequences HE and HR. 
+ 
+3.4.6 Cross-Attention Fusion 
+To capture complementary information between modalities, 
+a cross-attention block lets one modality query the other. For 
+ECG attending to respiration: 
+𝑄= 𝐻𝐸𝑊𝑄, 𝐾= 𝐻𝑅𝑊𝐾, 𝑉= 𝐻𝑅𝑊𝑉 
+𝐻
+𝐸←𝑅=𝑠𝑜𝑓𝑡max(𝑄𝐾𝑇
+√𝑑𝑘
+)𝑉. 
+ 
+ 
+  A symmetric block produces HRE, with respiration as the 
+query. Each block is followed by a residual connection, layer 
+normalization, and an FFN, and multi-head attention is used. 
+The principle is that cardiac fluctuations and respiratory 
+effort are physiologically coupled during apneic events, and 
+the attention weights indicate which temporal positions of 
+
+one signal are informative for the other. This builds on prior 
+evidence that combining ECG with respiratory or other 
+signals improves detection [15], [16], [17], [18], [19], and 
+that fusing complementary signals is beneficial more 
+generally [3], [8], [29]. Modality dropout can be used during 
+training, randomly masking one modality, so that the network 
+does not depend on a single branch and stays robust to 
+missing or noisy channels, a problem addressed explicitly in 
+[15]. 
+ 
+3.4.7 Pooling and Clsasification 
+  The fused sequences are aggregated by pooling over the 
+token dimension into vectors zE and zR. Mean pooling is 
+adopted as the primary pooling method for its simplicity and 
+low parameter count; attention pooling will be considered 
+only as a secondary hyperparameter if preliminary results 
+indicate that it materially improves validation performance. 
+The pooled vectors are concatenated and passed to a 
+classification head (dropout, a hidden fully connected layer 
+with nonlinearity, and a 2-unit output layer) with softmax: 
+𝑦= 𝑠𝑜𝑓𝑡max(𝑊𝑐[𝑧𝐸; 𝑧𝑅] + 𝑏𝑐) 
+ 
+3.4.8 Baseline Models 
+  Three baselines share the same encoder design, training 
+budget, and splits: 
+ 
+1. ECG-only: the ECG Transformer encoder with pooling and 
+classifier. 
+2. Respiration-only: the respiratory Transformer encoder 
+with pooling and classifier. 
+3. Simple fusion: both encoders with plain concatenation of 
+the pooled features and no cross-attention. 
+ 
+  Differences between the proposed model and the simple 
+fusion baseline therefore isolate the effect of cross-attention. 
+Classical references such as SVM, random forest, and LSTM 
+[11] are noted in the related work, but are not part of the 
+controlled comparison. 
+ 
+3.4.9 Training Procedure 
+  Windows labeled apnea are the minority class, so class 
+imbalance is handled with a class-weighted cross-entropy 
+loss, which is consistent with class and sample weighting 
+strategies in [40] and with the sensitivity of results to 
+balanced vs. imbalanced settings reported in [36]: 
+𝐿= −∑𝑦𝑖,𝑐
+𝑖𝑒𝑐𝑤
+∑
+. log(𝑦𝑖,𝑐) 
+ 
+  where wc is the class weight for class c, yi,c is the ground-
+truth label, and yi,c is the predicted probability. Focal loss 
+will be considered only as an additional experiment if the 
+class-weighted cross-entropy baseline proves insufficient on 
+the validation set; it is not part of the primary training 
+configuration. 
+ 
+ Models are optimized with AdamW, a learning-rate schedule 
+with warm-up, and early stopping on validation loss. The 
+batch size, learning rate, epoch budget, early-stopping 
+criteria, and model-selection criteria will be fixed through 
+preliminary experiments and hyperparameter tuning on the 
+validation set, and reported in the final implementation. 
+Hyperparameters (patch size, d, number of layers and heads, 
+dropout, learning rate) are tuned using only the validation set, 
+and the decision threshold is selected on the validation set 
+(e.g., maximizing F1-score) before being frozen. 
+ 
+3.5 Evaluation Metrics and Validation 
+3.5.1 Window-Level Metrics 
+  All models are evaluated on held-out test 
+subjects using the confusion-matrix counts TP, 
+TN, FP, and FN of the apnea class: 
+𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦=
+𝑇𝑃+ 𝑇𝑁
+𝑇𝑃+ 𝑇𝑁+ 𝐹𝑃+ 𝐹𝑁 
+ 
+𝑆𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦 (𝑅𝑒𝑐𝑎𝑙𝑙) =
+𝑇𝑃
+𝑇𝑃+ 𝐹𝑁 
+ 
+𝑆𝑝𝑒𝑐𝑖𝑓𝑖𝑐𝑖𝑡𝑦=
+𝑇𝑁
+𝑇𝑁+ 𝐹𝑃, 
+ 
+Pr𝑒𝑐𝑖𝑠𝑖𝑜𝑛=
+𝑇𝑃
+𝑇𝑃+ 𝐹𝑃 
+ 
+𝐹1𝑠𝑐𝑜𝑟𝑒= 2 ∙Pr 𝑒𝑐𝑖𝑠𝑖𝑜𝑛∙𝑆𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦
+Pr𝑒𝑐𝑖𝑠𝑖𝑜𝑛+ 𝑆𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦 
+ 
+𝐴𝑈𝐶= 𝑎𝑟𝑒𝑎 𝑢𝑛𝑑𝑒𝑟 𝑡ℎ𝑒 𝑅𝑂𝐶 𝑐𝑢𝑟𝑣𝑒  
+ 
+(𝑠𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦 𝑣𝑠. 1 −𝑠𝑝𝑒𝑐𝑖𝑓𝑖𝑐𝑖𝑡𝑦 𝑎𝑐𝑟𝑜𝑠𝑠 𝑡ℎ𝑟𝑒𝑠ℎ𝑜𝑙𝑑𝑠) 
+ 
+  Accuracy 
+measures 
+overall 
+correctness, 
+sensitivity 
+measures the ability to identify apnea windows, and 
+specificity measures the ability to identify normal windows. 
+The F1-score balances precision and sensitivity, which 
+matters because apnea windows are typically fewer than 
+normal windows. AUC evaluates discriminative ability 
+independently of a specific cutoff. These metrics are the 
+standard set in ECG-based apnea detection [9], [35], [40], 
+[43]. 
+ 
+3.5.2 Validation Protocol 
+  1. Subject-level partitioning. Data are divided into training, 
+validation, and test sets at the subject level, so no subject 
+appears in more than one set. Windows from the same 
+recording are highly correlated, and window-level splits 
+would inflate results. Participant-grouped cross-validation is 
+used in [5] for the same reason. 
+  2. Strict role separation. The training set updates weights, 
+the validation set is used for model selection, checkpointing, 
+and threshold tuning, and the test set is used once. Models 
+and thresholds are frozen before test prediction to prevent 
+data leakage and optimistic bias. 
+  3. Identical partitions across experiments. The same subject-
+level partitions are used for all comparative and ablation 
+experiments, so differences come from the configuration 
+being tested. 
+  4. Repeated runs. Each configuration is trained with several 
+random seeds, and results are reported as mean ± standard 
+deviation. Confidence intervals for the metrics are estimated 
+by bootstrap resampling at the subject level, so that the 
+resampling unit matches the subject-level design. 
+
+  5. Comparison of configurations. The proposed model is 
+compared with the three baselines (Experiment 1), 10-second 
+with 30-second windows (Experiment 2), and each 
+preprocessing variant with the full pipeline (Experiment 3). 
+  6. Generalization across datasets. Where the datasets allow, 
+a leave-one-dataset-out evaluation can be added to assess 
+generalization under distribution shift, following the logic of 
+[27] and [23]. This is treated as a separate evaluation protocol 
+from the subject-level split and is reported separately. 
+ 
+ 
+3.5.3 Computational Efficiency Analysis 
+  Because reduced temporal windowing is one of the 
+contributions of this study, efficiency is evaluated alongside 
+detection performance. Parameter count and inference time 
+per window are reported for the proposed model and the 
+baselines under both the 10-second and 30-second 
+configurations. This analysis quantifies whether the reduced 
+window provides a meaningful reduction in computational 
+cost at comparable detection performance. 
+ 
+3.5.4 Event Level and AHI Analysis 
+  Where reference annotations support it, window predictions 
+are aggregated per recording to estimate the apnea-hypopnea 
+index (AHI). Agreement with the reference AHI is measured 
+with Spearman's correlation, mean absolute error, and a 
+Bland-Altman plot [45]. Recordings are then assigned 
+severity classes by AHI thresholds, and agreement is 
+quantified with accuracy and Cohen's kappa, as in the clinical 
+validation of [43] and in [2]. This analysis complements the 
+window-level evaluation with a more clinically relevant view 
+of performance. It is treated as an optional secondary analysis 
+and is not used as the primary criterion for model selection, 
+because AHI estimation requires sleep-duration information 
+and an aggregation procedure that must be validated 
+separately from window-level classification. 
+ 
+ 
+REFERENCES 
+ 
+[1] 
+H. Liu, S. Cui, X. Zhao, and F. Cong, "Detection of obstructive sleep 
+apnea from single-channel ECG signals using a CNN-transformer 
+architecture," 
+2023. 
+[Online]. 
+Available: 
+https://doi.org/10.1016/j.bspc.2023.104581 
+[2] 
+J. Xie, P. Fonseca, J. P. van Dijk, S. Overeem, and X. Long, "The Use 
+of Respiratory Effort Improves an ECG-Based Deep Learning 
+Algorithm to Assess Sleep-Disordered Breathing," 2023. [Online]. 
+Available: https://doi.org/10.3390/diagnostics13132146 
+[3] 
+X. Lv, J. Li, and Q. Ren, "MCFN: A Multichannel Fusion Network for 
+Sleep Apnea Syndrome Detection," 2023. [Online]. Available: 
+https://doi.org/10.1155/2023/5287043 
+[4] 
+Y. Zhang et al., "Deep Learning for Obstructive Sleep Apnea Detection 
+and Severity Assessment: A Multimodal Signals Fusion Multiscale 
+Transformer 
+Model," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.2147/NSS.S492806 
+[5] 
+S. Ryu, J. Koh, and I. C. Jeong, "Multi-Window Temporal Context for 
+ECG-Based Sleep Apnea Detection Under Limited Apnea-Label 
+Availability," Diagnostics, vol. 16, no. 18, p. 2939, 2026, doi: 
+10.3390/diagnostics16182939. 
+[Online]. 
+Available: 
+https://doi.org/10.3390/diagnostics16182939 
+[6] 
+S. Thompson, D. Reilly, P. Fergus, and C. Chalmers, "Detection of 
+Obstructive Sleep Apnoea Using Features Extracted From Segmented 
+Time-Series ECG Signals With a One Dimensional Convolutional 
+Neural 
+Network," 
+2024. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/ACCESS.2023.3346689 
+[7] 
+A. E. A. Shokralla et al., "Sleep Apnea Detection using 
+Electrocardiography (ECG) Signals," 2025. [Online]. Available: 
+https://doi.org/10.1109/ICICIS66182.2025.11313203 
+[8] 
+A. J. Varghese et al., "A multifaceted approach for obstructive sleep 
+apnea classification from ECG signal using deep learning," 2025. 
+[Online]. Available: https://doi.org/10.1101/2025.09.03.673993 
+[9] 
+B. Patnaik, D. S. K. Nayak, and S. Sahoo, "Attention enhanced hybrid 
+deep learning model with 1D-CNN and BiLSTM for automated sleep 
+apnea 
+detection," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.1007/s42452-025-07639-1 
+[10] T. Paul, O. Hassan, S. K. Islam, and A. S. M. Mosa, "Real-Time 
+Obstructive Sleep Apnea Detection from Raw ECG and SpO2 Signal 
+Using Convolutional Neural Network," 2024. [Online]. Available: 
+https://pmc.ncbi.nlm.nih.gov/articles/PMC11141842/ 
+[11] M. A. Islam, S. Chaki, M. A. Yousuf, and M. A. Moni, "Sleep Apnea 
+Detection through HRV and SPO2 Analysis of Single-Lead ECG 
+Signals Using Machine Learning Algorithms," 2024. [Online]. 
+Available: https://doi.org/10.1145/3723178.3723251 
+[12] Y. J. Kumar, G. A. Reddy, and Arun V, "Deep Learning-Based 
+Detection of Obstructive Sleep Apnea from ECG Using 1D-CNN," 
+2025. [Online]. Available: https://doi.org/10.2991/978-94-6463-866-
+0_45 
+[13] L. Duan, Z. Song, Y. Xu, Y. Wang, and Z. Zhao, "An Automatic Sleep 
+Apnea Detection Method Based on Multi-Context-Scale CNN-LSTM 
+and Contrastive Learning With ECG," 2025. [Online]. Available: 
+https://doi.org/10.1049/csy2.70017 
+[14] M. Zakizadeh Irdmousa, N. Delfan, and B. Moshiri, "ApneaTraNet: A 
+Deep Fusion Model for Detection of Sleep Apnea-Hypopnea using 
+ECG 
+Signals," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/AI2E64943.2025.10983704 
+[15] H. Fayyaz, N. S. D’Souza, and R. Beheshti, "Multimodal Sleep Apnea 
+Detection with Missing or Noisy Modalities," 2024. [Online]. 
+Available: https://proceedings.mlr.press/v252/fayyaz24a.html 
+[16] M. Jiao, C. Song, X. Xia, S. Yang, and F. Liu, "Deep Attention 
+Networks With Multi-Temporal Information Fusion for Sleep Apnea 
+Detection," 
+2024. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/OJEMB.2024.3405666 
+[17] H. Wang, X. Qiu, B. Li, X. Tan, and J. Huang, "Multimodal 
+heterogeneous graph fusion for automated obstructive sleep apnea-
+hypopnea 
+syndrome 
+diagnosis," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.1007/s40747-024-01648-0 
+[18] P. Hemrajani et al., "Integrating physiological signals for enhanced 
+sleep apnea diagnosis with SleepNet," 2025. [Online]. Available: 
+https://doi.org/10.1038/s41598-025-16154-7 
+[19] Q. Zhu, M. Liang, X. Gong, Y. He, and C. Mao, "Multimodal ECG and 
+biometric data fusion for improved detection of obstructive sleep apnea 
+hypopnea 
+syndrome," 
+2026. 
+[Online]. 
+Available: 
+https://doi.org/10.3389/fmed.2026.1762868 
+[20] C.-H. Lee, H. Kim, B. Y. Choi, and Y. J. Kim, "Toward Foundational 
+Model for Sleep Analysis Using a Multimodal Hybrid Self-Supervised 
+Learning 
+Framework," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/TCYB.2025.3603608 
+[21] M. ElKomy et al., "Differential privacy in neural network architectures 
+for heartbeat detection from multimodal data," 2025. [Online]. 
+Available: https://doi.org/10.1186/s40537-025-01292-6 
+[22] Y. Lin, X. Song, Y. Zhao, C. Zhang, and X. Ding, "Continuous 
+respiratory rate monitoring through temporal fusion of ECG and PPG 
+signals," 
+2025. 
+[Online]. 
+Available: 
+https://doi.org/10.1371/journal.pone.0325307 
+[23] N. Grieger, J. Raskob, S. Mehrkanoon, and S. Bialonski, "AnySleep: a 
+channel-agnostic deep learning system for high-resolution sleep 
+staging in multi-center cohorts," 2026. [Online]. Available: 
+https://doi.org/10.1038/s41746-026-03406-7 
+[24] T. Penzel, "Using the gold mine of sleep data recorded to increase our 
+understanding 
+of 
+sleep," 
+2024. 
+[Online]. 
+Available: 
+https://doi.org/10.1093/sleep/zsae121 
+[25] F. Ehrlich et al., "SleepPhases: A Workflow Framework for Sleep Data 
+Harmonization, Analysis and Machine Learning," 2026. [Online]. 
+Available: https://doi.org/10.64898/2026.01.14.26344163 
+[26] R. Moberg, E. J. Moyer, D. Olson, et al., "Physiological Data in 
+Neurocritical Care: Challenges and a Path Forward," 2022. [Online]. 
+Available: https://doi.org/10.1007/s12028-022-01524-0 
+[27] J. Kim and S. Shin, "Unified multi-dataset training for ECG 
+classification 
+generalization." 
+[Online]. 
+Available: 
+https://doi.org/10.3390/s26061830 
+[28] Y. Jia et al., "Preprocessing and Denoising Techniques for 
+Electrocardiography and Magnetocardiography: A Review," 2024. 
+[Online]. Available: https://doi.org/10.3390/bioengineering11111109 
+
+[29] L. Ancillon, M. Elgendi, and C. Menon, "Machine Learning for 
+Anxiety Detection Using Biosignals," 2022. [Online]. Available: 
+https://doi.org/10.3390/diagnostics12081794 
+[30] T. Yamane, M. Fujii, and M. Morita, "Clinical-level screening of sleep 
+apnea syndrome with single-lead ECG alone is achievable using 
+machine learning with appropriate time windows," 2025. [Online]. 
+Available: https://doi.org/10.1007/s11325-025-03316-0 
+[31] Y. Lin, H. Zhang, W. Wu, X. Gao, F. Chao, and J. Lin, "Wavelet 
+transform and deep learning-based obstructive sleep apnea detection 
+from single-lead ECG signals," Phys. Eng. Sci. Med., vol. 47, no. 1, pp. 
+119–133, Mar. 2024, doi: 10.1007/s13246-023-01346-0. [Online]. 
+Available: https://doi.org/10.1007/s13246-023-01346-0 
+[32] L. Yang et al., "Algorithmic detection of sleep-disordered breathing 
+using respiratory signals: a systematic review," Physiol. Meas., vol. 45, 
+no. 3, Mar. 2024, doi: 10.1088/1361-6579/ad2c13. [Online]. Available: 
+https://doi.org/10.1088/1361-6579/ad2c13 
+[33] T. E. Nassi et al., "Automated scoring of respiratory events in sleep 
+with a single effort belt and deep neural networks," IEEE Trans. 
+Biomed. Eng., vol. 69, no. 6, pp. 2094–2104, Jun. 2022, doi: 
+10.1109/TBME.2021.3136753. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/TBME.2021.3136753 
+[34] M. Sharma, D. Kumbhani, J. Tiwari, T. S. Kumar, and U. R. Acharya, 
+"Automated detection of obstructive sleep apnea in more than 8000 
+subjects using frequency optimized orthogonal wavelet filter bank with 
+respiratory and oximetry signals," Comput. Biol. Med., vol. 144, May 
+2022, doi: 10.1016/j.compbiomed.2022.105364. [Online]. Available: 
+https://doi.org/10.1016/j.compbiomed.2022.105364 
+[35] M. H. Liu et al., "EfficientNet-based machine learning architecture for 
+sleep apnea identification in clinical single-lead ECG signal data sets," 
+BioMed. Eng. OnLine, vol. 23, no. 1, Dec. 2024, doi: 10.1186/s12938-
+024-01252-w. [Online]. Available: https://doi.org/10.1186/s12938-
+024-01252-w 
+[36] R. I. Nabil et al., "End-to-end sleep apnea identification from raw ECG 
+signals utilizing 1D convolutional neural networks," in Proc. 2025 
+IEEE Int. Conf. Quantum Photonics, Artificial Intelligence, and 
+Networking 
+(QPAIN), 
+2025, 
+doi: 
+10.1109/QPAIN66474.2025.11171943. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/QPAIN66474.2025.11171943 
+[37] H. Yue et al., "Validity study of a multiscaled fusion network using 
+single-lead electrocardiogram signals for obstructive sleep apnea 
+diagnosis," J. Clin. Sleep Med., vol. 19, no. 6, pp. 1017–1025, Jun. 
+2023, 
+doi: 
+10.5664/jcsm.10466. 
+[Online]. 
+Available: 
+https://doi.org/10.5664/jcsm.10466 
+[38] Z. Li, Y. Jia, Y. Li, and D. Han, "Automatic prediction of obstructive 
+sleep apnea event using deep learning algorithm based on ECG and 
+thoracic movement signals," Acta Oto-Laryngol., vol. 144, no. 1, pp. 
+52–57, 
+2024, 
+doi: 
+10.1080/00016489.2024.2301732. [Online]. 
+Available: https://doi.org/10.1080/00016489.2024.2301732 
+[39] M. Yeo et al., "Respiratory event detection during sleep using 
+electrocardiogram 
+and 
+respiratory 
+related 
+signals: 
+Using 
+polysomnogram and patch-type wearable device data," IEEE J. 
+Biomed. Health Inform., vol. 26, no. 2, pp. 550–560, Feb. 2022, doi: 
+10.1109/JBHI.2021.3098312. 
+[Online]. 
+Available: 
+https://doi.org/10.1109/JBHI.2021.3098312 
+[40] J. Xie, P. Fonseca, J. P. van Dijk, S. Overeem, and X. Long, "Multi-
+modal multi-task deep neural networks for sleep disordered breathing 
+assessment using cardiac and audio signals," Int. J. Med. Inform., vol. 
+201, Sep. 2025, doi: 10.1016/j.ijmedinf.2025.105932. [Online]. 
+Available: https://doi.org/10.1016/j.ijmedinf.2025.105932 
+[41] H. Zhou, S. Chen, Z. Xu, and W. Zheng, "A spatio-temporal learning-
+based model for sleep apnea detection using single-lead ECG signals," 
+technical 
+report. 
+[Online]. 
+Available: 
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9389170/ 
+[42] Y. Zhou and K. Kang, "Multi-feature automatic extraction for detecting 
+obstructive sleep apnea based on single-lead electrocardiography 
+signals," Sensors, vol. 24, no. 4, p. 1159, Feb. 2024, doi: 
+10.3390/s24041159. 
+[Online]. 
+Available: 
+https://doi.org/10.3390/s24041159 
+[43] S. M. I. Niroshana, X. Zhu, K. Nakamura, and W. Chen, "A fused-
+image-based approach to detect obstructive sleep apnea using a single-
+lead ECG and a 2D convolutional neural network," PLoS ONE, vol. 16, 
+no. 4, Apr. 2021, doi: 10.1371/journal.pone.0250618. [Online]. 
+Available: https://doi.org/10.1371/journal.pone.0250618 
+[44] J. 
+Hu 
+et 
+al., 
+"Application 
+of 
+spectral 
+characteristics 
+of 
+electrocardiogram signals in sleep apnea," Front. Bioeng. Biotechnol., 
+vol. 13, 2025, doi: 10.3389/fbioe.2025.1636011. [Online]. Available: 
+https://doi.org/10.3389/fbioe.2025.1636011 
+[45] Y. Zhang et al., "Detection and severity assessment of obstructive sleep 
+apnea according to deep learning of single-lead electrocardiogram 
+signals," J. Sleep Res., vol. 34, no. 1, Feb. 2025, doi: 
+10.1111/jsr.14285. 
+[Online]. 
+Available: 
+https://doi.org/10.1111/jsr.14285
+ 

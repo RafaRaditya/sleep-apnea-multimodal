@@ -1,0 +1,118 @@
+Apnea-ECG Database. These 
+databases contain physiological recordings relevant to sleep 
+apnea research, particularly electrocardiogram (ECG) and 
+respiratory-related signals. The combination of these datasets 
+is intended to provide a broader source of physiological data 
+for developing and evaluating the proposed multimodal sleep 
+apnea detection approach. 
+ 
+Because the proposed model requires both ECG and 
+respiratory inputs, the availability of these modalities in each 
+dataset is not assumed but will be verified through a dataset 
+audit. The audit will examine recording eligibility, subject 
+information, channel availability, annotation structure, and 
+signal quality. The following table serves as an audit template 
+and will be completed prior to harmonization and model 
+development. 
+3.4 Proposed Method 
+3.4.1 Method Overview 
+The proposed method detects sleep apnea by 
+integrating ECG and respiratory signals in a multimodal deep 
+learning pipeline. The pipeline has six stages: (1) multi-
+dataset harmonization, (2) preprocessing, (3) reduced 
+temporal windowing, (4) modality-specific Transformer 
+encoding, (5) cross-attention fusion, and (6) pooling and 
+window-level classification. Each window is classified as 
+sleep apnea or normal. Unlike approaches that convert signals 
+into time-frequency images before classification [41], [42], 
+the proposed model operates directly on one-dimensional 
+signal sequences, which keeps the pipeline simple and avoids 
+a separate image-construction step. 
+3.4.2  Multi Dataset Harmonization 
+1. Channel mapping. ECG and respiratory channels are 
+mapped to a unified naming scheme, so each recording 
+provides an ECG channel and a respiratory channel. 
+Respiratory sources differ in reliability and information 
+content (airflow, thoracic effort, abdominal effort) [37], and 
+a single effort signal can already support respiratory event 
+scoring [38]. 
+2. Resampling. Every signal is resampled to a modality-
+specific common rate after anti-aliasing filtering, so all 
+windows of a given duration have identical lengths in 
+samples. The target sampling rate for each modality will be 
+determined from the dataset audit and reported before model 
+development; ECG and respiratory signals are not required to 
+share the same rate. 
+
+3. Label unification. Event annotations are converted into a 
+binary label (apnea vs. normal). Datasets with per-minute 
+annotations propagate the label to the windows inside that 
+minute. Datasets with event-level annotations use an overlap 
+rule (Section 3.4.4). The difference in temporal precision 
+between 
+per-minute 
+and 
+event-level 
+annotations 
+is 
+acknowledged and will be reported as a potential source of 
+label noise. 
+4. Subject tracking. Each window keeps a subject identifier 
+and a dataset identifier for subject-level partitioning. Only de-
+identified public data are used, which respects the privacy 
+concerns raised for health data in machine learning [21]. 
+ 
+Training on unified multi-dataset data is expected to reduce 
+dataset-specific bias, which was shown to cause performance 
+degradation on unseen data [27], and heterogeneous multi-
+center data support more general models [23], [24]. 
+3.4.3 Signal Preprocessing 
+Three preprocessing operations are applied and 
+later examined by ablation. 
+ 
+- Filtering. ECG is band-pass filtered, with a notch filter 
+where power-line interference is present, to suppress baseline 
+wander, muscle noise, and mains interference [28], [7], [12]. 
+Respiratory signals are low-pass filtered and detrended. 
+Alternative decomposition-based spectral denoising exists, 
+such as EEMD-ICA [39], but fixed digital filters are preferred 
+here for their low computational cost. The specific filter cut-
+offs and notch frequency will be determined during the 
+dataset audit and preliminary experiments, and reported in the 
+final implementation. 
+- Normalization. Each recording is z-score normalized per 
+channel, 
+  
+ 
+𝑥′=𝑥−𝜇
+𝜎
+ 
+where x is the original signal value, is the mean, is the 
+standard deviation, and x' is the normalized value. To avoid 
+data leakage, normalization statistics are computed from the 
+training data only and applied consistently to the validation 
+and test sets. 
+- Amplitude clipping. After normalization, values are clipped 
+to a fixed range [-c,+c] (in units of standard deviation) to limit 
+the influence of motion artifacts and spikes. The value of c 
+will be fixed during preliminary experiments and reported. 
+3.4.4 Reduced Temporal Windowing 
+Signals are segmented into fixed-length windows of 
+L{10s,30s}, where the 10-second configuration is the main 
+reduced-window setting and the 30-second configuration is 
+the longer comparison. Longer contexts such as 3-minute 
+inputs are known to help [1], [30], but they increase input 
+size, memory, and latency. The reduced-window design tests 
+whether short windows, as used in [10] and [14], are 
+sufficient when two modalities are available. 
+ 
+For training, windows are extracted with overlap, since 
+overlapping slicing combined with sample weighting gave 
+the best segment-level detection in [40]. For validation and 
+testing, windows do not overlap, so every portion of a 
+recording is evaluated once. This asymmetry is applied 
+consistently across all configurations and is intended to 
+increase training-sample diversity while keeping evaluation 
+deterministic and comparable. When event-level annotations 
+are available, a window is labeled apnea if at least \(50\%\) of 
+its du

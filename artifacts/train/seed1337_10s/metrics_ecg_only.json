@@ -1,0 +1,116 @@
+{
+  "model": "ecg_only",
+  "params": 75906,
+  "duration_s": 10,
+  "seed": 1337,
+  "train_windows": 117954,
+  "train_subjects": 26,
+  "val_windows": 13485,
+  "val_subjects": 6,
+  "best_epoch": 3,
+  "best_val_loss": 0.7115,
+  "epochs_run": 6,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5997,
+      "val_loss": 0.7415,
+      "lr": 0.000997,
+      "train_s": 234.5,
+      "val_s": 4.9
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5263,
+      "val_loss": 0.7698,
+      "lr": 0.000963,
+      "train_s": 228.9,
+      "val_s": 5.0
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5032,
+      "val_loss": 0.7115,
+      "lr": 0.000895,
+      "train_s": 237.7,
+      "val_s": 5.5
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4893,
+      "val_loss": 0.7495,
+      "lr": 0.000796,
+      "train_s": 244.1,
+      "val_s": 5.5
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4735,
+      "val_loss": 0.8338,
+      "lr": 0.000675,
+      "train_s": 246.9,
+      "val_s": 5.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4623,
+      "val_loss": 0.7613,
+      "lr": 0.000541,
+      "train_s": 220.1,
+      "val_s": 4.8
+    }
+  ],
+  "class_weights": [
+    0.6163,
+    2.6493
+  ],
+  "threshold": 0.045,
+  "threshold_val_f1": 0.2671,
+  "val_overall": {
+    "accuracy": 0.157,
+    "sensitivity": 0.999,
+    "specificity": 0.004,
+    "precision": 0.1541,
+    "f1": 0.2671,
+    "roc_auc": 0.5143,
+    "tp": 2071,
+    "tn": 46,
+    "fp": 11366,
+    "fn": 2,
+    "n": 13485,
+    "positives": 2073
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.3345,
+      "sensitivity": 1.0,
+      "specificity": 0.0013,
+      "precision": 0.3339,
+      "f1": 0.5006,
+      "roc_auc": 0.4275,
+      "tp": 1173,
+      "tn": 3,
+      "fp": 2340,
+      "fn": 0,
+      "n": 3516,
+      "positives": 1173
+    },
+    "UCDDB": {
+      "accuracy": 0.0944,
+      "sensitivity": 0.9978,
+      "specificity": 0.0047,
+      "precision": 0.0905,
+      "f1": 0.1659,
+      "roc_auc": 0.3192,
+      "tp": 898,
+      "tn": 43,
+      "fp": 9026,
+      "fn": 2,
+      "n": 9969,
+      "positives": 900
+    }
+  },
+  "inference_ms_per_window": 0.374,
+  "checkpoint": "artifacts\\train\\seed1337_10s\\checkpoints\\ecg_only.pt",
+  "wall_minutes": 24.15
+}

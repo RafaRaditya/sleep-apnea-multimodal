@@ -1,0 +1,100 @@
+{
+  "model": "resp_only",
+  "params": 81346,
+  "duration_s": 30,
+  "seed": 42,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4801,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.5827,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5875,
+      "val_loss": 0.5827,
+      "lr": 0.000997,
+      "train_s": 485.8,
+      "val_s": 6.4
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5297,
+      "val_loss": 0.6358,
+      "lr": 0.000963,
+      "train_s": 506.2,
+      "val_s": 5.9
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5118,
+      "val_loss": 0.6854,
+      "lr": 0.000895,
+      "train_s": 451.8,
+      "val_s": 6.0
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4978,
+      "val_loss": 0.678,
+      "lr": 0.000796,
+      "train_s": 457.5,
+      "val_s": 5.9
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.37,
+  "threshold_val_f1": 0.1627,
+  "val_overall": {
+    "accuracy": 0.6592,
+    "sensitivity": 0.4119,
+    "specificity": 0.6809,
+    "precision": 0.1014,
+    "f1": 0.1627,
+    "roc_auc": 0.5207,
+    "tp": 159,
+    "tn": 3006,
+    "fp": 1409,
+    "fn": 227,
+    "n": 4801,
+    "positives": 386
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.4352,
+      "sensitivity": 0.3361,
+      "specificity": 0.4543,
+      "precision": 0.1056,
+      "f1": 0.1607,
+      "roc_auc": 0.4087,
+      "tp": 81,
+      "tn": 571,
+      "fp": 686,
+      "fn": 160,
+      "n": 1498,
+      "positives": 241
+    },
+    "UCDDB": {
+      "accuracy": 0.7608,
+      "sensitivity": 0.5379,
+      "specificity": 0.7711,
+      "precision": 0.0974,
+      "f1": 0.1649,
+      "roc_auc": 0.6553,
+      "tp": 78,
+      "tn": 2435,
+      "fp": 723,
+      "fn": 67,
+      "n": 3303,
+      "positives": 145
+    }
+  },
+  "inference_ms_per_window": 1.243,
+  "checkpoint": "artifacts\\train\\seed42_30s\\checkpoints\\resp_only.pt",
+  "wall_minutes": 32.33
+}

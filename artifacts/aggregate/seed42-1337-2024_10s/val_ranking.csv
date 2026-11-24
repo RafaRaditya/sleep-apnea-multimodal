@@ -1,0 +1,4 @@
+seed,ecg_only_auc,proposed_auc,resp_only_auc,simple_fusion_auc,ecg_only_rank,proposed_rank,resp_only_rank,simple_fusion_rank
+42,0.5427,0.6436,0.5907,0.6929,4,2,3,1
+1337,0.5143,0.6476,0.8201,0.7346,4,3,1,2
+2024,0.5968,0.6194,0.757,0.6406,4,3,1,2

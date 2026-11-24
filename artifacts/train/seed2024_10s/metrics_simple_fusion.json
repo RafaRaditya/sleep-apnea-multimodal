@@ -1,0 +1,100 @@
+{
+  "model": "simple_fusion",
+  "params": 150658,
+  "duration_s": 10,
+  "seed": 2024,
+  "train_windows": 116769,
+  "train_subjects": 26,
+  "val_windows": 14385,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.6446,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.553,
+      "val_loss": 0.6446,
+      "lr": 0.000997,
+      "train_s": 474.7,
+      "val_s": 8.4
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4641,
+      "val_loss": 0.7903,
+      "lr": 0.000963,
+      "train_s": 483.9,
+      "val_s": 8.7
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4397,
+      "val_loss": 0.7094,
+      "lr": 0.000895,
+      "train_s": 486.1,
+      "val_s": 8.6
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4239,
+      "val_loss": 0.7855,
+      "lr": 0.000796,
+      "train_s": 495.4,
+      "val_s": 8.6
+    }
+  ],
+  "class_weights": [
+    0.6113,
+    2.7467
+  ],
+  "threshold": 0.315,
+  "threshold_val_f1": 0.2965,
+  "val_overall": {
+    "accuracy": 0.5975,
+    "sensitivity": 0.6325,
+    "specificity": 0.5921,
+    "precision": 0.1936,
+    "f1": 0.2965,
+    "roc_auc": 0.6406,
+    "tp": 1220,
+    "tn": 7375,
+    "fp": 5081,
+    "fn": 709,
+    "n": 14385,
+    "positives": 1929
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.508,
+      "sensitivity": 0.6369,
+      "specificity": 0.451,
+      "precision": 0.3392,
+      "f1": 0.4426,
+      "roc_auc": 0.5519,
+      "tp": 814,
+      "tn": 1303,
+      "fp": 1586,
+      "fn": 464,
+      "n": 4167,
+      "positives": 1278
+    },
+    "UCDDB": {
+      "accuracy": 0.634,
+      "sensitivity": 0.6237,
+      "specificity": 0.6347,
+      "precision": 0.1041,
+      "f1": 0.1784,
+      "roc_auc": 0.6721,
+      "tp": 406,
+      "tn": 6072,
+      "fp": 3495,
+      "fn": 245,
+      "n": 10218,
+      "positives": 651
+    }
+  },
+  "inference_ms_per_window": 0.636,
+  "checkpoint": "artifacts\\train\\seed2024_10s\\checkpoints\\simple_fusion.pt",
+  "wall_minutes": 33.08
+}

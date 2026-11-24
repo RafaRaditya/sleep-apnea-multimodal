@@ -1,0 +1,19 @@
+record,subject,resp_channels,n_channels,fs
+slp01a,01,Resp (sum),4,250
+slp01b,01,Resp (sum),4,250
+slp02a,02,Resp (nasal),4,250
+slp02b,02,Resp (nasal),4,250
+slp03,03,Resp (nasal),4,250
+slp04,04,Resp (nasal),4,250
+slp14,14,Resp (nasal),4,250
+slp16,16,Resp (nasal),4,250
+slp32,32,Resp (nasal);Resp (chest),7,250
+slp37,37,Resp (nasal);Resp (abdominal),7,250
+slp41,41,Resp (nasal);Resp (abdominal),7,250
+slp45,45,Resp (nasal);Resp (abdominal),7,250
+slp48,48,Resp (nasal);Resp (chest),7,250
+slp59,59,Resp (nasal);Resp (abdominal),7,250
+slp60,60,Resp (abdominal);Resp (nasal),7,250
+slp61,61,Resp (abdominal),6,250
+slp66,66,Resp (nasal);Resp (abdomen),7,250
+slp67x,67,Resp (nasal);Resp (chest),7,250

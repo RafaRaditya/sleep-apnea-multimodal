@@ -1,0 +1,114 @@
+dataset,dataset_version,record_id,subject_id,ecg_channel,resp_channel,resp_type,sampling_rate_ecg,sampling_rate_resp,duration_s,time_offset_s,annotation_type,annotation_resolution,annotation_available,annotated_duration_s,positive_fraction,eligible,exclusion_reason
+UCDDB,1.0.0,ucddb002,2,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,22470.0,1089.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,22440,0.1067,True,
+UCDDB,1.0.0,ucddb003,3,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,26478.0,5112.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,26460,0.2049,True,
+UCDDB,1.0.0,ucddb005,5,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,24798.0,237.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,24780,0.0429,False,"Flow channel unusable: std 0.503 vs 4.2-6.0 in other UCDDB records, only 318 unique values, flat after initial transient. Excluded rather than substituted with an effort channel, preserving the strict airflow policy."
+UCDDB,1.0.0,ucddb006,6,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,24267.0,937.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,24240,0.1041,True,
+UCDDB,1.0.0,ucddb007,7,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,24405.0,2032.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,24390,0.0576,True,
+UCDDB,1.0.0,ucddb008,8,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,23041.0,2949.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,23040,0.0094,True,
+UCDDB,1.0.0,ucddb009,9,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27759.0,4552.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27750,0.0463,True,
+UCDDB,1.0.0,ucddb010,10,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27211.0,1598.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27210,0.123,True,
+UCDDB,1.0.0,ucddb011,11,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27030.0,4696.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27000,0.0219,True,
+UCDDB,1.0.0,ucddb012,12,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,25941.0,2683.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,25920,0.1344,True,
+UCDDB,1.0.0,ucddb013,13,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,24333.0,6154.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,24330,0.0478,True,
+UCDDB,1.0.0,ucddb014,14,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,23239.0,1646.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,23220,0.1968,True,
+UCDDB,1.0.0,ucddb015,15,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27488.0,3536.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27480,0.0227,True,
+UCDDB,1.0.0,ucddb017,17,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,23684.0,5086.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,23670,0.0457,True,
+UCDDB,1.0.0,ucddb018,18,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,24685.0,17751.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,24660,0.0075,True,
+UCDDB,1.0.0,ucddb019,19,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,25573.0,2350.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,25560,0.0615,True,
+UCDDB,1.0.0,ucddb020,20,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,22586.0,2030.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,22560,0.0596,True,
+UCDDB,1.0.0,ucddb021,21,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27409.0,1782.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27390,0.0434,True,
+UCDDB,1.0.0,ucddb022,22,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,23640.0,6083.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,23610,0.0181,True,
+UCDDB,1.0.0,ucddb023,23,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,25850.0,1818.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,25830,0.117,True,
+UCDDB,1.0.0,ucddb024,24,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,27250.0,1945.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,27240,0.1002,True,
+UCDDB,1.0.0,ucddb025,25,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,21350.0,352.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,21330,0.4667,True,
+UCDDB,1.0.0,ucddb026,26,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,25160.0,1040.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,25140,0.0651,True,
+UCDDB,1.0.0,ucddb027,27,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,26791.0,1061.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,26790,0.2088,True,
+UCDDB,1.0.0,ucddb028,28,ECG,Flow,airflow(thermistor)+effort(ribcage/abdo),128.0,8.0,21660.0,2238.0,respiratory event (onset+duration); sleep stage 30s,event-onset/duration; stage=30s,True,21630,0.1912,True,
+MIT-BIH_PSG,1.0.0,slp01a,slp01,ECG,Resp (sum),effort sum,250,250,7200.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,7200,0.1542,False,no airflow channel (effort only) under strict airflow policy
+MIT-BIH_PSG,1.0.0,slp01b,slp01,ECG,Resp (sum),effort sum,250,250,10800.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,10800,0.1806,False,no airflow channel (effort only) under strict airflow policy
+MIT-BIH_PSG,1.0.0,slp02a,slp02,ECG,Resp (nasal),airflow (nasal),250,250,10800.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,10800,0.2528,True,
+MIT-BIH_PSG,1.0.0,slp02b,slp02,ECG,Resp (nasal),airflow (nasal),250,250,8100.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,8100,0.1556,True,
+MIT-BIH_PSG,1.0.0,slp03,slp03,ECG,Resp (nasal),airflow (nasal),250,250,21600.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,21600,0.3347,True,
+MIT-BIH_PSG,1.0.0,slp04,slp04,ECG,Resp (nasal),airflow (nasal),250,250,21600.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,21600,0.4403,True,
+MIT-BIH_PSG,1.0.0,slp14,slp14,ECG,Resp (nasal),airflow (nasal),250,250,21600.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,21420,0.2549,True,
+MIT-BIH_PSG,1.0.0,slp16,slp16,ECG,Resp (nasal),airflow (nasal),250,250,21600.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,20820,0.4251,True,
+MIT-BIH_PSG,1.0.0,slp32,slp32,ECG,Resp (nasal),airflow (nasal),250,250,19200.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,19200,0.1844,True,
+MIT-BIH_PSG,1.0.0,slp37,slp37,ECG,Resp (nasal),airflow (nasal),250,250,21000.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,20940,0.7937,True,
+MIT-BIH_PSG,1.0.0,slp41,slp41,ECG,Resp (nasal),airflow (nasal),250,250,23400.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,23400,0.0,True,
+MIT-BIH_PSG,1.0.0,slp45,slp45,ECG,Resp (nasal),airflow (nasal),250,250,22800.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,22800,0.0,True,
+MIT-BIH_PSG,1.0.0,slp48,slp48,ECG,Resp (nasal),airflow (nasal),250,250,22800.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,22800,0.3855,True,
+MIT-BIH_PSG,1.0.0,slp59,slp59,ECG,Resp (nasal),airflow (nasal),250,250,14400.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,13740,0.4563,True,
+MIT-BIH_PSG,1.0.0,slp60,slp60,ECG,Resp (nasal),airflow (nasal),250,250,21300.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,21300,0.4803,True,
+MIT-BIH_PSG,1.0.0,slp61,slp61,ECG,Resp (abdominal),abdominal effort,250,250,22200.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,21600,0.3514,False,no airflow channel (effort only) under strict airflow policy
+MIT-BIH_PSG,1.0.0,slp66,slp66,ECG,Resp (nasal),airflow (nasal),250,250,13200.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,13170,0.5216,True,
+MIT-BIH_PSG,1.0.0,slp67x,slp67,ECG,Resp (nasal),airflow (nasal),250,250,4620.0,0,30s epoch: sleep stage + event indicators (H/OA/X/CA/L/A...),"30s epoch, no onset/duration",True,4620,0.474,True,
+Apnea-ECG,1.0.0,a01,a01,ECG,,,100,,29570.0,0,per-minute apnea label (A/N),60s minute,True,29340,0.9611,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a02,a02,ECG,,,100,,31820.0,0,per-minute apnea label (A/N),60s minute,True,31680,0.7955,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a03,a03,ECG,,,100,,31350.0,0,per-minute apnea label (A/N),60s minute,True,31140,0.474,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a04,a04,ECG,,,100,,29800.0,0,per-minute apnea label (A/N),60s minute,True,29520,0.9207,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a05,a05,ECG,,,100,,27195.0,0,per-minute apnea label (A/N),60s minute,True,27240,0.6079,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a06,a06,ECG,,,100,,30580.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.4039,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a07,a07,ECG,,,100,,30605.0,0,per-minute apnea label (A/N),60s minute,True,30660,0.6301,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a08,a08,ECG,,,100,,30025.0,0,per-minute apnea label (A/N),60s minute,True,30060,0.3772,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a09,a09,ECG,,,100,,29880.0,0,per-minute apnea label (A/N),60s minute,True,29700,0.7697,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a10,a10,ECG,,,100,,31015.0,0,per-minute apnea label (A/N),60s minute,True,31020,0.1934,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a11,a11,ECG,,,100,,28080.0,0,per-minute apnea label (A/N),60s minute,True,27960,0.4764,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a12,a12,ECG,,,100,,34620.0,0,per-minute apnea label (A/N),60s minute,True,34620,0.9255,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a13,a13,ECG,,,100,,29655.0,0,per-minute apnea label (A/N),60s minute,True,29700,0.4929,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a14,a14,ECG,,,100,,31350.0,0,per-minute apnea label (A/N),60s minute,True,30540,0.7525,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a15,a15,ECG,,,100,,30560.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.7216,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a16,a16,ECG,,,100,,28880.0,0,per-minute apnea label (A/N),60s minute,True,28920,0.6639,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a17,a17,ECG,,,100,,29045.0,0,per-minute apnea label (A/N),60s minute,True,29100,0.3258,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a18,a18,ECG,,,100,,29570.0,0,per-minute apnea label (A/N),60s minute,True,29340,0.8957,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a19,a19,ECG,,,100,,30120.0,0,per-minute apnea label (A/N),60s minute,True,30120,0.4084,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,a20,a20,ECG,,,100,,30600.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.6176,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,b01,b01,ECG,,,100,,29170.0,0,per-minute apnea label (A/N),60s minute,True,29220,0.039,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,b02,b02,ECG,,,100,,31705.0,0,per-minute apnea label (A/N),60s minute,True,31020,0.1799,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,b03,b03,ECG,,,100,,26430.0,0,per-minute apnea label (A/N),60s minute,True,26460,0.1655,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,b04,b04,ECG,,,100,,25730.0,0,per-minute apnea label (A/N),60s minute,True,25740,0.0233,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,b05,b05,ECG,,,100,,25935.0,0,per-minute apnea label (A/N),60s minute,True,25980,0.1316,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c01,c01,ECG,,,100,,28990.0,0,per-minute apnea label (A/N),60s minute,True,29040,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c02,c02,ECG,,,100,,30070.0,0,per-minute apnea label (A/N),60s minute,True,30120,0.002,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c03,c03,ECG,,,100,,27200.0,0,per-minute apnea label (A/N),60s minute,True,27240,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c04,c04,ECG,,,100,,28870.0,0,per-minute apnea label (A/N),60s minute,True,28920,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c05,c05,ECG,,,100,,27930.0,0,per-minute apnea label (A/N),60s minute,True,27960,0.0064,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c06,c06,ECG,,,100,,28040.0,0,per-minute apnea label (A/N),60s minute,True,28080,0.0021,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c07,c07,ECG,,,100,,25690.0,0,per-minute apnea label (A/N),60s minute,True,25740,0.0093,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c08,c08,ECG,,,100,,30840.0,0,per-minute apnea label (A/N),60s minute,True,30780,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c09,c09,ECG,,,100,,28050.0,0,per-minute apnea label (A/N),60s minute,True,28080,0.0043,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,c10,c10,ECG,,,100,,25850.0,0,per-minute apnea label (A/N),60s minute,True,25860,0.0023,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x01,x01,ECG,,,100,,31370.0,0,per-minute apnea label (A/N),60s minute,True,31380,0.717,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x02,x02,ECG,,,100,,28330.0,0,per-minute apnea label (A/N),60s minute,True,28140,0.4456,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x03,x03,ECG,,,100,,27900.0,0,per-minute apnea label (A/N),60s minute,True,27900,0.0258,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x04,x04,ECG,,,100,,28910.0,0,per-minute apnea label (A/N),60s minute,True,28920,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x05,x05,ECG,,,100,,30270.0,0,per-minute apnea label (A/N),60s minute,True,30300,0.6257,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x06,x06,ECG,,,100,,26970.0,0,per-minute apnea label (A/N),60s minute,True,27000,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x07,x07,ECG,,,100,,30500.0,0,per-minute apnea label (A/N),60s minute,True,30540,0.4715,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x08,x08,ECG,,,100,,31020.0,0,per-minute apnea label (A/N),60s minute,True,31020,0.6267,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x09,x09,ECG,,,100,,30470.0,0,per-minute apnea label (A/N),60s minute,True,30480,0.3287,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x10,x10,ECG,,,100,,30575.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.1882,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x11,x11,ECG,,,100,,27365.0,0,per-minute apnea label (A/N),60s minute,True,27420,0.0284,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x12,x12,ECG,,,100,,32210.0,0,per-minute apnea label (A/N),60s minute,True,31620,0.1082,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x13,x13,ECG,,,100,,30490.0,0,per-minute apnea label (A/N),60s minute,True,30360,0.5771,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x14,x14,ECG,,,100,,29850.0,0,per-minute apnea label (A/N),60s minute,True,29400,0.8959,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x15,x15,ECG,,,100,,31200.0,0,per-minute apnea label (A/N),60s minute,True,29880,0.4016,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x16,x16,ECG,,,100,,30890.0,0,per-minute apnea label (A/N),60s minute,True,30900,0.1262,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x17,x17,ECG,,,100,,24300.0,0,per-minute apnea label (A/N),60s minute,True,24000,0.0025,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x18,x18,ECG,,,100,,27530.0,0,per-minute apnea label (A/N),60s minute,True,27540,0.0044,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x19,x19,ECG,,,100,,29440.0,0,per-minute apnea label (A/N),60s minute,True,29220,0.8357,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x20,x20,ECG,,,100,,30745.0,0,per-minute apnea label (A/N),60s minute,True,30780,0.5146,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x21,x21,ECG,,,100,,30575.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.2353,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x22,x22,ECG,,,100,,28870.0,0,per-minute apnea label (A/N),60s minute,True,28920,0.0041,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x23,x23,ECG,,,100,,31960.0,0,per-minute apnea label (A/N),60s minute,True,31620,0.2258,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x24,x24,ECG,,,100,,25710.0,0,per-minute apnea label (A/N),60s minute,True,25740,0.0023,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x25,x25,ECG,,,100,,30550.0,0,per-minute apnea label (A/N),60s minute,True,30600,0.5706,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x26,x26,ECG,,,100,,31190.0,0,per-minute apnea label (A/N),60s minute,True,31200,0.6615,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x27,x27,ECG,,,100,,29855.0,0,per-minute apnea label (A/N),60s minute,True,29880,0.9779,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x28,x28,ECG,,,100,,29700.0,0,per-minute apnea label (A/N),60s minute,True,29700,0.8747,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x29,x29,ECG,,,100,,28210.0,0,per-minute apnea label (A/N),60s minute,True,28200,0.0,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x30,x30,ECG,,,100,,32045.0,0,per-minute apnea label (A/N),60s minute,True,30660,0.638,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x31,x31,ECG,,,100,,33420.0,0,per-minute apnea label (A/N),60s minute,True,33420,0.9264,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x32,x32,ECG,,,100,,32280.0,0,per-minute apnea label (A/N),60s minute,True,32280,0.79,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x33,x33,ECG,,,100,,28340.0,0,per-minute apnea label (A/N),60s minute,True,28380,0.0063,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x34,x34,ECG,,,100,,28450.0,0,per-minute apnea label (A/N),60s minute,True,28500,0.0084,False,no respiratory channel; ECG-only database
+Apnea-ECG,1.0.0,x35,x35,ECG,,,100,,28930.0,0,per-minute apnea label (A/N),60s minute,True,28980,0.0,False,no respiratory channel; ECG-only database

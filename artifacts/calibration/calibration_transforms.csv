@@ -1,0 +1,13 @@
+model,transform,val_pooled_auc,test_pooled_auc
+proposed,none,0.6436,0.5261
+proposed,z-score per record,0.6011,0.6705
+proposed,z-score per subject,0.6011,0.672
+simple_fusion,none,0.6929,0.4498
+simple_fusion,z-score per record,0.6243,0.5996
+simple_fusion,z-score per subject,0.6243,0.6039
+ecg_only,none,0.5427,0.359
+ecg_only,z-score per record,0.5367,0.5029
+ecg_only,z-score per subject,0.5367,0.5051
+resp_only,none,0.5907,0.7345
+resp_only,z-score per record,0.5918,0.7139
+resp_only,z-score per subject,0.5918,0.7121

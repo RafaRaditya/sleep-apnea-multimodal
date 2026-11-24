@@ -1,0 +1,5 @@
+model,auc_MIT-BIH_PSG,auc_MIT-BIH_PSG_sd,auc_UCDDB,auc_UCDDB_sd
+ecg_only,0.4201,0.0871,0.5148,0.1731
+proposed,0.5146,0.1304,0.7039,0.0537
+resp_only,0.563,0.1637,0.7438,0.0801
+simple_fusion,0.5367,0.0726,0.7075,0.1007

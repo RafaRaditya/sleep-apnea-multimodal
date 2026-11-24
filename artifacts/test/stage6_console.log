@@ -1,0 +1,21 @@
+﻿stage 6 -> C:\Users\MyBook PRO K7\Desktop\KULIAH\Research_v2\artifacts\test\seed42_10s
+test windows=13,993 subjects=6 records=7 positive_rate=0.147
+frozen at 2026-11-20 22:40:46 (stage 5), thresholds taken as-is
+
+[proposed] TEST acc=0.517 sens=0.556 spec=0.510 prec=0.163 f1=0.253 auc=0.526 (threshold=0.210)
+[simple_fusion] TEST acc=0.456 sens=0.459 spec=0.456 prec=0.127 f1=0.199 auc=0.450 (threshold=0.370)
+[ecg_only] TEST acc=0.210 sens=0.631 spec=0.138 prec=0.112 f1=0.190 auc=0.359 (threshold=0.095)
+[resp_only] TEST acc=0.506 sens=0.866 spec=0.443 prec=0.211 f1=0.340 auc=0.734 (threshold=0.140)
+
+        model  windows  positives  accuracy  sensitivity  specificity  precision     f1  roc_auc  threshold  ms_per_window
+    resp_only    13993       2057    0.5055       0.8663       0.4434     0.2115 0.3400   0.7345      0.140          0.392
+     proposed    13993       2057    0.5165       0.5557       0.5098     0.1634 0.2526   0.5261      0.210          0.730
+simple_fusion    13993       2057    0.4562       0.4594       0.4556     0.1270 0.1989   0.4498      0.370          0.552
+     ecg_only    13993       2057    0.2104       0.6305       0.1380     0.1119 0.1901   0.3590      0.095          0.379
+
+AUC decomposition (pooled vs per-subject; diagnostic, not headline):
+        model  pooled_auc  mean_subject_auc  min_subject_auc  max_subject_auc  within_subject_auc  subjects_scored
+    resp_only      0.7345            0.7484           0.6354           0.8330              0.7121                6
+     proposed      0.5261            0.7328           0.5303           0.8524              0.6720                6
+simple_fusion      0.4498            0.6709           0.4745           0.8596              0.6039                6
+     ecg_only      0.3590            0.5537           0.4270           0.6180              0.5051                6

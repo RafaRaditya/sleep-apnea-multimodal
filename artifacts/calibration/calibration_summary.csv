@@ -1,0 +1,9 @@
+model,split,pooled_auc,mean_subject_auc,mean_record_auc,gap,within_subject_auc,subject_score_spread
+proposed,val,0.6436,0.6872,0.6872,0.0436,0.6011,0.4809
+proposed,test,0.5261,0.7328,0.7044,0.2067,0.672,0.3256
+simple_fusion,val,0.6929,0.6811,0.6811,-0.0117,0.6243,0.5734
+simple_fusion,test,0.4498,0.6709,0.6452,0.2211,0.6039,0.5619
+ecg_only,val,0.5427,0.604,0.604,0.0613,0.5367,0.4732
+ecg_only,test,0.359,0.5537,0.5398,0.1948,0.5051,0.6019
+resp_only,val,0.5907,0.6951,0.6951,0.1045,0.5918,0.3854
+resp_only,test,0.7345,0.7484,0.7392,0.0139,0.7121,0.2329

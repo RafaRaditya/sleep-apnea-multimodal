@@ -1,0 +1,9 @@
+model,split,n_subjects,spearman,p,leave_one_out_range
+proposed,val,6,0.029,0.957,"[-0.2, 0.8]"
+proposed,test,6,-0.943,0.005,"[-1.0, -0.9]"
+simple_fusion,val,6,0.257,0.623,"[-0.1, 0.8]"
+simple_fusion,test,6,-0.257,0.623,"[-0.5, 0.3]"
+ecg_only,val,6,-0.257,0.623,"[-0.5, 0.3]"
+ecg_only,test,6,-0.657,0.156,"[-1.0, -0.4]"
+resp_only,val,6,-0.143,0.787,"[-0.4, 0.5]"
+resp_only,test,6,-0.029,0.957,"[-0.3, 0.7]"

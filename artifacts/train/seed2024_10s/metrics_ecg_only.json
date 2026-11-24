@@ -1,0 +1,100 @@
+{
+  "model": "ecg_only",
+  "params": 75906,
+  "duration_s": 10,
+  "seed": 2024,
+  "train_windows": 116769,
+  "train_subjects": 26,
+  "val_windows": 14385,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.6255,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5941,
+      "val_loss": 0.6255,
+      "lr": 0.000997,
+      "train_s": 247.2,
+      "val_s": 6.0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5195,
+      "val_loss": 0.7698,
+      "lr": 0.000963,
+      "train_s": 243.8,
+      "val_s": 5.8
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4955,
+      "val_loss": 0.8208,
+      "lr": 0.000895,
+      "train_s": 246.3,
+      "val_s": 5.9
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.48,
+      "val_loss": 0.8623,
+      "lr": 0.000796,
+      "train_s": 242.5,
+      "val_s": 5.8
+    }
+  ],
+  "class_weights": [
+    0.6113,
+    2.7467
+  ],
+  "threshold": 0.205,
+  "threshold_val_f1": 0.2651,
+  "val_overall": {
+    "accuracy": 0.4801,
+    "sensitivity": 0.6993,
+    "specificity": 0.4461,
+    "precision": 0.1636,
+    "f1": 0.2651,
+    "roc_auc": 0.5968,
+    "tp": 1349,
+    "tn": 5557,
+    "fp": 6899,
+    "fn": 580,
+    "n": 14385,
+    "positives": 1929
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.4749,
+      "sensitivity": 0.6651,
+      "specificity": 0.3908,
+      "precision": 0.3257,
+      "f1": 0.4372,
+      "roc_auc": 0.5033,
+      "tp": 850,
+      "tn": 1129,
+      "fp": 1760,
+      "fn": 428,
+      "n": 4167,
+      "positives": 1278
+    },
+    "UCDDB": {
+      "accuracy": 0.4822,
+      "sensitivity": 0.7665,
+      "specificity": 0.4628,
+      "precision": 0.0885,
+      "f1": 0.1587,
+      "roc_auc": 0.648,
+      "tp": 499,
+      "tn": 4428,
+      "fp": 5139,
+      "fn": 152,
+      "n": 10218,
+      "positives": 651
+    }
+  },
+  "inference_ms_per_window": 0.411,
+  "checkpoint": "artifacts\\train\\seed2024_10s\\checkpoints\\ecg_only.pt",
+  "wall_minutes": 16.85
+}

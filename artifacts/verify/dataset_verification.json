@@ -1,0 +1,246 @@
+{
+  "ucddb": {
+    "checksums": {
+      "listed": 102,
+      "ok": 101,
+      "mismatch": [
+        "SubjectDetails.xls"
+      ],
+      "missing": []
+    },
+    "channels": {
+      "records": 25,
+      "channel_layouts": 3,
+      "records_missing_ecg": [],
+      "records_missing_resp": [],
+      "layouts": [
+        {
+          "n_channels": 14,
+          "ecg_fs": 128.0,
+          "resp_fs": [
+            8.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "count": 14
+        },
+        {
+          "n_channels": 14,
+          "ecg_fs": 128.0,
+          "resp_fs": [
+            8.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "count": 10
+        },
+        {
+          "n_channels": 16,
+          "ecg_fs": 128.0,
+          "resp_fs": [
+            8.0,
+            8.0,
+            8.0,
+            8.0
+          ],
+          "count": 1
+        }
+      ]
+    }
+  },
+  "slpdb": {
+    "checksums": {
+      "listed": 114,
+      "ok": 113,
+      "mismatch": [],
+      "missing": [
+        "slpdb.shtml"
+      ]
+    },
+    "channels": {
+      "records": 18,
+      "channel_layouts": 12,
+      "records_with_nasal": 15,
+      "records_missing_ecg": [],
+      "records_missing_resp": [],
+      "layouts": [
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C4-A1)",
+            "Resp (sum)"
+          ],
+          "fs": 250,
+          "count": 2
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (O2-A1)",
+            "Resp (nasal)"
+          ],
+          "fs": 250,
+          "count": 2
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)"
+          ],
+          "fs": 250,
+          "count": 4
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C4-A1)",
+            "Resp (nasal)",
+            "Resp (chest)",
+            "EOG",
+            "EMG"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C4-A1)",
+            "Resp (nasal)",
+            "Resp (abdominal)",
+            "EOG (right)",
+            "EMG"
+          ],
+          "fs": 250,
+          "count": 2
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)",
+            "Resp (abdominal)",
+            "EOG (right)",
+            "EMG"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)",
+            "Resp (chest)",
+            "EOG (right)",
+            "EMG"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)",
+            "Resp (abdominal)",
+            "SV",
+            "SO2"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (abdominal)",
+            "Resp (nasal)",
+            "SV",
+            "SO2"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (abdominal)",
+            "SV",
+            "SO2"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)",
+            "Resp (abdomen)",
+            "SV",
+            "SO2"
+          ],
+          "fs": 250,
+          "count": 1
+        },
+        {
+          "channels": [
+            "ECG",
+            "BP",
+            "EEG (C3-O1)",
+            "Resp (nasal)",
+            "Resp (chest)",
+            "SV",
+            "SO2"
+          ],
+          "fs": 250,
+          "count": 1
+        }
+      ]
+    }
+  },
+  "apnea_ecg": {
+    "checksums": {
+      "listed": 384,
+      "ok": 383,
+      "mismatch": [],
+      "missing": [
+        "annotations.shtml"
+      ]
+    },
+    "channels": {
+      "records_listed": 86,
+      "base_records": 70,
+      "derived_records": 16,
+      "channel_layouts": 1,
+      "layouts": [
+        {
+          "channels": [
+            "ECG"
+          ],
+          "fs": 100,
+          "count": 70
+        }
+      ],
+      "n_signal_channel_counts": [
+        1
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "architecture": {
+    "patch_seconds": 0.2,
+    "note_patch_seconds": "Both branches use the same patch duration, so ECG (100 Hz) and respiration (25 Hz) produce the same token count and the same time span per token. Section 3.4.2 allows different per-modality rates as long as the time span is aligned.",
+    "d_model": 64,
+    "n_layers": 2,
+    "n_heads": 4,
+    "ffn_dim": 128,
+    "dropout": 0.1,
+    "attn_dropout": 0.1,
+    "pooling": "mean",
+    "head_hidden": 64,
+    "head_activation": "gelu",
+    "n_classes": 2,
+    "norm_first": true,
+    "positional_embedding": "learnable"
+  },
+  "benchmark": [
+    {
+      "model": "proposed",
+      "duration_s": 10,
+      "params": 217602,
+      "tokens_per_branch": 5,
+      "sec_per_step_batch32": 0.3072,
+      "windows_per_sec": 104.2,
+      "loss": 0.6531,
+      "grad_norm": 0.3,
+      "finite": true
+    },
+    {
+      "model": "ecg_only",
+      "duration_s": 10,
+      "params": 75906,
+      "tokens_per_branch": 5,
+      "sec_per_step_batch32": 0.0749,
+      "windows_per_sec": 427.2,
+      "loss": 0.6361,
+      "grad_norm": 0.21,
+      "finite": true
+    },
+    {
+      "model": "resp_only",
+      "duration_s": 10,
+      "params": 74946,
+      "tokens_per_branch": 5,
+      "sec_per_step_batch32": 0.0715,
+      "windows_per_sec": 447.3,
+      "loss": 0.6895,
+      "grad_norm": 0.27,
+      "finite": true
+    },
+    {
+      "model": "simple_fusion",
+      "duration_s": 10,
+      "params": 150658,
+      "tokens_per_branch": 5,
+      "sec_per_step_batch32": 0.1684,
+      "windows_per_sec": 190.0,
+      "loss": 0.6719,
+      "grad_norm": 0.3,
+      "finite": true
+    }
+  ]
+}

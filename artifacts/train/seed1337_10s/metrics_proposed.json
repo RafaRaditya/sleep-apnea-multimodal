@@ -1,0 +1,124 @@
+{
+  "model": "proposed",
+  "params": 217602,
+  "duration_s": 10,
+  "seed": 1337,
+  "train_windows": 117954,
+  "train_subjects": 26,
+  "val_windows": 13485,
+  "val_subjects": 6,
+  "best_epoch": 4,
+  "best_val_loss": 0.6898,
+  "epochs_run": 7,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5382,
+      "val_loss": 0.7786,
+      "lr": 0.000997,
+      "train_s": 967.8,
+      "val_s": 14.7
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4649,
+      "val_loss": 0.6906,
+      "lr": 0.000963,
+      "train_s": 1006.0,
+      "val_s": 11.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4386,
+      "val_loss": 0.7249,
+      "lr": 0.000895,
+      "train_s": 706.6,
+      "val_s": 9.9
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4211,
+      "val_loss": 0.6898,
+      "lr": 0.000796,
+      "train_s": 671.7,
+      "val_s": 10.7
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4049,
+      "val_loss": 0.7223,
+      "lr": 0.000675,
+      "train_s": 681.9,
+      "val_s": 10.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.3918,
+      "val_loss": 0.701,
+      "lr": 0.000541,
+      "train_s": 674.7,
+      "val_s": 9.8
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.378,
+      "val_loss": 0.7376,
+      "lr": 0.000404,
+      "train_s": 672.6,
+      "val_s": 10.1
+    }
+  ],
+  "class_weights": [
+    0.6163,
+    2.6493
+  ],
+  "threshold": 0.565,
+  "threshold_val_f1": 0.3786,
+  "val_overall": {
+    "accuracy": 0.7741,
+    "sensitivity": 0.4477,
+    "specificity": 0.8334,
+    "precision": 0.328,
+    "f1": 0.3786,
+    "roc_auc": 0.6476,
+    "tp": 928,
+    "tn": 9511,
+    "fp": 1901,
+    "fn": 1145,
+    "n": 13485,
+    "positives": 2073
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.5498,
+      "sensitivity": 0.5985,
+      "specificity": 0.5254,
+      "precision": 0.387,
+      "f1": 0.47,
+      "roc_auc": 0.5984,
+      "tp": 702,
+      "tn": 1231,
+      "fp": 1112,
+      "fn": 471,
+      "n": 3516,
+      "positives": 1173
+    },
+    "UCDDB": {
+      "accuracy": 0.8532,
+      "sensitivity": 0.2511,
+      "specificity": 0.913,
+      "precision": 0.2227,
+      "f1": 0.236,
+      "roc_auc": 0.6537,
+      "tp": 226,
+      "tn": 8280,
+      "fp": 789,
+      "fn": 674,
+      "n": 9969,
+      "positives": 900
+    }
+  },
+  "inference_ms_per_window": 0.747,
+  "checkpoint": "artifacts\\train\\seed1337_10s\\checkpoints\\proposed.pt",
+  "wall_minutes": 91.28
+}

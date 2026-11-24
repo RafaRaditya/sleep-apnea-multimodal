@@ -1,0 +1,18 @@
+{
+  "stage": "7a",
+  "run_at": "2026-11-24 11:32:18",
+  "seeds": [
+    42,
+    1337,
+    2024
+  ],
+  "duration_s": 10,
+  "source": [
+    "artifacts/train/seed42_10s",
+    "artifacts/train/seed1337_10s",
+    "artifacts/train/seed2024_10s"
+  ],
+  "split": "validation only; test not read by this script",
+  "summary": "mean and sample SD (ddof=1) across seeds",
+  "caution": "each seed is a different subject split, so SD across seeds measures split sensitivity, not run-to-run variance of a fixed split"
+}

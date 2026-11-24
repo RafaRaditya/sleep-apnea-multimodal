@@ -1,0 +1,9 @@
+model,split,windows,subjects,positive_rate,roc_auc,mean_score_positive,mean_score_negative,score_min,score_max
+proposed,train,3000,26,0.1993,0.7993,0.4658,0.2691,0.103,0.7441
+proposed,val,3000,6,0.088,0.467,0.2674,0.2737,0.1079,0.7345
+ecg_only,train,3000,26,0.1993,0.797,0.6513,0.383,0.066,0.9609
+ecg_only,val,3000,6,0.088,0.4525,0.2728,0.3264,0.0674,0.9187
+resp_only,train,3000,26,0.1993,0.7946,0.6255,0.3861,0.1026,0.8999
+resp_only,val,3000,6,0.088,0.5569,0.4146,0.3808,0.1088,0.8783
+simple_fusion,train,3000,26,0.1993,0.8234,0.5713,0.3181,0.0767,0.9123
+simple_fusion,val,3000,6,0.088,0.498,0.3174,0.3162,0.0866,0.8847

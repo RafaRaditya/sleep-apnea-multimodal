@@ -1,0 +1,26 @@
+{
+  "stage": 6,
+  "run_at": "2026-11-24 11:35:02",
+  "seed": 2024,
+  "duration_s": 10,
+  "source_frozen": "artifacts\\train\\seed2024_10s\\frozen.json",
+  "frozen_at": "2026-11-24 11:32:09",
+  "rule": "checkpoint and validation threshold applied unchanged; test read once",
+  "models": [
+    "proposed",
+    "simple_fusion",
+    "ecg_only",
+    "resp_only"
+  ],
+  "metrics": [
+    "accuracy",
+    "sensitivity",
+    "specificity",
+    "precision",
+    "f1",
+    "roc_auc"
+  ],
+  "windows_file": "artifacts/windows/windows_10s.csv",
+  "test_windows": 13730,
+  "test_subjects": 6
+}

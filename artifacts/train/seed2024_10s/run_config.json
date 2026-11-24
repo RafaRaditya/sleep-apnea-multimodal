@@ -1,0 +1,56 @@
+{
+  "stage": 5,
+  "seed": 2024,
+  "duration_s": 10,
+  "models": [
+    "proposed",
+    "simple_fusion",
+    "ecg_only",
+    "resp_only"
+  ],
+  "max_epochs": 12,
+  "patience": 3,
+  "train_cap": null,
+  "model_config": {
+    "version": "2026-11-20",
+    "status": "provisional",
+    "provenance": "Numeric values are not stated in paper RM (1).pdf. Sections 3.4.1 and 3.4.5-3.4.9 leave patch size, model width, depth, heads, dropout, batch size and learning rate TBD, tuned on validation. Values here are pilot defaults chosen for the available hardware (CPU only) and must be re-tuned on validation before any test-set prediction.",
+    "architecture": {
+      "patch_seconds": 0.2,
+      "note_patch_seconds": "Both branches use the same patch duration, so ECG (100 Hz) and respiration (25 Hz) produce the same token count and the same time span per token. Section 3.4.2 allows different per-modality rates as long as the time span is aligned.",
+      "d_model": 64,
+      "n_layers": 2,
+      "n_heads": 4,
+      "ffn_dim": 128,
+      "dropout": 0.1,
+      "attn_dropout": 0.1,
+      "pooling": "mean",
+      "head_hidden": 64,
+      "head_activation": "gelu",
+      "n_classes": 2,
+      "norm_first": true,
+      "positional_embedding": "learnable"
+    },
+    "training": {
+      "loss": "class-weighted cross-entropy",
+      "optimizer": "AdamW",
+      "weight_decay": 0.01,
+      "lr": 0.001,
+      "warmup_fraction": 0.05,
+      "schedule": "cosine decay after linear warmup",
+      "early_stopping": "validation loss",
+      "patience": 3,
+      "max_epochs": 12,
+      "grad_clip_norm": 1.0,
+      "batch_size": 64,
+      "num_workers": 0,
+      "seed": 2024,
+      "duration_s": 10,
+      "ceiling": "pilot only: one seed, reduced training subset, no test-set access"
+    }
+  },
+  "windows_file": "artifacts/windows/windows_10s.csv",
+  "norm_file": "artifacts/normalization/norm_stats.json",
+  "test_split_read": false,
+  "started": "2026-11-24 09:04:51"
+}

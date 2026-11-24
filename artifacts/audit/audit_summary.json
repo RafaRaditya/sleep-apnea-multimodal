@@ -1,0 +1,93 @@
+{
+  "UCDDB": {
+    "records": 25,
+    "total_hours": 173.4,
+    "duration_h_mean_sd": "6.93 +/- 0.53",
+    "event_positive_fraction_mean": 0.1001,
+    "event_positive_fraction_pooled": 0.0977,
+    "event_count": 3428,
+    "event_categories": {
+      "hypopnea": 2623,
+      "apnea": 695,
+      "possible": 19,
+      "periodic_breathing": 91
+    },
+    "possible_event_seconds": 143,
+    "periodic_breathing_seconds": 1353,
+    "event_types": {
+      "HYP-C": 1076,
+      "HYP-O": 1433,
+      "APNEA-O": 216,
+      "HYP-M": 114,
+      "APNEA-M": 136,
+      "POSSIBLE": 19,
+      "APNEA-C": 343,
+      "PB EVENT": 91
+    },
+    "signal_count_distribution": {
+      "14": 24,
+      "16": 1
+    },
+    "unannotated_tail_s_mean": 17.1,
+    "event_bounds_violations": 0
+  },
+  "MIT-BIH_PSG": {
+    "records": 18,
+    "subjects": 16,
+    "total_hours": 85.6,
+    "duration_h_mean_sd": "4.76 +/- 1.71",
+    "apnea_epoch_fraction_mean": 0.3247,
+    "apnea_epoch_fraction_pooled": 0.3275,
+    "event_tokens": {
+      "LA": 226,
+      "L": 299,
+      "HA": 754,
+      "H": 272,
+      "X": 1617,
+      "CA": 56,
+      "CAA": 181,
+      "A": 33,
+      "OA": 616,
+      "LLLL": 1,
+      "LLL": 1,
+      "LL": 5
+    },
+    "resp_channel_counts": {
+      "Resp (sum)": 2,
+      "Resp (nasal)": 15,
+      "Resp (abdominal)": 1
+    },
+    "resp_type_counts": {
+      "effort sum": 2,
+      "airflow (nasal)": 15,
+      "abdominal effort": 1
+    },
+    "eligible_records": 15,
+    "excluded_records": [
+      "slp01a",
+      "slp01b",
+      "slp61"
+    ],
+    "annotation_coverage_epochs": "10197/10274",
+    "unannotated_tail_s_mean": 128.3
+  },
+  "Apnea-ECG": {
+    "records": 70,
+    "total_hours": 573.7,
+    "duration_h_mean_sd": "8.20 +/- 0.54",
+    "minute_positive_fraction_mean": 0.3689,
+    "minute_positive_fraction_pooled": 0.3807,
+    "label_counts": {
+      "N": 21249,
+      "A": 13064
+    },
+    "record_groups": {
+      "a": 20,
+      "b": 5,
+      "c": 10,
+      "x": 35
+    },
+    "derived_records_excluded": 16
+  },
+  "eligible_manifest_rows": 39
+}

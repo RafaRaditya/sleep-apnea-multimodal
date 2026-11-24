@@ -1,0 +1,70 @@
+{
+  "model": "proposed",
+  "params": 217602,
+  "best_epoch": 1,
+  "best_val_loss": 0.58,
+  "epochs_run": 3,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6243,
+      "val_loss": 0.58,
+      "lr": 0.000895,
+      "train_s": 66.7,
+      "val_s": 2.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5814,
+      "val_loss": 0.685,
+      "lr": 0.000541,
+      "train_s": 54.2,
+      "val_s": 2.4
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5458,
+      "val_loss": 0.7047,
+      "lr": 0.000161,
+      "train_s": 53.9,
+      "val_s": 2.2
+    }
+  ],
+  "class_counts_train": [
+    6344.0,
+    1656.0
+  ],
+  "class_weights": [
+    0.6305,
+    2.4155
+  ],
+  "threshold_val_f1": 0.11,
+  "val_metrics_at_val_threshold": {
+    "accuracy": 0.08966666666666667,
+    "sensitivity": 1.0,
+    "specificity": 0.0007317965605561653,
+    "precision": 0.08905937291527685,
+    "f1": 0.16355283307810106,
+    "roc_auc": 0.4393040532484778,
+    "tp": 267,
+    "tn": 2,
+    "fp": 2731,
+    "fn": 0
+  },
+  "val_metrics_at_0.5": {
+    "accuracy": 0.79,
+    "sensitivity": 0.1348314606741573,
+    "specificity": 0.854006586169045,
+    "precision": 0.08275862068965517,
+    "f1": 0.10256410256410256,
+    "roc_auc": 0.4393040532484778,
+    "tp": 36,
+    "tn": 2334,
+    "fp": 399,
+    "fn": 231
+  },
+  "inference_s_per_window": 0.000738,
+  "checkpoint_reload_max_logit_diff": 0.0,
+  "checkpoint": "artifacts\\pilot\\checkpoints\\proposed.pt",
+  "wall_minutes": 3.14
+}

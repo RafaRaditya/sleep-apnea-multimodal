@@ -1,0 +1,76 @@
+{
+  "model": "ecg_only",
+  "params": 75906,
+  "duration_s": 10,
+  "seed": 42,
+  "train_windows": 600,
+  "train_subjects": 26,
+  "val_windows": 14407,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.674,
+  "epochs_run": 1,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6928,
+      "val_loss": 0.674,
+      "lr": 0.0,
+      "train_s": 2.1,
+      "val_s": 7.1
+    }
+  ],
+  "class_weights": [
+    0.6424,
+    2.2556
+  ],
+  "threshold": 0.5,
+  "threshold_val_f1": 0.263,
+  "val_overall": {
+    "accuracy": 0.6367,
+    "sensitivity": 0.7413,
+    "specificity": 0.6267,
+    "precision": 0.1599,
+    "f1": 0.263,
+    "roc_auc": 0.7125,
+    "tp": 934,
+    "tn": 8239,
+    "fp": 4908,
+    "fn": 326,
+    "n": 14407,
+    "positives": 1260
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.3751,
+      "sensitivity": 0.8893,
+      "specificity": 0.2766,
+      "precision": 0.1906,
+      "f1": 0.3139,
+      "roc_auc": 0.6322,
+      "tp": 643,
+      "tn": 1044,
+      "fp": 2731,
+      "fn": 80,
+      "n": 4498,
+      "positives": 723
+    },
+    "UCDDB": {
+      "accuracy": 0.7555,
+      "sensitivity": 0.5419,
+      "specificity": 0.7677,
+      "precision": 0.1179,
+      "f1": 0.1937,
+      "roc_auc": 0.6614,
+      "tp": 291,
+      "tn": 7195,
+      "fp": 2177,
+      "fn": 246,
+      "n": 9909,
+      "positives": 537
+    }
+  },
+  "inference_ms_per_window": 0.474,
+  "checkpoint": "artifacts\\train\\_smoke\\checkpoints\\ecg_only.pt",
+  "wall_minutes": 0.29
+}

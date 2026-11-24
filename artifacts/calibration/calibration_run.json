@@ -1,0 +1,13 @@
+{
+  "stage": "6b",
+  "run_at": "2026-11-23 01:06:47",
+  "seed": 42,
+  "duration_s": 10,
+  "source": {
+    "val": "artifacts\\train\\seed42_10s",
+    "test": "artifacts\\test\\seed42_10s"
+  },
+  "status": "post-hoc diagnostic; the per-record normalisation was chosen after seeing test results and is reported as secondary, never as the headline",
+  "n_boot": 2000,
+  "caution": "bootstrap resamples 6 subjects and ignores within-subject autocorrelation, so intervals are optimistic in width and must not be read as power"
+}

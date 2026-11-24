@@ -1,0 +1,78 @@
+{
+  "model": "resp_only",
+  "params": 74946,
+  "best_epoch": 4,
+  "best_val_loss": 0.6786,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.6236,
+      "val_loss": 0.7298,
+      "lr": 0.000895,
+      "train_s": 18.1,
+      "val_s": 0.7
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5918,
+      "val_loss": 0.7353,
+      "lr": 0.000541,
+      "train_s": 18.8,
+      "val_s": 0.8
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5809,
+      "val_loss": 0.6843,
+      "lr": 0.000161,
+      "train_s": 18.1,
+      "val_s": 0.8
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5771,
+      "val_loss": 0.6786,
+      "lr": 0.0,
+      "train_s": 19.4,
+      "val_s": 0.7
+    }
+  ],
+  "class_counts_train": [
+    6344.0,
+    1656.0
+  ],
+  "class_weights": [
+    0.6305,
+    2.4155
+  ],
+  "threshold_val_f1": 0.215,
+  "val_metrics_at_val_threshold": {
+    "accuracy": 0.3506666666666667,
+    "sensitivity": 0.7490636704119851,
+    "specificity": 0.31174533479692645,
+    "precision": 0.09610764055742431,
+    "f1": 0.17035775127768316,
+    "roc_auc": 0.522016250268942,
+    "tp": 200,
+    "tn": 852,
+    "fp": 1881,
+    "fn": 67
+  },
+  "val_metrics_at_0.5": {
+    "accuracy": 0.6793333333333333,
+    "sensitivity": 0.30711610486891383,
+    "specificity": 0.7156970362239298,
+    "precision": 0.09545983701979045,
+    "f1": 0.14564831261101244,
+    "roc_auc": 0.522016250268942,
+    "tp": 82,
+    "tn": 1956,
+    "fp": 777,
+    "fn": 185
+  },
+  "inference_s_per_window": 0.000237,
+  "checkpoint_reload_max_logit_diff": 0.0,
+  "checkpoint": "artifacts\\pilot\\checkpoints\\resp_only.pt",
+  "wall_minutes": 1.31
+}

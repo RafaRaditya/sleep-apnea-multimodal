@@ -1,0 +1,124 @@
+{
+  "model": "simple_fusion",
+  "params": 150658,
+  "duration_s": 10,
+  "seed": 42,
+  "train_windows": 116199,
+  "train_subjects": 26,
+  "val_windows": 14407,
+  "val_subjects": 6,
+  "best_epoch": 4,
+  "best_val_loss": 0.563,
+  "epochs_run": 7,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5601,
+      "val_loss": 0.5983,
+      "lr": 0.000997,
+      "train_s": 569.3,
+      "val_s": 9.6
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4937,
+      "val_loss": 0.5819,
+      "lr": 0.000963,
+      "train_s": 566.3,
+      "val_s": 10.1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4702,
+      "val_loss": 0.5962,
+      "lr": 0.000895,
+      "train_s": 543.8,
+      "val_s": 9.8
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4521,
+      "val_loss": 0.563,
+      "lr": 0.000796,
+      "train_s": 572.3,
+      "val_s": 10.4
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4375,
+      "val_loss": 0.5692,
+      "lr": 0.000675,
+      "train_s": 578.1,
+      "val_s": 10.3
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4233,
+      "val_loss": 0.6449,
+      "lr": 0.000541,
+      "train_s": 566.9,
+      "val_s": 11.7
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4122,
+      "val_loss": 0.6253,
+      "lr": 0.000404,
+      "train_s": 607.6,
+      "val_s": 10.3
+    }
+  ],
+  "class_weights": [
+    0.6311,
+    2.4065
+  ],
+  "threshold": 0.37,
+  "threshold_val_f1": 0.2407,
+  "val_overall": {
+    "accuracy": 0.567,
+    "sensitivity": 0.7849,
+    "specificity": 0.5461,
+    "precision": 0.1422,
+    "f1": 0.2407,
+    "roc_auc": 0.6929,
+    "tp": 989,
+    "tn": 7180,
+    "fp": 5967,
+    "fn": 271,
+    "n": 14407,
+    "positives": 1260
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.3911,
+      "sensitivity": 0.6971,
+      "specificity": 0.3325,
+      "precision": 0.1667,
+      "f1": 0.269,
+      "roc_auc": 0.4577,
+      "tp": 504,
+      "tn": 1255,
+      "fp": 2520,
+      "fn": 219,
+      "n": 4498,
+      "positives": 723
+    },
+    "UCDDB": {
+      "accuracy": 0.6469,
+      "sensitivity": 0.9032,
+      "specificity": 0.6322,
+      "precision": 0.1233,
+      "f1": 0.2171,
+      "roc_auc": 0.8211,
+      "tp": 485,
+      "tn": 5925,
+      "fp": 3447,
+      "fn": 52,
+      "n": 9909,
+      "positives": 537
+    }
+  },
+  "inference_ms_per_window": 0.728,
+  "checkpoint": "artifacts\\train\\seed42_10s\\checkpoints\\simple_fusion.pt",
+  "wall_minutes": 68.15
+}

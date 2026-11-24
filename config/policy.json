@@ -1,0 +1,45 @@
+{
+  "version": "2026-11-18",
+  "multimodal_policy": {
+    "require_ecg": true,
+    "require_airflow": true,
+    "description": "The proposed model requires both ECG and respiratory inputs (Section 3.4.2). A record is eligible only if it provides an airflow channel, per the strict airflow decision.",
+    "datasets_considered": ["UCDDB", "MIT-BIH_PSG", "Apnea-ECG"],
+    "datasets_excluded_from_multimodal": {
+      "Apnea-ECG": "ECG-only: all 70 base records contain a single ECG channel at 100 Hz; no respiratory channel."
+    },
+    "psg_airflow_channel": "Resp (nasal)",
+    "ucddb_airflow_channel": "Flow",
+    "excluded_records": {
+      "ucddb005": "Flow channel unusable: std 0.503 vs 4.2-6.0 in other UCDDB records, only 318 unique values, flat after initial transient. Excluded rather than substituted with an effort channel, preserving the strict airflow policy."
+    }
+  },
+  "preprocessing": {
+    "ecg": {
+      "bandpass_hz": [0.5, 40.0],
+      "order": 4,
+      "zero_phase": true,
+      "notch": "detected mains frequency (50/60 Hz), Q=30, applied when peak/neighbour ratio >= 3",
+      "target_fs_hz": 100.0
+    },
+    "resp": {
+      "lowpass_hz": 0.7,
+      "order": 4,
+      "detrend": "linear",
+      "target_fs_hz": 25.0
+    },
+    "status": "provisional"
+  },
+  "labeling": {
+    "positive_overlap_fraction": 0.5,
+    "positive_types": ["apnea", "hypopnea"],
+    "non_positive_types": ["POSSIBLE", "PB EVENT"],
+    "training_stride_fraction": 0.5,
+    "evaluation_stride_fraction": 1.0
+  },
+  "splits": {
+    "ratios": {"train": 0.7, "validation": 0.15, "test": 0.15},
+    "seeds": [42, 1337, 2024],
+    "unit": "subject"
+  }
+}
