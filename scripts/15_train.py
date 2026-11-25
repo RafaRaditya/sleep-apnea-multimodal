@@ -52,6 +52,28 @@ def pick_device(requested: str = "auto") -> torch.device:
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+def rel_or_abs(path: Path) -> str:
+    """Record a path relative to the project when possible, otherwise absolute.
+
+    Output directories may legitimately live outside the repo (e.g. --out on Colab), and
+    Path.relative_to raises rather than falling back.
+    """
+    try:
+        return str(Path(path).relative_to(ROOT))
+    except ValueError:
+        return str(Path(path).resolve())
+
+
+def resolve_recorded(path: Path | str) -> Path:
+    """Turn a recorded path back into a usable one, on Windows as well as Linux.
+
+    `ROOT / "/abs/path"` is only absolute on POSIX; on Windows a leading backslash keeps
+    the current drive and silently drops it. So absolute paths are used as-is.
+    """
+    p = Path(path)
+    return p if p.is_absolute() else ROOT / p
+
+
 def metrics_from_scores(y: np.ndarray, score: np.ndarray, threshold: float) -> dict:
     from sklearn.metrics import roc_auc_score
     pred = (score >= threshold).astype(int)
@@ -295,7 +317,7 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
         "val_by_dataset": {d: {k: (round(v, 4) if isinstance(v, float) else v)
                                for k, v in m.items()} for d, m in per_dataset.items()},
         "inference_ms_per_window": round(sec_per_window * 1000, 3),
-        "checkpoint": str(ckpt_path.relative_to(ROOT)),
+        "checkpoint": rel_or_abs(ckpt_path),
     }
     (out_dir / f"metrics_{name}.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(f"[{name}] frozen: epoch={best['epoch']} val_loss={best['val_loss']:.4f} "

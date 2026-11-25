@@ -93,7 +93,7 @@ def evaluate_one(name: str, frozen_entry: dict, test_rows: pd.DataFrame, norm: d
                  duration: int, out_dir: Path, device: torch.device | None = None,
                  workers: int = 0) -> dict:
     device = device or torch.device("cpu")
-    ckpt_path = ROOT / frozen_entry["checkpoint"]
+    ckpt_path = train_mod.resolve_recorded(frozen_entry["checkpoint"])
     threshold = float(frozen_entry["threshold"])
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
 
@@ -231,7 +231,7 @@ def main() -> None:
         "stage": 6,
         "run_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         "seed": args.seed, "duration_s": args.duration,
-        "source_frozen": str(frozen_path.relative_to(ROOT)),
+        "source_frozen": train_mod.rel_or_abs(frozen_path),
         "frozen_at": frozen["frozen_at"],
         "rule": "checkpoint and validation threshold applied unchanged; test read once",
         "models": names,

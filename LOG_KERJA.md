@@ -770,6 +770,15 @@ berubah).
 `notebooks/colab_ablation_30s.ipynb` untuk run penuh (±80 menit di T4 untuk
 5 arm × 2 model × 3 seed, 30 s).
 
+**Bug kedua: `--out` di luar repo (25 Nov 2026).** Smoke test Colab kedua gagal dengan
+`ValueError: ... is not in the subpath of '/content/Research_v2'` karena skrip memaksa
+`path.relative_to(ROOT)` saat mencatat path checkpoint, sedangkan `--out /content/smoke_ablation`
+berada di luar proyek. Diperbaiki dengan `rel_or_abs()` (relatif bila memungkinkan, absolut bila
+tidak) dan `resolve_recorded()` untuk membacanya kembali. `resolve_recorded()` perlu karena
+`ROOT / "/abs/path"` hanya menghasilkan path absolut di POSIX; di Windows huruf drive-nya hilang,
+jadi path absolut kini dipakai apa adanya. Diuji: output di luar repo dengan dan tanpa pembacaan
+test, serta reproduksi angka seed 42 30 s yang sudah di-commit dengan nilai identik.
+
 Output nanti: `artifacts/ablation/seed<list>_<duration>s/{ablation_val.csv,
 ablation_test.csv, ablation_per_seed.csv, ablation_run.json, runs/...}`.
 

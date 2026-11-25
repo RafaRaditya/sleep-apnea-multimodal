@@ -200,7 +200,8 @@ def main() -> None:
         "stage": "6b",
         "run_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         "seed": args.seed, "duration_s": args.duration,
-        "source": {"val": str(tr.relative_to(ROOT)), "test": str(te.relative_to(ROOT))},
+        "source": {"val": str(tr.relative_to(ROOT)) if tr.is_relative_to(ROOT) else str(tr),
+                   "test": str(te.relative_to(ROOT)) if te.is_relative_to(ROOT) else str(te)},
         "status": "post-hoc diagnostic; the per-record normalisation was chosen after "
                   "seeing test results and is reported as secondary, never as the headline",
         "n_boot": args.n_boot,

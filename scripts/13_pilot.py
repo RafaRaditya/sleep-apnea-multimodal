@@ -222,7 +222,7 @@ def run(name: str, train_data: dict, val_data: dict, duration_s: int, out: dict)
         "val_metrics_at_0.5": val_metrics_default,
         "inference_s_per_window": round(sec_per_window, 6),
         "checkpoint_reload_max_logit_diff": max_diff,
-        "checkpoint": str(ckpt_path.relative_to(ROOT)),
+        "checkpoint": str(ckpt_path.relative_to(ROOT)) if ckpt_path.is_relative_to(ROOT) else str(ckpt_path),
     }
 
 

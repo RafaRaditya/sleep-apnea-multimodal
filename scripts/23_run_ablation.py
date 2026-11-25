@@ -87,8 +87,9 @@ def run_arm(arm: str, model_name: str, seed: int, duration: int, manifest: pd.Da
                                  num_workers=workers, drop_last=False,
                                  pin_memory=(device.type == "cuda"),
                                  persistent_workers=workers > 0)
-        ckpt = torch.load(run_dir / "checkpoints" / f"{model_name}.pt",
-                          map_location=device, weights_only=False)
+        ckpt = torch.load(train_mod.resolve_recorded(
+            json.loads((run_dir / f"metrics_{model_name}.json").read_text(encoding="utf-8"))["checkpoint"]),
+            map_location=device, weights_only=False)
         model = build(model_name, duration).to(device)
         model.load_state_dict(ckpt["state_dict"])
         score, y, sec_per_window = train_mod.score_batches(model, test_loader, device)
@@ -208,7 +209,7 @@ def main() -> None:
     print("\n=== ablation, mean +/- SD across seeds ===")
     print(agg[keep].sort_values(["model", "val_roc_auc"], ascending=[True, False])
           .to_string(index=False))
-    print(f"\nwrote -> {out_dir.relative_to(ROOT)}")
+    print(f"\nwrote -> {train_mod.rel_or_abs(out_dir)}")
 
 
 if __name__ == "__main__":

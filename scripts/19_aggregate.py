@@ -122,7 +122,7 @@ def main() -> None:
                    "split sensitivity, not run-to-run variance of a fixed split",
     }, indent=2), encoding="utf-8")
 
-    print(f"\nwrote -> {out.relative_to(ROOT)}")
+    print(f"\nwrote -> {out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}")
 
 
 if __name__ == "__main__":
