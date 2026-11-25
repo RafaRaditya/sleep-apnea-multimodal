@@ -99,7 +99,12 @@ def score_batches(model: nn.Module, loader: DataLoader,
 def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
               val_loader: DataLoader, val_rows: pd.DataFrame, out_dir: Path,
               max_epochs: int, patience: int, train_cap: int | None = None,
-              device: torch.device | None = None, num_workers: int = 0) -> dict:
+              device: torch.device | None = None, num_workers: int = 0,
+              train_ds_factory=None) -> dict:
+    """train_ds_factory(train_rows) -> Dataset, for the preprocessing ablation.
+
+    When omitted, the standard WindowDataset is used, so Stage 5 is unchanged.
+    """
     device = device or torch.device("cpu")
     seed = TRAIN_CFG["seed"]
     torch.manual_seed(seed)
@@ -111,7 +116,8 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
         keep = np.sort(rng.choice(len(train_rows), size=min(train_cap, len(train_rows)),
                                   replace=False))
         train_rows = train_rows.iloc[keep].reset_index(drop=True)
-    train_ds = WindowDataset(train_rows, norm, duration, cache_size=64)
+    train_ds = (train_ds_factory(train_rows) if train_ds_factory
+                else WindowDataset(train_rows, norm, duration, cache_size=64))
     train_loader = DataLoader(train_ds, batch_size=TRAIN_CFG["batch_size"],
                               shuffle=True, num_workers=num_workers, drop_last=True,
                               pin_memory=(device.type == "cuda"),

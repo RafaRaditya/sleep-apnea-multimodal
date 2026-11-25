@@ -8,6 +8,10 @@ dataset-rm/
 # Per-record signal cache (~414 MB of .npy). Regenerate with scripts/04_preprocess.py.
 *.npy
 
+# Unfiltered cache for the preprocessing ablation. Regenerate with
+# scripts/22_make_unfiltered_cache.py.
+artifacts/signals_unfiltered/
+
 # Generated bundle for Colab (scripts/21_make_cache_zip.py). Upload to Drive instead.
 research_cache.zip
 research_cache.manifest.json

@@ -721,6 +721,46 @@ Output: `artifacts/train/seed{42,1337,2024}_30s/`, `artifacts/test/seed{42,1337,
 test_by_dataset_mean_sd.csv, test_auc_decomposition_mean_sd.csv, test_bootstrap_by_seed.csv,
 test_per_seed.csv, val_ranking.csv, aggregate_run.json, test_aggregate_run.json}`.
 
+### Tahap 7d — Eksperimen 3: ablation preprocessing (ALAT SIAP, BELUM DIJALANKAN)
+
+**Status: belum ada satu pun run penuh.** Jangan mengutip angka ablation apa pun.
+
+Yang sudah dikerjakan: kode dan data pendukungnya, bukan hasilnya.
+
+**Lima arm, masing-masing mengubah satu keputusan saja:**
+
+| Arm | Yang berubah vs baseline | Cache sinyal |
+|---|---|---|
+| `baseline` | tidak ada (pipeline sekarang) | filtered |
+| `no_clip` | clipping ±5σ dihapus | filtered |
+| `clip_per_record` | batas clip diskalakan ke std rekaman itu sendiri | filtered |
+| `norm_per_record` | z-score per rekaman, bukan per dataset | filtered |
+| `no_filter` | band-pass/low-pass/detrend dihapus | unfiltered |
+
+Arm `clip_per_record` dan `norm_per_record` dipilih karena temuan Tahap 6c: skala per
+rekaman berkisar 0,55–5,92 dalam satuan std dataset, sehingga ambang 5σ tetap memotong
+8–10% sampel respirasi di `slp02a/b` tetapi hampir tidak menyentuh rekaman lain.
+Diverifikasi: 37 dari 78 entri (record × modalitas) mendapat batas lebih longgar, 40 lebih
+ketat — jadi arm ini bukan duplikat `no_clip`.
+
+**Cache unfiltered** (`scripts/22_make_unfiltered_cache.py`): dibuat dari data mentah
+dengan resampling saja. Diverifikasi **0 mismatch panjang sampel** pada 39 record di kedua
+modalitas, sinkronisasi 0 ms, sehingga window manifest tetap valid.
+
+**Batasan yang wajib ikut pada `no_filter`:** `resample_poly` adalah anti-alias, dan itu
+sendiri low-pass (ECG ~50 Hz, respirasi ~12,5 Hz). Jadi arm ini berarti "tanpa filter
+tambahan", bukan "tanpa filter sama sekali". Jangan menulis klaim lebih kuat dari itu.
+
+**Sudah diuji:** smoke test end-to-end kelima arm (1 model, 1 epoch, 512 window) berjalan,
+menghitung validasi + test + agregasi. Itu membuktikan kode, bukan efek ablation.
+
+**Cara menjalankan:** lokal cepat untuk cek konfigurasi, atau
+`notebooks/colab_ablation_30s.ipynb` untuk run penuh (±80 menit di T4 untuk
+5 arm × 2 model × 3 seed, 30 s).
+
+Output nanti: `artifacts/ablation/seed<list>_<duration>s/{ablation_val.csv,
+ablation_test.csv, ablation_per_seed.csv, ablation_run.json, runs/...}`.
+
 ### Pemeriksaan tambahan yang sudah dijalankan
 
 | Skrip | Yang dibuktikan |

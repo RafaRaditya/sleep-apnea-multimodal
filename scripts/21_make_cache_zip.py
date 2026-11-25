@@ -32,6 +32,14 @@ INCLUDE_DIRS = [
     ("artifacts/normalization", "artifacts/normalization", "*.json"),
 ]
 
+# The unfiltered cache is only needed for the preprocessing ablation (arm A4). Included
+# automatically when present so one zip serves both Experiment 2 and Experiment 3.
+OPTIONAL_DIRS = [
+    ("artifacts/signals_unfiltered", "artifacts/signals_unfiltered", "*.npy"),
+    ("artifacts/signals_unfiltered", "artifacts/signals_unfiltered", "*.csv"),
+    ("artifacts/signals_unfiltered", "artifacts/signals_unfiltered", "*.json"),
+]
+
 SKIP_PARTS = {"__pycache__"}
 
 
@@ -41,6 +49,15 @@ def collect() -> list[tuple[Path, str]]:
         src = ROOT / src_rel
         if not src.exists():
             raise SystemExit(f"missing directory: {src}")
+        for path in sorted(src.glob(pattern)):
+            if SKIP_PARTS & set(path.parts):
+                continue
+            items.append((path, f"{arc_root}/{path.name}"))
+    for src_rel, arc_root, pattern in OPTIONAL_DIRS:
+        src = ROOT / src_rel
+        if not src.exists():
+            print(f"note: {src_rel} absent, skipping (only needed for the ablation)")
+            continue
         for path in sorted(src.glob(pattern)):
             if SKIP_PARTS & set(path.parts):
                 continue

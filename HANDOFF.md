@@ -46,9 +46,11 @@ Ditulis 24 November 2026.
 
 ### Persis di titik mana kita berhenti
 
-Eksperimen 1 dan 2 selesai dan terverifikasi (3 seed × 2 durasi, agregasi lengkap). Langkah
-berikutnya adalah Eksperimen 3 (ablation preprocessing), yang belum dimulai — belum ada satu pun
-run ablation. Kalau kamu mengambil alih, mulai dari keputusan desain ablation di bagian 7.
+Eksperimen 1 dan 2 selesai dan terverifikasi (3 seed × 2 durasi, agregasi lengkap).
+Eksperimen 3 (ablation preprocessing) **kodenya sudah siap dan sudah diuji end-to-end**
+di lokal dengan subset kecil, tetapi **belum ada satu pun run penuh** — jadi belum ada
+angka ablation. Kalau kamu mengambil alih, jalankan
+`notebooks/colab_ablation_30s.ipynb` (lihat bagian 5), lalu perbarui log.
 
 ---
 
@@ -122,10 +124,34 @@ python scripts\20_aggregate_test.py --seeds 42,1337,2024 --duration 30
 python scripts\10_report.py
 ```
 
-**GPU (Colab):** lihat `notebooks/colab_train_30s.ipynb`. Isinya: mount Drive, ekstrak
-`research_cache.zip`, verifikasi cache, lalu training dengan `--device cuda --workers 2`.
-Zip dibuat oleh `python scripts\21_make_cache_zip.py` (±400 MB), berisi scripts + config +
-cache sinyal + manifest window + norm stats. Dataset mentah tidak perlu di Colab.
+**GPU (Colab):** dua notebook tersedia.
+
+| Notebook | Untuk | Zip yang dibutuhkan |
+|---|---|---|
+| `notebooks/colab_train_30s.ipynb` | training seed 2024 30 s (sudah selesai) | 400 MB |
+| `notebooks/colab_ablation_30s.ipynb` | Eksperimen 3, 5 arm ablation | **786 MB** (butuh `signals_unfiltered/`) |
+
+Zip dibuat oleh `python scripts\21_make_cache_zip.py`, berisi scripts + config + kedua cache
+sinyal + manifest window + norm stats. Dataset mentah tidak perlu di Colab.
+
+**Eksperimen 3 (ablation) — kode sudah siap, belum dijalankan:**
+
+```powershell
+# lokal, cepat (1 seed, subset kecil) untuk cek konfigurasi
+python scripts\23_run_ablation.py --seeds 42 --models resp_only --duration 30 --max-epochs 1 --train-cap 512 --val-only
+
+# penuh (Colab, ±80 menit di T4)
+python scripts\23_run_ablation.py --seeds 42,1337,2024 --models proposed,resp_only --duration 30 --device cuda --workers 2
+```
+
+Lima arm: `baseline`, `no_clip`, `clip_per_record`, `norm_per_record`, `no_filter`
+(definisi di `scripts/23_ablation.py`). Cache unfiltered dibuat oleh
+`scripts/22_make_unfiltered_cache.py`; sudah diverifikasi 0 mismatch panjang sampel di 39
+record, jadi keselarasan window terjaga.
+
+**Batasan yang wajib ikut pada arm `no_filter`:** cache unfiltered tetap memakai
+`resample_poly`, dan anti-alias itu sendiri adalah low-pass (ECG ~50 Hz, respirasi ~12.5 Hz).
+Jadi arm ini berarti "tanpa filter tambahan", bukan "tanpa filter sama sekali".
 
 **Resume:** kalau sesi Colab terputus, jalankan perintah yang sama lagi. Skrip membaca
 `resume_<model>.pt` di direktori output dan melanjutkan dari epoch terakhir yang selesai,
