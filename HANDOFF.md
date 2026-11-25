@@ -93,7 +93,9 @@ Detail lengkap + tabel per dataset + bootstrap CI: `LOG_KERJA.md` Tahap 7a/7b.
 
 ## 5. Cara menjalankan
 
-Semua skrip di `scripts/`, dijalankan dari root proyek, Python 3.12, CPU-only.
+Semua skrip di `scripts/`, dijalankan dari root proyek, Python 3.12.
+
+**CPU (default, laptop):** tidak ada argumen tambahan, `--device auto` akan memilih CPU.
 
 ```powershell
 # Training penuh (per seed, per durasi)
@@ -110,11 +112,22 @@ python scripts\20_aggregate_test.py --seeds 42,1337,2024 --duration 30
 python scripts\10_report.py
 ```
 
-Skrip berurutan: `01_audit` → `02_split_windows` → `03_verify_datasets` → `04_preprocess` →
-`07_normalize` → `08_dataset` → `15_train` → `16_test` → `19/20_aggregate` → `10_report`.
+**GPU (Colab):** lihat `notebooks/colab_train_30s.ipynb`. Isinya: mount Drive, ekstrak
+`research_cache.zip`, verifikasi cache, lalu training dengan `--device cuda --workers 2`.
+Zip dibuat oleh `python scripts\21_make_cache_zip.py` (±400 MB), berisi scripts + config +
+cache sinyal + manifest window + norm stats. Dataset mentah tidak perlu di Colab.
 
-**Fakta mesin:** CPU 8 core, RAM bebas ~2 GB (harus). Sinyal di-stream dari cache, bukan dimuat
-semua. Satu `ecg_only` pernah 13.939 s/epoch karena mesin di-suspend — itu anomali, bukan pola.
+**Resume:** kalau sesi Colab terputus, jalankan perintah yang sama lagi. Skrip membaca
+`resume_<model>.pt` di direktori output dan melanjutkan dari epoch terakhir yang selesai,
+termasuk state optimizer dan posisi learning-rate scheduler.
+
+**Catatan perangkat:** hasil GPU bisa berbeda tipis dari CPU karena urutan operasi
+floating-point. Catat di log seed mana yang jalan di perangkat apa.
+
+**Fakta mesin (laptop):** CPU 8 core, RAM bebas ~2 GB. Sinyal di-stream dari cache, bukan
+dimuat semua. Satu `ecg_only` pernah 13.939 s/epoch karena mesin di-suspend — itu anomali,
+bukan pola. Jalankan `python scripts\keep_awake.py` untuk menahan Modern Standby selama
+training panjang di laptop.
 
 ---
 

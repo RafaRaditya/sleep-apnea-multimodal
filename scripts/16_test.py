@@ -74,13 +74,15 @@ def auc_decomposition(pred: pd.DataFrame) -> dict:
 
 
 @torch.no_grad()
-def score_batches(model: torch.nn.Module, loader: DataLoader) -> tuple[np.ndarray, np.ndarray, float]:
+def score_batches(model: torch.nn.Module, loader: DataLoader,
+                  device: torch.device | None = None) -> tuple[np.ndarray, np.ndarray, float]:
+    device = device or torch.device("cpu")
     model.eval()
     scores, labels, n = [], [], 0
     t0 = time.perf_counter()
     for batch in loader:
-        logits = model(batch["ecg"], batch["resp"])
-        scores.append(torch.softmax(logits, dim=1)[:, 1])
+        logits = model(batch["ecg"].to(device), batch["resp"].to(device))
+        scores.append(torch.softmax(logits, dim=1)[:, 1].cpu())
         labels.append(batch["label"])
         n += batch["label"].shape[0]
     return (torch.cat(scores).numpy(), torch.cat(labels).numpy(),
@@ -88,19 +90,23 @@ def score_batches(model: torch.nn.Module, loader: DataLoader) -> tuple[np.ndarra
 
 
 def evaluate_one(name: str, frozen_entry: dict, test_rows: pd.DataFrame, norm: dict,
-                 duration: int, out_dir: Path) -> dict:
+                 duration: int, out_dir: Path, device: torch.device | None = None,
+                 workers: int = 0) -> dict:
+    device = device or torch.device("cpu")
     ckpt_path = ROOT / frozen_entry["checkpoint"]
     threshold = float(frozen_entry["threshold"])
-    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
 
-    model = build(name, duration)
+    model = build(name, duration).to(device)
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
 
     loader = DataLoader(WindowDataset(test_rows, norm, duration, cache_size=64),
                         batch_size=TRAIN_CFG["batch_size"], shuffle=False,
-                        num_workers=0, drop_last=False)
-    score, y, sec_per_window = score_batches(model, loader)
+                        num_workers=workers, drop_last=False,
+                        pin_memory=(device.type == "cuda"),
+                        persistent_workers=workers > 0)
+    score, y, sec_per_window = score_batches(model, loader, device)
 
     expected = test_rows.label.to_numpy()
     if not np.array_equal(y, expected):
@@ -162,7 +168,11 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=TRAIN_CFG["seed"])
     ap.add_argument("--duration", type=int, default=TRAIN_CFG["duration_s"])
     ap.add_argument("--out", default=None)
+    ap.add_argument("--device", default="auto", help="auto | cpu | cuda | cuda:0")
+    ap.add_argument("--workers", type=int, default=0)
     args = ap.parse_args()
+
+    device = train_mod.pick_device(args.device)
 
     train_dir = ROOT / "artifacts" / "train" / f"seed{args.seed}_{args.duration}s"
     frozen_path = train_dir / "frozen.json"
@@ -198,7 +208,8 @@ def main() -> None:
     results = []
     for name in names:
         results.append(evaluate_one(name, frozen["models"][name], test_rows, norm,
-                                    args.duration, out_dir))
+                                    args.duration, out_dir, device=device,
+                                    workers=args.workers))
 
     summary = pd.DataFrame([{
         "model": r["model"], "windows": r["test_windows"], "positives": r["test_overall"]["positives"],

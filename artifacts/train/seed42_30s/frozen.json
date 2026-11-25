@@ -1,0 +1,34 @@
+{
+  "stage": 5,
+  "frozen_at": "2026-11-24 23:49:11",
+  "seed": 42,
+  "duration_s": 30,
+  "rule": "checkpoint, decision threshold, and hyperparameters are fixed before any test prediction",
+  "test_split_read": false,
+  "models": {
+    "resp_only": {
+      "checkpoint": "artifacts\\train\\seed42_30s\\checkpoints\\resp_only.pt",
+      "threshold": 0.37,
+      "best_epoch": 1,
+      "best_val_loss": 0.5827
+    },
+    "ecg_only": {
+      "checkpoint": "artifacts\\train\\seed42_30s\\checkpoints\\ecg_only.pt",
+      "threshold": 0.12,
+      "best_epoch": 1,
+      "best_val_loss": 0.5256
+    },
+    "proposed": {
+      "checkpoint": "artifacts\\train\\seed42_30s\\checkpoints\\proposed.pt",
+      "threshold": 0.04,
+      "best_epoch": 5,
+      "best_val_loss": 0.5805
+    },
+    "simple_fusion": {
+      "checkpoint": "artifacts\\train\\seed42_30s\\checkpoints\\simple_fusion.pt",
+      "threshold": 0.25,
+      "best_epoch": 4,
+      "best_val_loss": 0.5521
+    }
+  }
+}

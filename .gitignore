@@ -8,6 +8,10 @@ dataset-rm/
 # Per-record signal cache (~414 MB of .npy). Regenerate with scripts/04_preprocess.py.
 *.npy
 
+# Generated bundle for Colab (scripts/21_make_cache_zip.py). Upload to Drive instead.
+research_cache.zip
+research_cache.manifest.json
+
 # Model checkpoints (~10 MB). Regenerate with scripts/15_train.py from config/model.json.
 *.pt
 

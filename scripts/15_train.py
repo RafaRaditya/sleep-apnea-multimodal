@@ -45,6 +45,13 @@ MODEL_CFG = json.loads((ROOT / "config" / "model.json").read_text(encoding="utf-
 TRAIN_CFG = MODEL_CFG["training"]
 
 
+def pick_device(requested: str = "auto") -> torch.device:
+    """CPU stays the default behaviour; CUDA is used only when present and asked for."""
+    if requested != "auto":
+        return torch.device(requested)
+    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
 def metrics_from_scores(y: np.ndarray, score: np.ndarray, threshold: float) -> dict:
     from sklearn.metrics import roc_auc_score
     pred = (score >= threshold).astype(int)
@@ -74,12 +81,15 @@ def best_threshold(y: np.ndarray, score: np.ndarray) -> tuple[float, float]:
 
 
 @torch.no_grad()
-def score_batches(model: nn.Module, loader: DataLoader) -> tuple[np.ndarray, np.ndarray, float]:
+def score_batches(model: nn.Module, loader: DataLoader,
+                  device: torch.device | None = None) -> tuple[np.ndarray, np.ndarray, float]:
+    device = device or torch.device("cpu")
     model.eval()
     scores, labels, n = [], [], 0
     t0 = time.perf_counter()
     for batch in loader:
-        scores.append(torch.softmax(model(batch["ecg"], batch["resp"]), dim=1)[:, 1])
+        logits = model(batch["ecg"].to(device), batch["resp"].to(device))
+        scores.append(torch.softmax(logits, dim=1)[:, 1].cpu())
         labels.append(batch["label"])
         n += batch["label"].shape[0]
     return (torch.cat(scores).numpy(), torch.cat(labels).numpy(),
@@ -88,7 +98,9 @@ def score_batches(model: nn.Module, loader: DataLoader) -> tuple[np.ndarray, np.
 
 def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
               val_loader: DataLoader, val_rows: pd.DataFrame, out_dir: Path,
-              max_epochs: int, patience: int, train_cap: int | None = None) -> dict:
+              max_epochs: int, patience: int, train_cap: int | None = None,
+              device: torch.device | None = None, num_workers: int = 0) -> dict:
+    device = device or torch.device("cpu")
     seed = TRAIN_CFG["seed"]
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -101,13 +113,15 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
         train_rows = train_rows.iloc[keep].reset_index(drop=True)
     train_ds = WindowDataset(train_rows, norm, duration, cache_size=64)
     train_loader = DataLoader(train_ds, batch_size=TRAIN_CFG["batch_size"],
-                              shuffle=True, num_workers=0, drop_last=True)
+                              shuffle=True, num_workers=num_workers, drop_last=True,
+                              pin_memory=(device.type == "cuda"),
+                              persistent_workers=num_workers > 0)
 
     counts = torch.bincount(torch.from_numpy(train_rows.label.to_numpy()), minlength=2).float()
     weights = counts.sum() / (2 * counts.clamp(min=1))
-    criterion = nn.CrossEntropyLoss(weight=weights)
+    criterion = nn.CrossEntropyLoss(weight=weights.to(device))
 
-    model = build(name, duration)
+    model = build(name, duration).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=TRAIN_CFG["lr"],
                                   weight_decay=TRAIN_CFG["weight_decay"])
     total_steps = len(train_loader) * max_epochs
@@ -128,13 +142,40 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
 
     best = {"val_loss": float("inf"), "epoch": -1, "state": None}
     history = []
-    for epoch in range(max_epochs):
+
+    # Resume support: a long run on a preemptible session can be restarted without
+    # losing progress. Epoch numbers stay consistent because the scheduler is fast-forwarded.
+    resume_path = out_dir / f"resume_{name}.pt"
+    start_epoch = 0
+    if resume_path.exists():
+        r = torch.load(resume_path, map_location=device, weights_only=False)
+        model.load_state_dict(r["model"])
+        optimizer.load_state_dict(r["optimizer"])
+        best = r["best"]
+        if best.get("state") is not None:
+            best["state"] = r["best_state"]
+        history = r["history"]
+        start_epoch = r["next_epoch"]
+        for _ in range(start_epoch * len(train_loader)):
+            scheduler.step()
+        print(f"[{name}] resuming at epoch {start_epoch + 1} (best epoch {best['epoch']}, "
+              f"best val loss {best['val_loss']:.4f})", flush=True)
+
+    def save_resume(next_epoch: int) -> None:
+        torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(),
+                    "next_epoch": next_epoch,
+                    "best": {"val_loss": best["val_loss"], "epoch": best["epoch"]},
+                    "best_state": best["state"], "history": history}, resume_path)
+
+    for epoch in range(start_epoch, max_epochs):
         model.train()
         t0 = time.perf_counter()
         running, seen = 0.0, 0
         for batch in train_loader:
             optimizer.zero_grad()
-            loss = criterion(model(batch["ecg"], batch["resp"]), batch["label"])
+            logits = model(batch["ecg"].to(device, non_blocking=True),
+                           batch["resp"].to(device, non_blocking=True))
+            loss = criterion(logits, batch["label"].to(device, non_blocking=True))
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), TRAIN_CFG["grad_clip_norm"])
             optimizer.step()
@@ -149,8 +190,11 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
         v_loss, v_n = 0.0, 0
         with torch.no_grad():
             for batch in val_loader:
-                v_loss += float(criterion(model(batch["ecg"], batch["resp"]),
-                                          batch["label"])) * batch["label"].shape[0]
+                logits = model(batch["ecg"].to(device, non_blocking=True),
+                               batch["resp"].to(device, non_blocking=True))
+                v_loss += float(criterion(logits, batch["label"].to(device,
+                                                                   non_blocking=True))
+                                ) * batch["label"].shape[0]
                 v_n += batch["label"].shape[0]
         val_loss = v_loss / v_n
         val_s = time.perf_counter() - t0
@@ -171,6 +215,7 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
             print(f"[{name}] early stop after epoch {epoch + 1} "
                   f"(no improvement for {patience} epochs)", flush=True)
             break
+        save_resume(epoch + 1)
 
     model.load_state_dict(best["state"])
     ckpt_dir = out_dir / "checkpoints"
@@ -178,10 +223,11 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
     ckpt_path = ckpt_dir / f"{name}.pt"
     torch.save({"model": name, "duration_s": duration, "seed": seed,
                 "epoch": best["epoch"], "val_loss": best["val_loss"],
-                "state_dict": best["state"], "config": MODEL_CFG,
+                "state_dict": {k: v.cpu() for k, v in best["state"].items()},
+                "config": MODEL_CFG,
                 "train_windows": int(len(train_rows))}, ckpt_path)
 
-    score, y, sec_per_window = score_batches(model, val_loader)
+    score, y, sec_per_window = score_batches(model, val_loader, device)
     threshold, val_f1 = best_threshold(y, score)
 
     overall = metrics_from_scores(y, score, threshold)
@@ -240,12 +286,17 @@ def main() -> None:
     ap.add_argument("--out", default=None)
     ap.add_argument("--train-cap", type=int, default=None,
                     help="smoke testing only: cap training windows (recorded in run_config)")
+    ap.add_argument("--device", default="auto", help="auto | cpu | cuda | cuda:0")
+    ap.add_argument("--workers", type=int, default=0,
+                    help="DataLoader workers; raise on GPU hosts")
     args = ap.parse_args()
 
     names = [n.strip() for n in args.models.split(",") if n.strip()]
     for n in names:
         if n not in MODEL_NAMES:
             raise SystemExit(f"unknown model {n}; choose from {MODEL_NAMES}")
+
+    device = pick_device(args.device)
 
     out_dir = (Path(args.out) if args.out
                else ROOT / "artifacts" / "train" / f"seed{args.seed}_{args.duration}s").resolve()
@@ -259,12 +310,15 @@ def main() -> None:
     val_rows = manifest[(manifest.seed == args.seed) & (manifest.split == "val")].reset_index(drop=True)
     val_ds = WindowDataset(val_rows, norm, args.duration, cache_size=64)
     val_loader = DataLoader(val_ds, batch_size=TRAIN_CFG["batch_size"], shuffle=False,
-                            num_workers=0, drop_last=False)
+                            num_workers=args.workers, drop_last=False,
+                            pin_memory=(device.type == "cuda"),
+                            persistent_workers=args.workers > 0)
 
     run_config = {
         "stage": 5, "seed": args.seed, "duration_s": args.duration,
         "models": names, "max_epochs": args.max_epochs, "patience": args.patience,
         "train_cap": args.train_cap,
+        "device": str(device), "workers": args.workers,
         "model_config": MODEL_CFG,
         "windows_file": f"artifacts/windows/windows_{args.duration}s.csv",
         "norm_file": "artifacts/normalization/norm_stats.json",
@@ -272,13 +326,14 @@ def main() -> None:
         "started": time.strftime("%Y-%m-%d %H:%M:%S"),
     }
     (out_dir / "run_config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
-    print(f"stage 5 -> {out_dir}", flush=True)
+    print(f"stage 5 -> {out_dir} (device={device}, workers={args.workers})", flush=True)
 
     results = []
     for name in names:
         t0 = time.perf_counter()
         res = train_one(name, manifest, norm, args.duration, val_loader, val_rows,
-                        out_dir, args.max_epochs, args.patience, args.train_cap)
+                        out_dir, args.max_epochs, args.patience, args.train_cap,
+                        device=device, num_workers=args.workers)
         res["wall_minutes"] = round((time.perf_counter() - t0) / 60, 2)
         results.append(res)
         (out_dir / f"metrics_{name}.json").write_text(json.dumps(res, indent=2), encoding="utf-8")

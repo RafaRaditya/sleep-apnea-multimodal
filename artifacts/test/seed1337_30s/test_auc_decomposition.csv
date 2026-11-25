@@ -1,0 +1,5 @@
+model,pooled_auc,mean_subject_auc,min_subject_auc,max_subject_auc,within_subject_auc,subjects_scored
+resp_only,0.7545,0.7165,0.6115,0.8623,0.7006,6
+simple_fusion,0.7513,0.7021,0.5083,0.8749,0.6725,6
+proposed,0.6586,0.6485,0.3673,0.8478,0.5728,6
+ecg_only,0.53,0.48,0.3301,0.5958,0.453,6

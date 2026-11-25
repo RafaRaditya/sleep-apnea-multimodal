@@ -1,0 +1,65 @@
+{
+  "model": "resp_only",
+  "params": 81346,
+  "duration_s": 30,
+  "checkpoint": "artifacts\\train\\seed1337_30s\\checkpoints\\resp_only.pt",
+  "frozen_threshold": 0.525,
+  "best_epoch": 9,
+  "test_windows": 4678,
+  "test_subjects": 6,
+  "test_records": 6,
+  "test_positive_rate": 0.1539,
+  "test_overall": {
+    "accuracy": 0.6864,
+    "sensitivity": 0.7097,
+    "specificity": 0.6822,
+    "precision": 0.2889,
+    "f1": 0.4106,
+    "roc_auc": 0.7545,
+    "tp": 511,
+    "tn": 2700,
+    "fp": 1258,
+    "fn": 209,
+    "n": 4678,
+    "positives": 720
+  },
+  "test_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.4893,
+      "sensitivity": 0.82,
+      "specificity": 0.3516,
+      "precision": 0.3449,
+      "f1": 0.4856,
+      "roc_auc": 0.5923,
+      "tp": 337,
+      "tn": 347,
+      "fp": 640,
+      "fn": 74,
+      "n": 1398,
+      "positives": 411
+    },
+    "UCDDB": {
+      "accuracy": 0.7704,
+      "sensitivity": 0.5631,
+      "specificity": 0.792,
+      "precision": 0.2197,
+      "f1": 0.3161,
+      "roc_auc": 0.7808,
+      "tp": 174,
+      "tn": 2353,
+      "fp": 618,
+      "fn": 135,
+      "n": 3280,
+      "positives": 309
+    }
+  },
+  "auc_decomposition": {
+    "pooled_auc": 0.7545,
+    "mean_subject_auc": 0.7165,
+    "min_subject_auc": 0.6115,
+    "max_subject_auc": 0.8623,
+    "within_subject_auc": 0.7006,
+    "subjects_scored": 6
+  },
+  "inference_ms_per_window": 1.656
+}
