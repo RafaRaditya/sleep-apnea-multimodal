@@ -152,23 +152,45 @@ def train_one(name: str, manifest: pd.DataFrame, norm: dict, duration: int,
     # Resume support: a long run on a preemptible session can be restarted without
     # losing progress. Epoch numbers stay consistent because the scheduler is fast-forwarded.
     resume_path = out_dir / f"resume_{name}.pt"
+    final_path = out_dir / "checkpoints" / f"{name}.pt"
     start_epoch = 0
+    if final_path.exists() and (out_dir / f"metrics_{name}.json").exists():
+        # A finished run must not be retrained by accident: a preempted Colab sweep
+        # re-runs the same command, and silently restarting a completed model would
+        # burn GPU time and produce a second, different result.
+        print(f"[{name}] already complete ({final_path.name}), skipping", flush=True)
+        return json.loads((out_dir / f"metrics_{name}.json").read_text(encoding="utf-8"))
+
     if resume_path.exists():
         r = torch.load(resume_path, map_location=device, weights_only=False)
         model.load_state_dict(r["model"])
         optimizer.load_state_dict(r["optimizer"])
-        best = r["best"]
-        if best.get("state") is not None:
-            best["state"] = r["best_state"]
+        if r.get("scheduler") is not None:
+            scheduler.load_state_dict(r["scheduler"])
+        else:
+            # Older resume files have no scheduler state; fast-forward it instead.
+            for _ in range(r["next_epoch"] * len(train_loader)):
+                scheduler.step()
+        # `state` must always be restored: `best` on disk only carries the scalars.
+        best = {**r["best"], "state": r["best_state"]}
+        if best["state"] is None:
+            raise RuntimeError(
+                f"{resume_path} has no best checkpoint state; delete it to restart cleanly")
+        best["state"] = {k: v.to(device) for k, v in best["state"].items()}
         history = r["history"]
         start_epoch = r["next_epoch"]
-        for _ in range(start_epoch * len(train_loader)):
-            scheduler.step()
-        print(f"[{name}] resuming at epoch {start_epoch + 1} (best epoch {best['epoch']}, "
-              f"best val loss {best['val_loss']:.4f})", flush=True)
+        print(f"[{name}] resuming at epoch {start_epoch + 1} "
+              f"(best epoch {best['epoch']}, best val loss {best['val_loss']:.4f})",
+              flush=True)
+
+    if start_epoch >= max_epochs:
+        print(f"[{name}] nothing to do: {start_epoch} epochs already completed "
+              f"(max_epochs={max_epochs}); finalising from the stored best checkpoint",
+              flush=True)
 
     def save_resume(next_epoch: int) -> None:
         torch.save({"model": model.state_dict(), "optimizer": optimizer.state_dict(),
+                    "scheduler": scheduler.state_dict(),
                     "next_epoch": next_epoch,
                     "best": {"val_loss": best["val_loss"], "epoch": best["epoch"]},
                     "best_state": best["state"], "history": history}, resume_path)

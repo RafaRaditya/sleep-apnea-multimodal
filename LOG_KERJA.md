@@ -754,6 +754,18 @@ tambahan", bukan "tanpa filter sama sekali". Jangan menulis klaim lebih kuat dar
 **Sudah diuji:** smoke test end-to-end kelima arm (1 model, 1 epoch, 512 window) berjalan,
 menghitung validasi + test + agregasi. Itu membuktikan kode, bukan efek ablation.
 
+**Bug resume yang ditemukan dan diperbaiki (25 Nov 2026).** Smoke test di Colab gagal dengan
+`KeyError: 'state'`. Penyebabnya dua cacat di kode resume Tahap 5: (a) `save_resume` menulis
+`best` tanpa kunci `state` (disimpan terpisah sebagai `best_state`), tetapi saat dibaca kode
+memeriksa `best.get("state")`, yang selalu `None`, sehingga checkpoint terbaik tidak pernah
+dipulihkan; (b) kalau `next_epoch >= max_epochs`, loop epoch tidak jalan sama sekali dan
+`best["state"]` tetap `None`. Perbaikan: `best` direkonstruksi eksplisit dari `best_state`,
+state scheduler ikut disimpan (menghilangkan warning `lr_scheduler.step()`), dan run yang
+sudah selesai **di-skip** alih-alih dilatih ulang — supaya sweep Colab yang terputus lalu
+dijalankan ulang tidak membuang GPU. Diuji tiga skenario: run selesai lalu diulang (skip),
+resume di tengah (lanjut dari epoch benar, best epoch dipertahankan), dan run normal (tidak
+berubah).
+
 **Cara menjalankan:** lokal cepat untuk cek konfigurasi, atau
 `notebooks/colab_ablation_30s.ipynb` untuk run penuh (±80 menit di T4 untuk
 5 arm × 2 model × 3 seed, 30 s).
