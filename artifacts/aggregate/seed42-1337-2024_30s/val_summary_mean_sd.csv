@@ -1,0 +1,5 @@
+model,val_accuracy,val_accuracy_sd,val_sensitivity,val_sensitivity_sd,val_specificity,val_specificity_sd,val_precision,val_precision_sd,val_f1,val_f1_sd,val_roc_auc,val_roc_auc_sd,threshold,threshold_sd,best_epoch,best_epoch_sd,best_val_loss,best_val_loss_sd
+simple_fusion,0.7665,0.0738,0.5957,0.0686,0.792,0.0916,0.3007,0.1384,0.3848,0.1359,0.7462,0.0738,0.3883,0.14,3.3333,1.1547,0.5744,0.1146
+proposed,0.7256,0.1748,0.6151,0.141,0.7486,0.2135,0.3121,0.1679,0.3777,0.1505,0.7432,0.1066,0.36,0.2825,3.6667,1.5275,0.5321,0.0424
+resp_only,0.7558,0.0843,0.5575,0.1287,0.7817,0.0879,0.2864,0.1667,0.3692,0.1841,0.7274,0.1802,0.4833,0.0993,5.3333,4.0415,0.5036,0.0732
+ecg_only,0.4953,0.2224,0.7484,0.2486,0.4735,0.2812,0.1826,0.0937,0.2693,0.087,0.5883,0.0572,0.2817,0.2844,1.0,0.0,0.6258,0.0871

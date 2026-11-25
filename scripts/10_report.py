@@ -105,6 +105,7 @@ def build() -> str:
       '<div><a href="#s6b">Stage 6b — calibration diagnostic</a></div>'
       '<div><a href="#s6c">Stage 6c — per-record offset probe</a></div>'
       '<div><a href="#s7">Stage 7 — multi-seed comparison</a></div>'
+      '<div><a href="#s7b">Stage 7b — 10 s vs 30 s</a></div>'
       '<div><a href="#decisions">Decisions &amp; exclusions</a></div>'
       '<div><a href="#decisions-detail">Decision log</a></div>'
       '<div><a href="#limits">Limitations</a></div>'
@@ -571,11 +572,81 @@ def build() -> str:
           'resolved by this data. The bootstrap resamples subjects and ignores within-subject '
           'autocorrelation, so even these widths are optimistic.</div>')
 
-        a('<div class="note"><b>Still open (Experiments 2–4):</b> 30 s window comparison, '
-          'preprocessing ablation, and single- vs combined-dataset training with LODO. Also open: the '
-          'ECG-only Apnea-ECG arm. No results in this report cover those.</div>')
+        a('<div class="note"><b>Still open (Experiments 3–4):</b> preprocessing ablation and '
+          'single- vs combined-dataset training with LODO. Also open: the ECG-only Apnea-ECG arm. '
+          'No results in this report cover those.</div>')
     else:
         a('<div class="note">Stage 7 has not been run yet.</div>')
+
+    # ---------------- Stage 7b: window duration (Experiment 2)
+    agg10 = ART / "aggregate" / "seed42-1337-2024_10s"
+    agg30 = ART / "aggregate" / "seed42-1337-2024_30s"
+    a('<h2 id="s7b">Stage 7b — window duration, 10 s vs 30 s (Experiment 2)</h2>')
+    if (agg30 / "test_summary_mean_sd.csv").exists() and (agg10 / "test_summary_mean_sd.csv").exists():
+        a('<p class="sub">Same four models, same three seeds and subject splits, same frozen '
+          'protocol; only the window length differs. Reported as mean ± SD across seeds. '
+          'Seed 2024 at 30 s was trained on a T4 GPU, the others on CPU — floating-point order '
+          'differs, so this is recorded as a device difference, not a method change.</p>')
+
+        a10 = pd.read_csv(agg10 / "test_summary_mean_sd.csv")[["model", "test_roc_auc", "test_roc_auc_sd"]]
+        a30 = pd.read_csv(agg30 / "test_summary_mean_sd.csv")[["model", "test_roc_auc", "test_roc_auc_sd"]]
+        cmp = a10.merge(a30, on="model", suffixes=(" (10 s)", " (30 s)"))
+        cols = ["test_roc_auc (10 s)", "test_roc_auc_sd (10 s)",
+                "test_roc_auc (30 s)", "test_roc_auc_sd (30 s)"]
+        cmp["change"] = (cmp[cols[2]] - cmp[cols[0]]).round(4)
+        cmp = cmp.sort_values(cols[2], ascending=False)
+        cmp.columns = ["model", "AUC 10 s", "SD 10 s", "AUC 30 s", "SD 30 s", "change"]
+        a("<h3>Test ROC-AUC by window length</h3>")
+        a(table(cmp, num_cols=["AUC 10 s", "SD 10 s", "AUC 30 s", "SD 30 s", "change"]))
+        a('<div class="note"><b>The headline of Experiment 2:</b> the two <em>fusion</em> models gain '
+          'substantially at 30 s (<code>simple_fusion</code> +0.123, <code>proposed</code> +0.123), '
+          'while <code>resp_only</code> barely moves (+0.004) and <code>ecg_only</code> gets worse '
+          '(−0.024). This is consistent with fusion needing longer sequences to have anything to '
+          'fuse: at 10 s each branch only has 50 tokens.</div>')
+
+        p10 = pd.read_csv(agg10 / "test_per_seed.csv")[["seed", "model", "test_roc_auc"]]
+        p30 = pd.read_csv(agg30 / "test_per_seed.csv")[["seed", "model", "test_roc_auc"]]
+        per = p10.merge(p30, on=["seed", "model"], suffixes=("_10", "_30"))
+        per["change"] = (per.test_roc_auc_30 - per.test_roc_auc_10).round(4)
+        per = per.rename(columns={"test_roc_auc_10": "AUC 10 s", "test_roc_auc_30": "AUC 30 s"})
+        a("<h3>Change per seed — is the gain consistent or one lucky split?</h3>")
+        a(table(per[["model", "seed", "AUC 10 s", "AUC 30 s", "change"]],
+                num_cols=["AUC 10 s", "AUC 30 s", "change"]))
+        a('<div class="note"><b>Check this before claiming anything.</b> <code>proposed</code> gains '
+          'in all three seeds (+0.109, +0.106, +0.154) — the only model whose direction never flips. '
+          '<code>simple_fusion</code> gains in all three too but wildly (+0.213, +0.056, +0.100), and '
+          'it was already the least stable model at 10 s. <code>resp_only</code> moves both ways '
+          '(−0.040, +0.004, +0.049), i.e. no real effect. <code>ecg_only</code> is negative in two of '
+          'three seeds.</div>')
+        a('<div class="note"><b>What this does not show.</b> <code>resp_only</code> still has the '
+          'highest mean test AUC at 30 s (0.747 vs 0.678 for <code>proposed</code>), and its SD is '
+          'much smaller. The gain narrows the gap; it does not close or reverse it. Also, '
+          '<code>proposed</code> at 30 s still carries the cross-subject score offset (pooled 0.678 vs '
+          'mean subject 0.704), and two of the three seed bootstrap intervals still contain 0.5 '
+          '(seed 42: 0.522-0.804, seed 1337: 0.486-0.808; seed 2024 no longer does: 0.575-0.857). '
+          'Report the gain, do not report a win.</div>')
+
+        a("<h3>Validation at 30 s</h3>")
+        v30 = pd.read_csv(agg30 / "val_summary_mean_sd.csv")[
+            ["model", "val_roc_auc", "val_roc_auc_sd", "val_f1", "val_f1_sd", "best_epoch"]]
+        v30.columns = ["model", "val AUC", "val AUC SD", "val F1", "val F1 SD", "mean best epoch"]
+        a(table(v30, num_cols=["val AUC", "val AUC SD", "val F1", "val F1 SD", "mean best epoch"]))
+        a('<div class="note">At 30 s the best epoch is often 1–2 (<code>ecg_only</code> epoch 1 in '
+          'all three seeds), so the longer window overfits faster under the same budget. '
+          '<code>proposed</code> and <code>simple_fusion</code> on validation rank above '
+          '<code>resp_only</code> (0.743 / 0.746 vs 0.727), but that ordering does not survive on '
+          'test — a reminder that with 6 validation subjects the ranking is not trustworthy.</div>')
+
+        a("<h3>Test ROC-AUC by dataset at 30 s</h3>")
+        ds30 = pd.read_csv(agg30 / "test_by_dataset_mean_sd.csv")[
+            ["model", "dataset", "roc_auc", "roc_auc_sd", "f1"]]
+        ds30.columns = ["model", "dataset", "test AUC", "test AUC SD", "F1"]
+        a(table(ds30, num_cols=["test AUC", "test AUC SD", "F1"]))
+        a('<div class="note">UCDDB stays easy (0.77–0.81 for the fusion models) and PSG stays the '
+          'hard half (0.34–0.67). <code>resp_only</code> is still the only model above 0.6 on PSG '
+          '(0.669 ± 0.069).</div>')
+    else:
+        a('<div class="note">The 30 s comparison has not been run yet.</div>')
 
     # ---------------- decisions
     a('<h2 id="decisions">Decisions &amp; exclusions</h2>')
@@ -724,6 +795,11 @@ def build() -> str:
         ("Stage 7", "artifacts/aggregate/seed42-1337-2024_10s/test_by_dataset_mean_sd.csv", "per-dataset test AUC"),
         ("Stage 7", "artifacts/aggregate/seed42-1337-2024_10s/test_bootstrap_by_seed.csv", "bootstrap CI per seed"),
         ("Stage 7", "artifacts/aggregate/seed42-1337-2024_10s/val_ranking.csv", "model rank per seed"),
+        ("Stage 7b", "artifacts/aggregate/seed42-1337-2024_30s/test_summary_mean_sd.csv", "30 s test, 3 seeds"),
+        ("Stage 7b", "artifacts/aggregate/seed42-1337-2024_30s/val_summary_mean_sd.csv", "30 s validation, 3 seeds"),
+        ("Stage 7b", "artifacts/aggregate/seed42-1337-2024_30s/test_per_seed.csv", "30 s per-seed AUC"),
+        ("Stage 7b", "artifacts/aggregate/seed42-1337-2024_30s/test_bootstrap_by_seed.csv", "30 s bootstrap CI"),
+        ("Stage 7b", "notebooks/colab_train_30s.ipynb", "GPU run used for seed 2024 at 30 s"),
         ("all", "config/policy.json", "eligibility, exclusions, thresholds"),
         ("all", "config/model.json", "architecture and training hyperparameters"),
         ("all", "scripts/01..20_*.py", "one script per stage, re-runnable"),

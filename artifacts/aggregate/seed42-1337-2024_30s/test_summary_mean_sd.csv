@@ -1,0 +1,5 @@
+model,test_accuracy,test_accuracy_sd,test_sensitivity,test_sensitivity_sd,test_specificity,test_specificity_sd,test_precision,test_precision_sd,test_f1,test_f1_sd,test_roc_auc,test_roc_auc_sd,threshold,threshold_sd
+resp_only,0.6854,0.0023,0.6895,0.1123,0.6807,0.0212,0.3036,0.0791,0.4208,0.0959,0.7465,0.0486,0.4833,0.0993
+simple_fusion,0.6416,0.0798,0.647,0.0923,0.6468,0.1114,0.2802,0.095,0.379,0.0758,0.6995,0.0462,0.3883,0.14
+proposed,0.5726,0.1623,0.6196,0.1948,0.5752,0.2322,0.2499,0.1144,0.3314,0.0773,0.6777,0.0551,0.36,0.2825
+ecg_only,0.3421,0.2565,0.6584,0.3204,0.2782,0.3572,0.1583,0.0161,0.2454,0.0166,0.4269,0.0948,0.2817,0.2844

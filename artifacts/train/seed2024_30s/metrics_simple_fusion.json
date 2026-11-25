@@ -1,0 +1,108 @@
+{
+  "model": "simple_fusion",
+  "params": 163458,
+  "duration_s": 30,
+  "seed": 2024,
+  "train_windows": 38901,
+  "train_subjects": 26,
+  "val_windows": 4793,
+  "val_subjects": 6,
+  "best_epoch": 2,
+  "best_val_loss": 0.6986,
+  "epochs_run": 5,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5636,
+      "val_loss": 0.6987,
+      "lr": 0.000997,
+      "train_s": 20.9,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4297,
+      "val_loss": 0.6986,
+      "lr": 0.000963,
+      "train_s": 18.8,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.3949,
+      "val_loss": 0.7678,
+      "lr": 0.000895,
+      "train_s": 19.6,
+      "val_s": 1.8
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.3793,
+      "val_loss": 1.0269,
+      "lr": 0.000796,
+      "train_s": 18.7,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.3625,
+      "val_loss": 0.8027,
+      "lr": 0.000675,
+      "train_s": 18.5,
+      "val_s": 1.2
+    }
+  ],
+  "class_weights": [
+    0.6112,
+    2.7492
+  ],
+  "threshold": 0.53,
+  "threshold_val_f1": 0.4082,
+  "val_overall": {
+    "accuracy": 0.8076,
+    "sensitivity": 0.5179,
+    "specificity": 0.8502,
+    "precision": 0.3369,
+    "f1": 0.4082,
+    "roc_auc": 0.7252,
+    "tp": 318,
+    "tn": 3553,
+    "fp": 626,
+    "fn": 296,
+    "n": 4793,
+    "positives": 614
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.6078,
+      "sensitivity": 0.6056,
+      "specificity": 0.6087,
+      "precision": 0.4069,
+      "f1": 0.4868,
+      "roc_auc": 0.6081,
+      "tp": 258,
+      "tn": 585,
+      "fp": 376,
+      "fn": 168,
+      "n": 1387,
+      "positives": 426
+    },
+    "UCDDB": {
+      "accuracy": 0.889,
+      "sensitivity": 0.3191,
+      "specificity": 0.9223,
+      "precision": 0.1935,
+      "f1": 0.241,
+      "roc_auc": 0.7904,
+      "tp": 60,
+      "tn": 2968,
+      "fp": 250,
+      "fn": 128,
+      "n": 3406,
+      "positives": 188
+    }
+  },
+  "inference_ms_per_window": 0.323,
+  "checkpoint": "artifacts/train/seed2024_30s/checkpoints/simple_fusion.pt",
+  "wall_minutes": 1.77
+}

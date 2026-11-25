@@ -1,0 +1,5 @@
+model,pooled_auc,pooled_auc_sd,mean_subject_auc,mean_subject_auc_sd,within_subject_auc,within_subject_auc_sd
+ecg_only,0.4269,0.0948,0.4937,0.0362,0.4689,0.0339
+proposed,0.6777,0.0551,0.7036,0.061,0.6473,0.0742
+resp_only,0.7465,0.0486,0.7118,0.0043,0.6868,0.0167
+simple_fusion,0.6995,0.0462,0.7156,0.0147,0.6842,0.0184

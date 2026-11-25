@@ -30,25 +30,25 @@ Ditulis 24 November 2026.
 | 2 | Split subjek (3 seed) + windowing 10/30 s | `artifacts/splits/`, `artifacts/windows/` |
 | 3 | Preprocessing, normalisasi, loader | `artifacts/signals/`, `artifacts/normalization/` |
 | 4 | Pilot 4 model | `artifacts/pilot/` |
-| 5 | Training penuh + freeze, 3 seed × 4 model, 10 s | `artifacts/train/seed{42,1337,2024}_10s/` |
-| 6 | Test beku, 3 seed, 10 s | `artifacts/test/seed{42,1337,2024}_10s/` |
+| 5 | Training penuh + freeze, 4 model × 3 seed × 2 durasi | `artifacts/train/seed{42,1337,2024}_{10,30}s/` |
+| 6 | Test beku, 3 seed × 2 durasi | `artifacts/test/seed{42,1337,2024}_{10,30}s/` |
 | 6b/6c | Diagnostik kalibrasi & offset per rekaman | `artifacts/calibration/`, `artifacts/offset_probe/` |
-| **7a/7b** | **Eksperimen 1: agregasi multi-seed, validasi + test** | `artifacts/aggregate/seed42-1337-2024_10s/` |
+| **7a/7b** | **Eksperimen 1: agregasi multi-seed, validasi + test, 10 s** | `artifacts/aggregate/seed42-1337-2024_10s/` |
+| **7c** | **Eksperimen 2: window 30 s, 3 seed, agregasi** | `artifacts/aggregate/seed42-1337-2024_30s/` |
 
 ### Belum dikerjakan (ini pekerjaan berikutnya)
 
 | Eksperimen paper | Status | Catatan |
 |---|---|---|
-| **Eksperimen 2** — window 30 s vs 10 s | **belum** | Manifest dan `norm_stats` 30 s sudah ada, tinggal training |
 | **Eksperimen 3** — ablation preprocessing (filter / normalisasi / clipping) | belum | Butuh training ulang per konfigurasi |
 | **Eksperimen 4** — single- vs combined-dataset training, LODO 2 arah | belum | Perlu kohort pembanding yang didefinisikan dulu |
 | Lengan ECG-only Apnea-ECG | belum | Disetujui dosen, terpisah dari multimodal |
 
 ### Persis di titik mana kita berhenti
 
-Tahap 7a/7b selesai dan terverifikasi. Saya (AI) sudah menghitung biaya Eksperimen 2 dan
-menyerahkan keputusan eksekusinya — belum ada satu pun training 30 s yang dijalankan.
-Jadi **semua angka 30 s adalah estimasi, bukan hasil**.
+Eksperimen 1 dan 2 selesai dan terverifikasi (3 seed × 2 durasi, agregasi lengkap). Langkah
+berikutnya adalah Eksperimen 3 (ablation preprocessing), yang belum dimulai — belum ada satu pun
+run ablation. Kalau kamu mengambil alih, mulai dari keputusan desain ablation di bagian 7.
 
 ---
 
@@ -63,17 +63,27 @@ Jadi **semua angka 30 s adalah estimasi, bukan hasil**.
 | proposed | 0,6369 ± 0,0153 | 0,5548 ± 0,0299 |
 | ecg_only | 0,5513 ± 0,0419 | 0,4513 ± 0,1365 |
 
+**Eksperimen 2 (3 seed, perbandingan 10 s vs 30 s, test AUC):**
+
+| Model | 10 s | 30 s | Perubahan |
+|---|---|---|---|
+| resp_only | 0,7424 ± 0,0083 | **0,7465 ± 0,0486** | +0,004 |
+| simple_fusion | 0,5767 ± 0,1231 | 0,6995 ± 0,0462 | +0,123 |
+| proposed | 0,5548 ± 0,0299 | 0,6777 ± 0,0551 | +0,123 |
+| ecg_only | 0,4513 ± 0,1365 | 0,4269 ± 0,0948 | −0,024 |
+
 Empat hal yang **harus** dilaporkan apa adanya:
 
-1. **`proposed` (cross-attention) tidak lebih baik.** Kalah dari `resp_only` di ketiga seed.
-   Tidak ada satu seed pun yang mendukung manfaat cross-attention.
-2. **`resp_only` yang paling stabil** (SD test 0,008 di tiga split subjek berbeda).
-3. **`simple_fusion` sangat tidak stabil** (test 0,450 / 0,696 / 0,585). Satu seed untuk model
-   ini menyesatkan.
-4. **Kalibrasi antar subjek belum beres.** `proposed` pooled AUC 0,555 vs rata-rata AUC per
-   subjek 0,673. Gap ini bertahan di ketiga seed.
+1. **Window 30 s menolong model fusion, bukan model satu modalitas.** `proposed` naik di
+   ketiga seed (+0,109 / +0,106 / +0,154); `resp_only` praktis tidak berubah; `ecg_only` turun.
+2. **`proposed` tetap bukan model terbaik.** Gap ke `resp_only` menyempit dari 0,188 ke 0,069,
+   tetapi `resp_only` masih tertinggi dan jauh lebih stabil. Jangan menulis "cross-attention menang".
+3. **`simple_fusion` sangat tidak stabil di 10 s** (0,450 / 0,696 / 0,585) dan membaik di 30 s
+   (SD 0,123 → 0,046). Satu durasi untuk model ini menyesatkan.
+4. **Kalibrasi antar subjek belum beres.** `proposed` 30 s: pooled 0,678 vs mean per subjek 0,704;
+   dua dari tiga bootstrap seed masih memuat 0,5.
 
-Detail lengkap + tabel per dataset + bootstrap CI: `LOG_KERJA.md` Tahap 7a/7b.
+Detail lengkap + tabel per dataset + bootstrap CI: `LOG_KERJA.md` Tahap 7a/7b/7c.
 
 ---
 
@@ -154,14 +164,17 @@ Total 10 s yang sudah selesai: ±11 jam.
 
 | # | Pertanyaan | Kenapa penting |
 |---|---|---|
-| 1 | Berapa seed untuk 30 s, dan model mana | Menentukan 6 jam vs 30 jam |
-| 2 | Apakah preprocessing diperbaiki dulu (normalisasi skala per rekaman, clipping sadar-skala) | Temuan Tahap 6c: `slp02a/b` kehilangan 8–10% sampel respirasi karena clip 5σ tidak seragam. Kalau diperbaiki sekarang, semua training harus diulang |
+| 1 | ~~Berapa seed untuk 30 s~~ | **Terjawab** — 3 seed, 4 model, selesai (Tahap 7c) |
+| 2 | Apakah preprocessing diperbaiki dulu (normalisasi skala per rekaman, clipping sadar-skala) | Temuan Tahap 6c: `slp02a/b` kehilangan 8–10% sampel respirasi karena clip 5σ tidak seragam. Ini kandidat ablation pertama untuk Eksperimen 3, dan harus diputuskan sebelum training ulang |
 | 3 | Kohort pembanding untuk Eksperimen 4 | Tanpa ini, klaim efek harmonisasi tidak bisa dipisahkan dari perubahan komposisi cohort |
-| 4 | Apakah ablation pakai arsitektur `proposed` saja atau juga baseline | Menentukan jumlah run |
+| 4 | Apakah ablation pakai arsitektur `proposed` saja atau juga baseline | Menentukan jumlah run; saran: `proposed` + `resp_only` saja, karena keduanya mewakili dua kutub |
+| 5 | Durasi mana yang jadi konfigurasi utama untuk Eksperimen 3 dan 4 | Hasil Tahap 7c menunjukkan 30 s lebih baik untuk model fusion, jadi menjalankan ablation di 10 s saja akan meremehkan model utama |
 
-**Rekomendasi saya (belum dijalankan):** 30 s dengan 1 seed dulu (±6 jam) untuk memastikan
-pipeline 30 s hidup dan hasilnya wajar, baru lanjutkan seed lain. Jangan mengubah preprocessing
-di tengah perbandingan 10 s vs 30 s, karena itu mengubah dua variabel sekaligus.
+**Rekomendasi saya (belum dijalankan):** jalankan Eksperimen 3 pada window 30 s dengan dua model
+(`proposed` dan `resp_only`), satu seed dulu untuk memastikan konfigurasi ablation masuk akal,
+lalu perluas ke 3 seed. Ablation yang paling punya dasar empiris: (a) tanpa clipping, (b) clipping
+yang diskalakan per rekaman, (c) normalisasi skala per rekaman, (d) tanpa filter tambahan
+(anti-alias resampling tetap diperlukan).
 
 ---
 

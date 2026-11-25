@@ -1,10 +1,10 @@
 # Log Kerja — Sleep Apnea Multimodal
 
-**Terakhir diperbarui:** 24 November 2026
+**Terakhir diperbarui:** 25 November 2026
 **Acuan:** `paper RM (1).pdf` (paper UTS) + `Konteks_Penelitian_Sleep_Apnea.md`
-**Status keseluruhan:** Tahap 1–7a/7b selesai untuk **perbandingan model (Eksperimen 1)** pada
-window 10 s dan 3 seed (42, 1337, 2024). Test tiap seed dibaca **sekali** dengan model beku.
-Belum: window 30 s (Eksperimen 2), ablation preprocessing (Eksperimen 3), single vs combined-dataset
+**Status keseluruhan:** Eksperimen 1 (perbandingan model) dan Eksperimen 2 (durasi window)
+selesai untuk **4 model × 3 seed × 2 durasi (10 s dan 30 s)**. Test tiap seed dibaca **sekali**
+dengan model beku. Belum: ablation preprocessing (Eksperimen 3), single vs combined-dataset
 training + LODO (Eksperimen 4), dan lengan ECG-only Apnea-ECG.
 
 Dokumen ini mencatat apa yang **sudah benar-benar dijalankan**, angka aktualnya, dan alasan
@@ -28,9 +28,10 @@ Untuk serah-terima ke orang lain: lihat `HANDOFF.md` (urutan baca, status, atura
 | Split subjek | 70/15/15, 3 seed (42, 1337, 2024), stratifikasi severitas |
 | Kebocoran subjek | 0 (diverifikasi per seed) |
 | Rate positif window 10 s | UCDDB 9,8% · PSG 32,8% |
-| Model dilatih | 4 konfigurasi × **3 seed** (42, 1337, 2024), data penuh, window 10 s |
-| Status training | data penuh, 3 seed, 10 s; val AUC gabungan per seed 0,62–0,82 (rincian Tahap 7a) |
-| Status test | 3 seed, 10 s; pooled AUC **resp_only 0,7424 ± 0,0083**, `proposed` 0,5548 ± 0,0299 (Tahap 7b) |
+| Model dilatih | 4 konfigurasi × 3 seed × **2 durasi** (10 s dan 30 s), data penuh |
+| Status training | 10 s: 3 seed CPU · 30 s: seed 42 & 1337 CPU, **seed 2024 GPU (T4)** |
+| Status test | 10 s dan 30 s, 3 seed, 6 subjek/split; pooled AUC `resp_only` 0,742/0,747 (Tahap 7b, 7c) |
+| Status Eksperimen 2 | `proposed` +0,123 di 30 s, naik di **3/3 seed**; `resp_only` tidak terpengaruh (Tahap 7c) |
 
 ---
 
@@ -641,6 +642,85 @@ Output: `artifacts/test/seed{1337,2024}_10s/*` dan
 test_by_dataset_mean_sd.csv, test_auc_decomposition_mean_sd.csv, test_bootstrap_by_seed.csv,
 test_per_seed.csv}`.
 
+### Tahap 7c — Eksperimen 2: window 30 s (`scripts/19_aggregate.py`, `scripts/20_aggregate_test.py`)
+
+**Tujuan:** menjawab Eksperimen 2 paper — 10 s (reduced window utama) vs 30 s (pembanding).
+Semua hal lain dijaga sama: 4 model, 3 seed, split subjek identik, arsitektur, budget, dan
+protokol beku.
+
+**Perangkat:** seed 42 dan 1337 di CPU; **seed 2024 di T4 GPU** (`device: cuda`, `workers: 2`,
+via `notebooks/colab_train_30s.ipynb`). Perbedaan urutan operasi floating-point bisa menggeser
+angka tipis; ini dicatat sebagai beda perangkat, bukan beda metode.
+
+**Test ROC-AUC, mean ± SD antar 3 seed:**
+
+| Model | 10 s | 30 s | Perubahan |
+|---|---|---|---|
+| resp_only | 0,7424 ± 0,0083 | **0,7465 ± 0,0486** | +0,004 |
+| simple_fusion | 0,5767 ± 0,1231 | 0,6995 ± 0,0462 | **+0,123** |
+| proposed | 0,5548 ± 0,0299 | 0,6777 ± 0,0551 | **+0,123** |
+| ecg_only | 0,4513 ± 0,1365 | 0,4269 ± 0,0948 | −0,024 |
+
+**Perubahan per seed — ini yang menentukan klaim apa yang boleh dibuat:**
+
+| Model | seed 42 | seed 1337 | seed 2024 | Arah konsisten? |
+|---|---|---|---|---|
+| proposed | +0,109 | +0,106 | +0,154 | **ya, 3/3 naik** |
+| simple_fusion | +0,213 | +0,056 | +0,100 | ya, tapi rentang 4× |
+| resp_only | −0,040 | +0,004 | +0,049 | tidak (campur) |
+| ecg_only | +0,048 | −0,078 | −0,043 | tidak (2/3 turun) |
+
+**Validasi 30 s (mean ± SD):**
+
+| Model | Val AUC | Val F1 | Best epoch rata-rata |
+|---|---|---|---|
+| simple_fusion | 0,7462 ± 0,0738 | 0,3848 | 3,3 |
+| proposed | 0,7432 ± 0,1066 | 0,3777 | 3,7 |
+| resp_only | 0,7274 ± 0,1802 | 0,3692 | 5,3 |
+| ecg_only | 0,5883 ± 0,0572 | 0,2693 | 1,0 |
+
+**Test per dataset 30 s:**
+
+| Model | UCDDB | MIT-BIH PSG |
+|---|---|---|
+| simple_fusion | 0,8064 ± 0,0354 | 0,5810 ± 0,1181 |
+| proposed | 0,8000 ± 0,0494 | 0,5443 ± 0,1549 |
+| resp_only | 0,7660 ± 0,0775 | **0,6693 ± 0,0693** |
+| ecg_only | 0,4883 ± 0,1444 | 0,3402 ± 0,0146 |
+
+**Pooled vs per subjek 30 s:** proposed 0,678 vs 0,704 · resp_only 0,747 vs 0,712 ·
+simple_fusion 0,700 vs 0,716 · ecg_only 0,427 vs 0,494.
+
+**Yang benar-benar terbukti:**
+- **Window 30 s secara sistematis membantu model fusion.** `proposed` naik di **ketiga** seed
+  (+0,109 / +0,106 / +0,154). Ini satu-satunya model yang arahnya tidak pernah berbalik.
+  `simple_fusion` juga naik di ketiga seed tetapi rentangnya lebar (+0,056 sampai +0,213).
+- **`resp_only` tidak terpengaruh durasi** (−0,040 / +0,004 / +0,049 — praktis nol). Masuk akal:
+  informasi respirasi ada di skala napas, tidak butuh konteks 30 s.
+- **`ecg_only` memburuk** di 2 dari 3 seed. Tidak ada bukti ECG saja memanfaatkan window panjang.
+- **Gap `resp_only` vs `proposed` menyempit tajam**: dari 0,188 (10 s) menjadi 0,069 (30 s).
+  Mekanismenya konsisten dengan kebutuhan token: pada 10 s tiap cabang hanya punya 50 token,
+  pada 30 s ada 150, sehingga cross-attention punya konteks untuk bekerja.
+- **Overfit lebih cepat di 30 s**: best epoch `ecg_only` = 1 di ketiga seed, `proposed` 2–5,
+  padahal budget epoch sama. Window lebih panjang memperbesar risiko hafal subjek.
+
+**Yang harus diakui (jangan dibungkus):**
+- **`proposed` tetap bukan model terbaik.** Di 30 s `resp_only` masih tertinggi
+  (0,7465 vs 0,6777) dan SD-nya jauh lebih kecil (0,049 vs 0,055 dengan rata-rata lebih tinggi).
+  Yang terjadi adalah *gap menyempit*, bukan *cross-attention menang*. Menulis "cross-attention
+  lebih baik" dari angka ini adalah salah.
+- **Offset antar subjek pada `proposed` masih ada** (pooled 0,678 vs per subjek 0,704), meski
+  lebih kecil daripada 10 s (0,555 vs 0,673). Belum selesai.
+- **Bootstrap per seed:** seed 42 (0,522–0,804) dan seed 1337 (0,486–0,808) masih memuat 0,5;
+  seed 2024 (0,575–0,857) tidak lagi. Dengan 6 subjek, arah perbaikan lebih bisa dipercaya
+  daripada besarnya.
+- **PSG tetap lemah** untuk semua model kecuali `resp_only`. UCDDB ~0,80, PSG 0,34–0,67.
+
+Output: `artifacts/train/seed{42,1337,2024}_30s/`, `artifacts/test/seed{42,1337,2024}_30s/`, dan
+`artifacts/aggregate/seed42-1337-2024_30s/{val_summary_mean_sd.csv, test_summary_mean_sd.csv,
+test_by_dataset_mean_sd.csv, test_auc_decomposition_mean_sd.csv, test_bootstrap_by_seed.csv,
+test_per_seed.csv, val_ranking.csv, aggregate_run.json, test_aggregate_run.json}`.
+
 ### Pemeriksaan tambahan yang sudah dijalankan
 
 | Skrip | Yang dibuktikan |
@@ -690,20 +770,23 @@ test_per_seed.csv}`.
     prevalensi 0%, skor rata-rata 0,504 (tertinggi) — subjek tanpa window positif tidak punya AUC
     sehingga luput dari semua tabel. Z-score per rekaman menutup gap di test tetapi merugikan validasi
     (0,644 → 0,601), jadi itu penyelamat post-hoc, bukan perbaikan berprinsip.
-11. **Test hanya 1 seed dan 1 durasi window.** 13.993 window bukan 13.993 sampel independen
-    (N_eff test ≈2.000 UCDDB, ≈110 PSG dari autokorelasi label). Jangan laporkan angka test seed 42
-    sebagai performa model; ini satu titik pengukuran.
-12. **Multi-seed menegaskan `proposed` tidak unggul, dan `resp_only` yang stabil.** Setelah 3 seed
-    (Tahap 7b), test AUC `resp_only` 0,7424 ± 0,0083 — konsisten di 0,734/0,751/0,742. `proposed`
-    0,5548 ± 0,0299, di bawah `resp_only` di **ketiga** seed. Tidak ada satu pun seed di mana
-    cross-attention menang. `simple_fusion` sangat tidak stabil (SD 0,1231, rentang 0,450–0,696),
-    jadi angka satu seed untuk model itu tidak bisa dipercaya. Ini temuan empiris yang harus ditulis
-    apa adanya; bukan alasan mengubah arsitektur di tengah jalan.
+11. **Jumlah window bukan jumlah sampel independen.** Test 30 s punya ~4.600 window, 10 s ~14.000,
+    tetapi N_eff-nya ≈2.000 (UCDDB) dan ≈110 (PSG) setelah koreksi autokorelasi label, dengan
+    ~583 episode apnea berurutan. Jangan membaca jumlah window sebagai ukuran sampel.
+12. **Multi-seed menegaskan `proposed` tidak unggul di 10 s, tapi gap menyempit di 30 s.** Di 10 s,
+    `proposed` kalah dari `resp_only` di **ketiga** seed (0,555 vs 0,742). Di 30 s, `proposed` naik
+    di ketiga seed (+0,109 / +0,106 / +0,154) sehingga gap menyempit dari 0,188 ke 0,069 — tetapi
+    **`resp_only` masih tertinggi** (0,7465 vs 0,6777) dengan SD lebih kecil. Ini perbaikan yang
+    konsisten, bukan kemenangan. `simple_fusion` di 10 s sangat tidak stabil (SD 0,123) dan membaik
+    di 30 s (SD 0,046), jadi angka satu durasi untuk model itu menyesatkan.
 13. **SD antar seed bukan variance run-ulang.** Tiap seed adalah split subjek berbeda, jadi SD
-    mengukur sensitivitas ke komposisi split. Dengan 6 subjek test, SD `proposed` (0,0299) lebih
-    kecil dari lebar CI-nya (0,41–0,81), sehingga urutan model dari selisih kecil tidak bermakna.
-14. **Durasi 30 s belum dijalankan.** Semua angka di dokumen ini adalah window 10 s. Klaim tentang
-    "reduced window" belum punya pembanding 30 s dari eksekusi kelompok.
+    mengukur sensitivitas ke komposisi split. Dengan 6 subjek test, SD `proposed` di 10 s (0,030)
+    lebih kecil dari lebar CI-nya, sehingga urutan model dari selisih kecil tidak bermakna.
+14. **30 s sudah dijalankan, tapi dengan beda perangkat.** Seed 42 dan 1337 di CPU, seed 2024 di
+    T4 GPU. Urutan operasi floating-point GPU berbeda, jadi angka seed 2024 tidak sepenuhnya
+    sebanding bit-per-bit dengan dua seed lain; ini dicatat sebagai beda perangkat. Selain itu,
+    window 30 s overfit lebih cepat (best epoch `ecg_only` = 1 di ketiga seed) di bawah budget
+    epoch yang sama, sehingga perbandingan durasi juga tercampur perbedaan jumlah epoch efektif.
 
 ---
 
@@ -714,7 +797,7 @@ test_per_seed.csv}`.
 | 4 | Model pilot: proposed (dual Transformer + bidirectional cross-attention) + 3 baseline, 1 seed, 10 s, budget kecil | **selesai** — pipeline hidup, tetapi belum generalize (lihat Tahap 4) |
 | 5 | Training penuh + freeze checkpoint/threshold | **selesai** — seed 42, 10 s, 4 model, test belum disentuh |
 | 6 | Prediksi test dengan model beku + 6 metrik | **selesai** — seed 42, 10 s, test dibaca sekali (lihat Tahap 6) |
-| 7 | Analisis komparatif: 4 eksperimen, multi-seed, bootstrap subjek, ablation | **sebagian** — Eksperimen 1 (perbandingan model) sudah 3 seed, 10 s, 4 model, mean ± SD + bootstrap. Eksperimen 2 (30 s), 3 (ablation preprocessing), 4 (single vs combined + LODO) belum |
+| 7 | Analisis komparatif: 4 eksperimen, multi-seed, bootstrap subjek, ablation | **sebagian** — Eksperimen 1 (4 model × 3 seed × 10 s) dan Eksperimen 2 (30 s, 3 seed) selesai. Eksperimen 3 (ablation preprocessing) dan 4 (single vs combined + LODO) belum |
 | opsional | Lengan ECG-only Apnea-ECG terpisah (disetujui dosen) | belum |
 
 ---
@@ -754,18 +837,32 @@ test_per_seed.csv}`.
 > UCDDB dan PSG berbeda ~22×. Perbedaan bacaan ini dicatat sebagai keputusan, bukan diabaikan.
 
 **"Jadi cross-attention-nya berhasil atau tidak?"**
-> Tidak, menurut data kami belum. Di tiga seed terpisah, model `proposed` (dengan bidirectional
-> cross-attention) mendapat test AUC 0,526 / 0,552 / 0,586, sedangkan `resp_only` — model baseline
-> yang hanya memakai satu encoder — mendapat 0,735 / 0,751 / 0,742. `proposed` kalah di setiap seed,
-> dan selisihnya jauh lebih besar dari SD antar seed. Yang perlu ditegaskan: ini bukan berarti
-> cross-attention mustahil berguna, tetapi pada data dan budget ini ia belum memberi manfaat yang
-> terukur, dan penambahan parameter/cross-attention justru tidak menutup jarak dengan baseline.
+> Jawabannya tergantung durasi window, dan ini justru temuan Eksperimen 2. Di **10 s**: tidak.
+> `proposed` mendapat test AUC 0,526 / 0,552 / 0,586, kalah dari `resp_only` (0,735 / 0,751 / 0,742)
+> di ketiga seed. Di **30 s**: `proposed` naik konsisten di ketiga seed — 0,635 / 0,659 / 0,740,
+> yaitu +0,109 / +0,106 / +0,154 — sehingga rata-ratanya 0,678 dan gap ke `resp_only` menyempit dari
+> 0,188 menjadi 0,069. Yang perlu ditegaskan: itu perbaikan yang konsisten dan masuk akal (pada 10 s
+> tiap cabang hanya punya 50 token, pada 30 s ada 150 sehingga ada konteks untuk dipertemukan), tapi
+> `resp_only` **masih yang tertinggi dan paling stabil**. Jadi bukan "cross-attention menang",
+> melainkan "cross-attention baru mulai berguna ketika window cukup panjang, dan belum menyalip
+> baseline".
 
 **"Kenapa `simple_fusion` angkanya naik-turun?"**
-> Karena split subjeknya berubah antar seed. Test AUC-nya 0,450 (seed 42), 0,696 (seed 1337), dan
-> 0,585 (seed 2024) — SD 0,1231, paling lebar di antara empat model. Dengan hanya 6 subjek test,
-> satu atau dua subjek yang "mudah" atau "sulit" bisa menggeser angka besar. Itulah sebabnya paper
-> meminta mean ± SD beberapa seed, bukan satu angka: satu seed untuk model ini menyesatkan.
+> Karena split subjeknya berubah antar seed, dan efeknya paling besar saat window pendek. Di 10 s
+> test AUC-nya 0,450 / 0,696 / 0,585 (SD 0,123); di 30 s 0,663 / 0,751 / 0,685 (SD 0,046). Jadi
+> ketidakstabilannya sebagian memang hilang ketika window diperpanjang — masuk akal, karena model
+> fusion butuh token untuk bekerja. Tetap saja, satu seed untuk model ini menyesatkan; itulah alasan
+> paper meminta mean ± SD beberapa seed.
+
+**"Jadi 10 s atau 30 s yang lebih baik?"**
+> Tidak ada satu jawaban untuk semua model, dan itu hasilnya. Pada 30 s, `proposed` naik di ketiga
+> seed (+0,109 / +0,106 / +0,154) dan `simple_fusion` juga naik meski tidak sekonsisten itu;
+> `resp_only` praktis tidak berubah (−0,040 / +0,004 / +0,049); `ecg_only` malah turun di 2 dari 3
+> seed. Jadi window panjang menolong model yang **menggabungkan dua modalitas**, dan tidak menolong
+> model satu modalitas. Untuk klaim "reduced window 10 s cukup", jawaban jujurnya: cukup untuk
+> `resp_only` (0,742 vs 0,747 — selisih dalam noise), tidak cukup untuk model fusion (0,555 vs 0,678).
+> Ini juga berarti klaim paper bahwa window pendek mempertahankan akurasi harus dibatasi per model,
+> bukan dinyatakan umum.
 
 **"Kenapa `resp_only` bisa terbaik, padahal modelnya multimodal?"**
 > Itu memang hasil yang keluar, bukan yang kami rencanakan. Ada dua pembacaan yang jujur. Pertama,
