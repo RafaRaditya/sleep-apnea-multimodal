@@ -1,0 +1,105 @@
+{
+  "model": "proposed",
+  "params": 230402,
+  "duration_s": 30,
+  "seed": 42,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4801,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.5936,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5397,
+      "val_loss": 0.5936,
+      "lr": 0.000997,
+      "train_s": 110.1,
+      "val_s": 1.5
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4671,
+      "val_loss": 0.7075,
+      "lr": 0.000963,
+      "train_s": 111.6,
+      "val_s": 1.7
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4356,
+      "val_loss": 0.8076,
+      "lr": 0.000895,
+      "train_s": 110.4,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.415,
+      "val_loss": 0.714,
+      "lr": 0.000796,
+      "train_s": 110.1,
+      "val_s": 1.4
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.265,
+  "threshold_val_f1": 0.2109,
+  "val_overall": {
+    "accuracy": 0.562,
+    "sensitivity": 0.728,
+    "specificity": 0.5475,
+    "precision": 0.1233,
+    "f1": 0.2109,
+    "roc_auc": 0.643,
+    "tp": 281,
+    "tn": 2417,
+    "fp": 1998,
+    "fn": 105,
+    "n": 4801,
+    "positives": 386
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.3344,
+      "sensitivity": 0.8091,
+      "specificity": 0.2434,
+      "precision": 0.1702,
+      "f1": 0.2812,
+      "roc_auc": 0.4145,
+      "tp": 195,
+      "tn": 306,
+      "fp": 951,
+      "fn": 46,
+      "n": 1498,
+      "positives": 241
+    },
+    "UCDDB": {
+      "accuracy": 0.6652,
+      "sensitivity": 0.5931,
+      "specificity": 0.6685,
+      "precision": 0.0759,
+      "f1": 0.1346,
+      "roc_auc": 0.6497,
+      "tp": 86,
+      "tn": 2111,
+      "fp": 1047,
+      "fn": 59,
+      "n": 3303,
+      "positives": 145
+    }
+  },
+  "inference_ms_per_window": 0.433,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/no_filter_proposed_seed42/checkpoints/proposed.pt",
+  "arm": "no_filter",
+  "arm_spec": {
+    "source": "unfiltered",
+    "clip": "fixed",
+    "norm": "dataset"
+  }
+}

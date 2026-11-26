@@ -35,22 +35,24 @@ Ditulis 24 November 2026.
 | 6b/6c | Diagnostik kalibrasi & offset per rekaman | `artifacts/calibration/`, `artifacts/offset_probe/` |
 | **7a/7b** | **Eksperimen 1: agregasi multi-seed, validasi + test, 10 s** | `artifacts/aggregate/seed42-1337-2024_10s/` |
 | **7c** | **Eksperimen 2: window 30 s, 3 seed, agregasi** | `artifacts/aggregate/seed42-1337-2024_30s/` |
+| **7d** | **Eksperimen 3: ablation preprocessing, 30 run di T4** | `artifacts/ablation/seed42-1337-2024_30s/` — **dijalankan, belum dapat ditafsirkan** |
 
 ### Belum dikerjakan (ini pekerjaan berikutnya)
 
 | Eksperimen paper | Status | Catatan |
 |---|---|---|
-| **Eksperimen 3** — ablation preprocessing (filter / normalisasi / clipping) | belum | Butuh training ulang per konfigurasi |
+| **Eksperimen 3** — ablation preprocessing | **dijalankan, perlu diulang** | Arm `baseline` menyimpang −0,164…+0,229 dari Eksperimen 2 padahal pipeline-nya identik. Data loader terbukti sama (selisih tensor 0,000000), jadi penyebabnya variasi run. Perbaiki determinisme dulu, lalu ulangi. Rincian di `LOG_KERJA.md` Tahap 7d |
 | **Eksperimen 4** — single- vs combined-dataset training, LODO 2 arah | belum | Perlu kohort pembanding yang didefinisikan dulu |
 | Lengan ECG-only Apnea-ECG | belum | Disetujui dosen, terpisah dari multimodal |
 
 ### Persis di titik mana kita berhenti
 
 Eksperimen 1 dan 2 selesai dan terverifikasi (3 seed × 2 durasi, agregasi lengkap).
-Eksperimen 3 (ablation preprocessing) **kodenya sudah siap dan sudah diuji end-to-end**
-di lokal dengan subset kecil, tetapi **belum ada satu pun run penuh** — jadi belum ada
-angka ablation. Kalau kamu mengambil alih, jalankan
-`notebooks/colab_ablation_30s.ipynb` (lihat bagian 5), lalu perbarui log.
+Eksperimen 3 sudah **dijalankan penuh** (30 run, T4 GPU) tetapi **hasilnya belum dapat
+ditafsirkan**: arm `baseline`, yang pipeline-nya identik dengan Eksperimen 2, menyimpang
+−0,164…+0,229 di test AUC. Data loader sudah diverifikasi identik sampai 0,000000, jadi ini
+variasi training, bukan bug data. Sebelum mengutip angka ablation, tegakkan determinisme dan
+buktikan `baseline` mereproduksi Eksperimen 2.
 
 ---
 
@@ -86,6 +88,26 @@ Empat hal yang **harus** dilaporkan apa adanya:
    dua dari tiga bootstrap seed masih memuat 0,5.
 
 Detail lengkap + tabel per dataset + bootstrap CI: `LOG_KERJA.md` Tahap 7a/7b/7c.
+
+**Eksperimen 3 (ablation) — ADA ANGKANYA, JANGAN DIKUTIP DULU.**
+
+30 run selesai di T4 (5 arm × 2 model × 3 seed, 30 s). Tapi arm `baseline`, yang seharusnya
+identik dengan Eksperimen 2, memberi test AUC yang berbeda:
+
+| Model | seed | baseline (ablation) | Eksperimen 2 | selisih |
+|---|---|---|---|---|
+| proposed | 42 | 0,471 | 0,635 | −0,164 |
+| proposed | 1337 | 0,888 | 0,659 | +0,229 |
+| resp_only | 42 | 0,784 | 0,694 | +0,090 |
+
+Penyebabnya sudah diperiksa dan **bukan bug data**: loader menghasilkan tensor identik
+(selisih maksimum 0,000000 di 200 window), parameter sama, set test sama. Yang berbeda adalah
+hasil training — urutan batch, non-determinisme GPU, dan epoch terbaik yang terpilih berbeda
+(seed 42 memilih epoch 1, bukan epoch 5). Dengan validation hanya 6 subjek, itu cukup untuk
+menggeser angka test jauh. **Artinya variasi run (sampai 0,23) lebih besar daripada efek
+ablation (0,01–0,09), sehingga selisih antar arm belum bisa ditafsirkan.**
+
+Rincian + tabel per seed: `LOG_KERJA.md` Tahap 7d.
 
 ---
 
@@ -191,16 +213,21 @@ Total 10 s yang sudah selesai: ±11 jam.
 | # | Pertanyaan | Kenapa penting |
 |---|---|---|
 | 1 | ~~Berapa seed untuk 30 s~~ | **Terjawab** — 3 seed, 4 model, selesai (Tahap 7c) |
-| 2 | Apakah preprocessing diperbaiki dulu (normalisasi skala per rekaman, clipping sadar-skala) | Temuan Tahap 6c: `slp02a/b` kehilangan 8–10% sampel respirasi karena clip 5σ tidak seragam. Ini kandidat ablation pertama untuk Eksperimen 3, dan harus diputuskan sebelum training ulang |
+| 2 | ~~Apakah preprocessing diperbaiki dulu~~ | **Terjawab sebagian** — ablation dijalankan, tapi protokolnya belum stabil; perbaiki determinisme dulu |
 | 3 | Kohort pembanding untuk Eksperimen 4 | Tanpa ini, klaim efek harmonisasi tidak bisa dipisahkan dari perubahan komposisi cohort |
-| 4 | Apakah ablation pakai arsitektur `proposed` saja atau juga baseline | Menentukan jumlah run; saran: `proposed` + `resp_only` saja, karena keduanya mewakili dua kutub |
-| 5 | Durasi mana yang jadi konfigurasi utama untuk Eksperimen 3 dan 4 | Hasil Tahap 7c menunjukkan 30 s lebih baik untuk model fusion, jadi menjalankan ablation di 10 s saja akan meremehkan model utama |
+| 4 | Apakah ablation pakai arsitektur `proposed` saja atau juga baseline | **Terjawab** — `proposed` + `resp_only` dipakai |
+| 5 | Durasi mana yang jadi konfigurasi utama untuk Eksperimen 3 dan 4 | **Terjawab** — 30 s, karena 10 s meremehkan model fusion |
+| 6 | **Determinisme training** — sekarang yang paling mendesak | Tanpa ini, hasil ablation tidak bisa ditafsirkan. Opsi: `torch.use_deterministic_algorithms(True)`, seed untuk DataLoader worker, dan/atau `workers=0`. Setelah itu, buktikan `baseline` mereproduksi Eksperimen 2 (mis. selisih test AUC < 0,02) sebelum menafsirkan arm lain |
 
-**Rekomendasi saya (belum dijalankan):** jalankan Eksperimen 3 pada window 30 s dengan dua model
-(`proposed` dan `resp_only`), satu seed dulu untuk memastikan konfigurasi ablation masuk akal,
-lalu perluas ke 3 seed. Ablation yang paling punya dasar empiris: (a) tanpa clipping, (b) clipping
-yang diskalakan per rekaman, (c) normalisasi skala per rekaman, (d) tanpa filter tambahan
-(anti-alias resampling tetap diperlukan).
+**Rekomendasi saya (belum dijalankan):** jangan menambah arm baru dulu. Urutannya:
+1. Tegakkan determinisme (lihat #6) dan buktikan `baseline` mereproduksi Eksperimen 2.
+2. Setelah itu baru jalankan ulang 5 arm yang sudah ada — kodenya sudah siap, cukup
+   `notebooks/colab_ablation_30s.ipynb`.
+3. Kalau reproduksi tetap tidak tercapai meski deterministik, laporkan variabilitas run
+   sebagai batas metodologis, dan naikkan jumlah seed alih-alih menafsirkan selisih kecil.
+
+Catatan: `cache_size=8` di loader ablation sudah diperbaiki menjadi 64, jadi run ulang akan
+jauh lebih cepat (sebelumnya 112 detik/epoch di GPU, seharusnya 14–24 detik).
 
 ---
 

@@ -1,0 +1,161 @@
+{
+  "model": "resp_only",
+  "params": 81346,
+  "duration_s": 30,
+  "seed": 42,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4801,
+  "val_subjects": 6,
+  "best_epoch": 8,
+  "best_val_loss": 0.5256,
+  "epochs_run": 11,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5887,
+      "val_loss": 0.6059,
+      "lr": 0.000997,
+      "train_s": 108.9,
+      "val_s": 2.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5524,
+      "val_loss": 0.618,
+      "lr": 0.000963,
+      "train_s": 110.5,
+      "val_s": 1.7
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5279,
+      "val_loss": 0.5989,
+      "lr": 0.000895,
+      "train_s": 109.7,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5089,
+      "val_loss": 0.6321,
+      "lr": 0.000796,
+      "train_s": 107.2,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.5011,
+      "val_loss": 0.5523,
+      "lr": 0.000675,
+      "train_s": 105.3,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4905,
+      "val_loss": 0.5641,
+      "lr": 0.000541,
+      "train_s": 104.2,
+      "val_s": 1.8
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.477,
+      "val_loss": 0.5793,
+      "lr": 0.000404,
+      "train_s": 104.1,
+      "val_s": 1.9
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4688,
+      "val_loss": 0.5256,
+      "lr": 0.000274,
+      "train_s": 103.8,
+      "val_s": 1.8
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4592,
+      "val_loss": 0.5859,
+      "lr": 0.000161,
+      "train_s": 103.7,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.451,
+      "val_loss": 0.5836,
+      "lr": 7.4e-05,
+      "train_s": 103.9,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.448,
+      "val_loss": 0.5741,
+      "lr": 1.9e-05,
+      "train_s": 103.9,
+      "val_s": 1.2
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.25,
+  "threshold_val_f1": 0.2573,
+  "val_overall": {
+    "accuracy": 0.703,
+    "sensitivity": 0.6399,
+    "specificity": 0.7085,
+    "precision": 0.161,
+    "f1": 0.2573,
+    "roc_auc": 0.7231,
+    "tp": 247,
+    "tn": 3128,
+    "fp": 1287,
+    "fn": 139,
+    "n": 4801,
+    "positives": 386
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.48,
+      "sensitivity": 0.6598,
+      "specificity": 0.4455,
+      "precision": 0.1857,
+      "f1": 0.2899,
+      "roc_auc": 0.4979,
+      "tp": 159,
+      "tn": 560,
+      "fp": 697,
+      "fn": 82,
+      "n": 1498,
+      "positives": 241
+    },
+    "UCDDB": {
+      "accuracy": 0.8041,
+      "sensitivity": 0.6069,
+      "specificity": 0.8132,
+      "precision": 0.1298,
+      "f1": 0.2139,
+      "roc_auc": 0.7889,
+      "tp": 88,
+      "tn": 2568,
+      "fp": 590,
+      "fn": 57,
+      "n": 3303,
+      "positives": 145
+    }
+  },
+  "inference_ms_per_window": 0.265,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/baseline_resp_only_seed42/checkpoints/resp_only.pt",
+  "arm": "baseline",
+  "arm_spec": {
+    "source": "main",
+    "clip": "fixed",
+    "norm": "dataset"
+  }
+}

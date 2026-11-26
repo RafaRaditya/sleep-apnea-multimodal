@@ -1,0 +1,113 @@
+{
+  "model": "proposed",
+  "params": 230402,
+  "duration_s": 30,
+  "seed": 2024,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4793,
+  "val_subjects": 6,
+  "best_epoch": 2,
+  "best_val_loss": 0.4585,
+  "epochs_run": 5,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5517,
+      "val_loss": 0.4669,
+      "lr": 0.000997,
+      "train_s": 111.9,
+      "val_s": 1.5
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4594,
+      "val_loss": 0.4585,
+      "lr": 0.000963,
+      "train_s": 112.8,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4258,
+      "val_loss": 0.5114,
+      "lr": 0.000895,
+      "train_s": 111.3,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4108,
+      "val_loss": 0.5153,
+      "lr": 0.000796,
+      "train_s": 112.0,
+      "val_s": 2.1
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.3982,
+      "val_loss": 0.5125,
+      "lr": 0.000675,
+      "train_s": 111.6,
+      "val_s": 1.3
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.7,
+  "threshold_val_f1": 0.4918,
+  "val_overall": {
+    "accuracy": 0.8775,
+    "sensitivity": 0.4625,
+    "specificity": 0.9385,
+    "precision": 0.525,
+    "f1": 0.4918,
+    "roc_auc": 0.8215,
+    "tp": 284,
+    "tn": 3922,
+    "fp": 257,
+    "fn": 330,
+    "n": 4793,
+    "positives": 614
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.7477,
+      "sensitivity": 0.5962,
+      "specificity": 0.8148,
+      "precision": 0.588,
+      "f1": 0.5921,
+      "roc_auc": 0.7503,
+      "tp": 254,
+      "tn": 783,
+      "fp": 178,
+      "fn": 172,
+      "n": 1387,
+      "positives": 426
+    },
+    "UCDDB": {
+      "accuracy": 0.9304,
+      "sensitivity": 0.1596,
+      "specificity": 0.9755,
+      "precision": 0.2752,
+      "f1": 0.202,
+      "roc_auc": 0.7924,
+      "tp": 30,
+      "tn": 3139,
+      "fp": 79,
+      "fn": 158,
+      "n": 3406,
+      "positives": 188
+    }
+  },
+  "inference_ms_per_window": 0.28,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/baseline_proposed_seed2024/checkpoints/proposed.pt",
+  "arm": "baseline",
+  "arm_spec": {
+    "source": "main",
+    "clip": "fixed",
+    "norm": "dataset"
+  }
+}

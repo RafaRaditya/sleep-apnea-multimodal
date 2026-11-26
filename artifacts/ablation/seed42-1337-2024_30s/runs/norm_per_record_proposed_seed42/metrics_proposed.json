@@ -1,0 +1,137 @@
+{
+  "model": "proposed",
+  "params": 230402,
+  "duration_s": 30,
+  "seed": 42,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4801,
+  "val_subjects": 6,
+  "best_epoch": 5,
+  "best_val_loss": 0.439,
+  "epochs_run": 8,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5718,
+      "val_loss": 0.6684,
+      "lr": 0.000997,
+      "train_s": 111.8,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4767,
+      "val_loss": 0.4959,
+      "lr": 0.000963,
+      "train_s": 110.0,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4358,
+      "val_loss": 0.4935,
+      "lr": 0.000895,
+      "train_s": 109.5,
+      "val_s": 2.1
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4129,
+      "val_loss": 0.4736,
+      "lr": 0.000796,
+      "train_s": 110.5,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.3985,
+      "val_loss": 0.439,
+      "lr": 0.000675,
+      "train_s": 109.8,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.3808,
+      "val_loss": 0.4405,
+      "lr": 0.000541,
+      "train_s": 109.7,
+      "val_s": 2.1
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.372,
+      "val_loss": 0.4569,
+      "lr": 0.000404,
+      "train_s": 110.9,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.3549,
+      "val_loss": 0.539,
+      "lr": 0.000274,
+      "train_s": 109.3,
+      "val_s": 1.3
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.175,
+  "threshold_val_f1": 0.2907,
+  "val_overall": {
+    "accuracy": 0.7296,
+    "sensitivity": 0.6891,
+    "specificity": 0.7332,
+    "precision": 0.1842,
+    "f1": 0.2907,
+    "roc_auc": 0.7693,
+    "tp": 266,
+    "tn": 3237,
+    "fp": 1178,
+    "fn": 120,
+    "n": 4801,
+    "positives": 386
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.5708,
+      "sensitivity": 0.722,
+      "specificity": 0.5418,
+      "precision": 0.232,
+      "f1": 0.3512,
+      "roc_auc": 0.6151,
+      "tp": 174,
+      "tn": 681,
+      "fp": 576,
+      "fn": 67,
+      "n": 1498,
+      "positives": 241
+    },
+    "UCDDB": {
+      "accuracy": 0.8017,
+      "sensitivity": 0.6345,
+      "specificity": 0.8094,
+      "precision": 0.1326,
+      "f1": 0.2193,
+      "roc_auc": 0.8202,
+      "tp": 92,
+      "tn": 2556,
+      "fp": 602,
+      "fn": 53,
+      "n": 3303,
+      "positives": 145
+    }
+  },
+  "inference_ms_per_window": 0.272,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/norm_per_record_proposed_seed42/checkpoints/proposed.pt",
+  "arm": "norm_per_record",
+  "arm_spec": {
+    "source": "main",
+    "clip": "fixed",
+    "norm": "per_record"
+  }
+}

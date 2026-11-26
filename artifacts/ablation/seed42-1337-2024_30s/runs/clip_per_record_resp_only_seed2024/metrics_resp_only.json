@@ -1,0 +1,161 @@
+{
+  "model": "resp_only",
+  "params": 81346,
+  "duration_s": 30,
+  "seed": 2024,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4793,
+  "val_subjects": 6,
+  "best_epoch": 8,
+  "best_val_loss": 0.4701,
+  "epochs_run": 11,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5805,
+      "val_loss": 0.5373,
+      "lr": 0.000997,
+      "train_s": 105.3,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5443,
+      "val_loss": 0.5183,
+      "lr": 0.000963,
+      "train_s": 105.3,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.519,
+      "val_loss": 0.5192,
+      "lr": 0.000895,
+      "train_s": 105.3,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5032,
+      "val_loss": 0.5055,
+      "lr": 0.000796,
+      "train_s": 105.5,
+      "val_s": 1.3
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4982,
+      "val_loss": 0.4772,
+      "lr": 0.000675,
+      "train_s": 105.1,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4836,
+      "val_loss": 0.4753,
+      "lr": 0.000541,
+      "train_s": 105.0,
+      "val_s": 1.6
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4749,
+      "val_loss": 0.5053,
+      "lr": 0.000404,
+      "train_s": 104.3,
+      "val_s": 1.9
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4663,
+      "val_loss": 0.4701,
+      "lr": 0.000274,
+      "train_s": 103.8,
+      "val_s": 2.0
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4583,
+      "val_loss": 0.4896,
+      "lr": 0.000161,
+      "train_s": 103.8,
+      "val_s": 2.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.4514,
+      "val_loss": 0.4868,
+      "lr": 7.4e-05,
+      "train_s": 104.5,
+      "val_s": 2.0
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.4484,
+      "val_loss": 0.4788,
+      "lr": 1.9e-05,
+      "train_s": 103.8,
+      "val_s": 1.9
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.525,
+  "threshold_val_f1": 0.4263,
+  "val_overall": {
+    "accuracy": 0.8091,
+    "sensitivity": 0.5537,
+    "specificity": 0.8466,
+    "precision": 0.3466,
+    "f1": 0.4263,
+    "roc_auc": 0.8115,
+    "tp": 340,
+    "tn": 3538,
+    "fp": 641,
+    "fn": 274,
+    "n": 4793,
+    "positives": 614
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.7022,
+      "sensitivity": 0.6103,
+      "specificity": 0.743,
+      "precision": 0.5128,
+      "f1": 0.5573,
+      "roc_auc": 0.7478,
+      "tp": 260,
+      "tn": 714,
+      "fp": 247,
+      "fn": 166,
+      "n": 1387,
+      "positives": 426
+    },
+    "UCDDB": {
+      "accuracy": 0.8526,
+      "sensitivity": 0.4255,
+      "specificity": 0.8776,
+      "precision": 0.1688,
+      "f1": 0.2417,
+      "roc_auc": 0.7816,
+      "tp": 80,
+      "tn": 2824,
+      "fp": 394,
+      "fn": 108,
+      "n": 3406,
+      "positives": 188
+    }
+  },
+  "inference_ms_per_window": 0.405,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/clip_per_record_resp_only_seed2024/checkpoints/resp_only.pt",
+  "arm": "clip_per_record",
+  "arm_spec": {
+    "source": "main",
+    "clip": "per_record",
+    "norm": "dataset"
+  }
+}

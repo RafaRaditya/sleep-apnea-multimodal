@@ -1,0 +1,105 @@
+{
+  "model": "proposed",
+  "params": 230402,
+  "duration_s": 30,
+  "seed": 42,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4801,
+  "val_subjects": 6,
+  "best_epoch": 1,
+  "best_val_loss": 0.6203,
+  "epochs_run": 4,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5654,
+      "val_loss": 0.6203,
+      "lr": 0.000997,
+      "train_s": 112.3,
+      "val_s": 1.5
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.4746,
+      "val_loss": 0.667,
+      "lr": 0.000963,
+      "train_s": 111.2,
+      "val_s": 1.4
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.4264,
+      "val_loss": 0.7853,
+      "lr": 0.000895,
+      "train_s": 113.2,
+      "val_s": 1.5
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4052,
+      "val_loss": 0.6425,
+      "lr": 0.000796,
+      "train_s": 112.2,
+      "val_s": 1.5
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.055,
+  "threshold_val_f1": 0.163,
+  "val_overall": {
+    "accuracy": 0.2172,
+    "sensitivity": 0.9482,
+    "specificity": 0.1533,
+    "precision": 0.0892,
+    "f1": 0.163,
+    "roc_auc": 0.443,
+    "tp": 366,
+    "tn": 677,
+    "fp": 3738,
+    "fn": 20,
+    "n": 4801,
+    "positives": 386
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.1949,
+      "sensitivity": 0.9253,
+      "specificity": 0.0549,
+      "precision": 0.158,
+      "f1": 0.27,
+      "roc_auc": 0.23,
+      "tp": 223,
+      "tn": 69,
+      "fp": 1188,
+      "fn": 18,
+      "n": 1498,
+      "positives": 241
+    },
+    "UCDDB": {
+      "accuracy": 0.2274,
+      "sensitivity": 0.9862,
+      "specificity": 0.1925,
+      "precision": 0.0531,
+      "f1": 0.1008,
+      "roc_auc": 0.7285,
+      "tp": 143,
+      "tn": 608,
+      "fp": 2550,
+      "fn": 2,
+      "n": 3303,
+      "positives": 145
+    }
+  },
+  "inference_ms_per_window": 0.304,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/baseline_proposed_seed42/checkpoints/proposed.pt",
+  "arm": "baseline",
+  "arm_spec": {
+    "source": "main",
+    "clip": "fixed",
+    "norm": "dataset"
+  }
+}

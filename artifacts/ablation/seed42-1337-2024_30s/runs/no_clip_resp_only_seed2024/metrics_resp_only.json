@@ -1,0 +1,161 @@
+{
+  "model": "resp_only",
+  "params": 81346,
+  "duration_s": 30,
+  "seed": 2024,
+  "train_windows": 38711,
+  "train_subjects": 26,
+  "val_windows": 4793,
+  "val_subjects": 6,
+  "best_epoch": 8,
+  "best_val_loss": 0.4746,
+  "epochs_run": 11,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.5805,
+      "val_loss": 0.5376,
+      "lr": 0.000997,
+      "train_s": 105.3,
+      "val_s": 1.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.5448,
+      "val_loss": 0.5373,
+      "lr": 0.000963,
+      "train_s": 104.2,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5205,
+      "val_loss": 0.5202,
+      "lr": 0.000895,
+      "train_s": 103.6,
+      "val_s": 1.5
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5056,
+      "val_loss": 0.5079,
+      "lr": 0.000796,
+      "train_s": 103.2,
+      "val_s": 1.7
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4999,
+      "val_loss": 0.4746,
+      "lr": 0.000675,
+      "train_s": 102.8,
+      "val_s": 1.7
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.4865,
+      "val_loss": 0.5062,
+      "lr": 0.000541,
+      "train_s": 103.6,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.4805,
+      "val_loss": 0.5188,
+      "lr": 0.000404,
+      "train_s": 103.7,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4718,
+      "val_loss": 0.4746,
+      "lr": 0.000274,
+      "train_s": 104.0,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4638,
+      "val_loss": 0.4935,
+      "lr": 0.000161,
+      "train_s": 104.0,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.4572,
+      "val_loss": 0.5033,
+      "lr": 7.4e-05,
+      "train_s": 105.0,
+      "val_s": 1.1
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.4539,
+      "val_loss": 0.4883,
+      "lr": 1.9e-05,
+      "train_s": 104.2,
+      "val_s": 1.1
+    }
+  ],
+  "class_weights": [
+    0.6348,
+    2.355
+  ],
+  "threshold": 0.52,
+  "threshold_val_f1": 0.4183,
+  "val_overall": {
+    "accuracy": 0.8247,
+    "sensitivity": 0.4919,
+    "specificity": 0.8737,
+    "precision": 0.3639,
+    "f1": 0.4183,
+    "roc_auc": 0.8048,
+    "tp": 302,
+    "tn": 3651,
+    "fp": 528,
+    "fn": 312,
+    "n": 4793,
+    "positives": 614
+  },
+  "val_by_dataset": {
+    "MIT-BIH_PSG": {
+      "accuracy": 0.7145,
+      "sensitivity": 0.5399,
+      "specificity": 0.7919,
+      "precision": 0.5349,
+      "f1": 0.5374,
+      "roc_auc": 0.745,
+      "tp": 230,
+      "tn": 761,
+      "fp": 200,
+      "fn": 196,
+      "n": 1387,
+      "positives": 426
+    },
+    "UCDDB": {
+      "accuracy": 0.8696,
+      "sensitivity": 0.383,
+      "specificity": 0.8981,
+      "precision": 0.18,
+      "f1": 0.2449,
+      "roc_auc": 0.7802,
+      "tp": 72,
+      "tn": 2890,
+      "fp": 328,
+      "fn": 116,
+      "n": 3406,
+      "positives": 188
+    }
+  },
+  "inference_ms_per_window": 0.227,
+  "checkpoint": "artifacts/ablation/seed42-1337-2024_30s/runs/no_clip_resp_only_seed2024/checkpoints/resp_only.pt",
+  "arm": "no_clip",
+  "arm_spec": {
+    "source": "main",
+    "clip": null,
+    "norm": "dataset"
+  }
+}

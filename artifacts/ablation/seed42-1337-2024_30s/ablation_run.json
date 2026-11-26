@@ -1,0 +1,53 @@
+{
+  "stage": "7d",
+  "run_at": "2026-11-25 23:11:42",
+  "seeds": [
+    42,
+    1337,
+    2024
+  ],
+  "models": [
+    "proposed",
+    "resp_only"
+  ],
+  "arms": [
+    "baseline",
+    "no_clip",
+    "clip_per_record",
+    "norm_per_record",
+    "no_filter"
+  ],
+  "duration_s": 30,
+  "device": "cuda",
+  "workers": 2,
+  "val_only": false,
+  "arm_definitions": {
+    "baseline": {
+      "source": "main",
+      "clip": "fixed",
+      "norm": "dataset"
+    },
+    "no_clip": {
+      "source": "main",
+      "clip": null,
+      "norm": "dataset"
+    },
+    "clip_per_record": {
+      "source": "main",
+      "clip": "per_record",
+      "norm": "dataset"
+    },
+    "norm_per_record": {
+      "source": "main",
+      "clip": "fixed",
+      "norm": "per_record"
+    },
+    "no_filter": {
+      "source": "unfiltered",
+      "clip": "fixed",
+      "norm": "dataset"
+    }
+  },
+  "caveat_no_filter": "unfiltered cache is resample_poly only, and that anti-alias step is itself a low-pass (ECG ~50 Hz, respiration ~12.5 Hz). Arm means 'no added filter', not 'no filtering'.",
+  "rule": "one decision changed per arm; windows, splits, architecture, budget, and threshold selection are identical across arms"
+}

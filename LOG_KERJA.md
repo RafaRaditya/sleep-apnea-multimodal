@@ -1,11 +1,13 @@
 # Log Kerja — Sleep Apnea Multimodal
 
-**Terakhir diperbarui:** 25 November 2026
+**Terakhir diperbarui:** 26 November 2026
 **Acuan:** `paper RM (1).pdf` (paper UTS) + `Konteks_Penelitian_Sleep_Apnea.md`
 **Status keseluruhan:** Eksperimen 1 (perbandingan model) dan Eksperimen 2 (durasi window)
 selesai untuk **4 model × 3 seed × 2 durasi (10 s dan 30 s)**. Test tiap seed dibaca **sekali**
-dengan model beku. Belum: ablation preprocessing (Eksperimen 3), single vs combined-dataset
-training + LODO (Eksperimen 4), dan lengan ECG-only Apnea-ECG.
+dengan model beku. Eksperimen 3 (ablation preprocessing) sudah **dijalankan** (30 run, T4 GPU)
+tetapi **belum layak dikutip**: arm `baseline` tidak mereproduksi Eksperimen 2, jadi selisih
+antar arm belum bisa dipisahkan dari variasi run (lihat Tahap 7d). Belum: Eksperimen 4
+(single vs combined-dataset + LODO) dan lengan ECG-only Apnea-ECG.
 
 Dokumen ini mencatat apa yang **sudah benar-benar dijalankan**, angka aktualnya, dan alasan
 setiap keputusan — supaya bisa dipertanggungjawabkan kalau ditanya. Semua angka berasal dari
@@ -32,6 +34,7 @@ Untuk serah-terima ke orang lain: lihat `HANDOFF.md` (urutan baca, status, atura
 | Status training | 10 s: 3 seed CPU · 30 s: seed 42 & 1337 CPU, **seed 2024 GPU (T4)** |
 | Status test | 10 s dan 30 s, 3 seed, 6 subjek/split; pooled AUC `resp_only` 0,742/0,747 (Tahap 7b, 7c) |
 | Status Eksperimen 2 | `proposed` +0,123 di 30 s, naik di **3/3 seed**; `resp_only` tidak terpengaruh (Tahap 7c) |
+| Status Eksperimen 3 | 30 run selesai (5 arm × 2 model × 3 seed, T4 GPU) tetapi **belum dapat ditafsirkan**: `baseline` menyimpang −0,164…+0,229 dari Eksperimen 2 (Tahap 7d) |
 
 ---
 
@@ -721,13 +724,84 @@ Output: `artifacts/train/seed{42,1337,2024}_30s/`, `artifacts/test/seed{42,1337,
 test_by_dataset_mean_sd.csv, test_auc_decomposition_mean_sd.csv, test_bootstrap_by_seed.csv,
 test_per_seed.csv, val_ranking.csv, aggregate_run.json, test_aggregate_run.json}`.
 
-### Tahap 7d — Eksperimen 3: ablation preprocessing (ALAT SIAP, BELUM DIJALANKAN)
+### Tahap 7d — Eksperimen 3: ablation preprocessing (DIJALANKAN, TAPI BELUM LAYAK DIKUTIP)
 
-**Status: belum ada satu pun run penuh.** Jangan mengutip angka ablation apa pun.
+**Dijalankan 25 November 2026 di Colab T4:** 5 arm × 2 model × 3 seed, window 30 s,
+`device=cuda`, `workers=2`, 30/30 run lengkap dengan checkpoint.
 
-Yang sudah dikerjakan: kode dan data pendukungnya, bukan hasilnya.
+**Kenapa hasil ini BELUM boleh dipakai sebagai hasil Eksperimen 3:**
 
-**Lima arm, masing-masing mengubah satu keputusan saja:**
+Arm `baseline` seharusnya mereproduksi Eksperimen 2 — pipeline, data, split, arsitektur, dan
+budget identik. Kenyataannya tidak:
+
+| Model | seed | baseline (ablation) | Eksperimen 2 | selisih |
+|---|---|---|---|---|
+| proposed | 42 | 0,4707 | 0,6348 | **−0,164** |
+| proposed | 1337 | 0,8879 | 0,6586 | **+0,229** |
+| proposed | 2024 | 0,8050 | 0,7398 | +0,065 |
+| resp_only | 42 | 0,7844 | 0,6944 | +0,090 |
+| resp_only | 1337 | 0,7993 | 0,7545 | +0,045 |
+| resp_only | 2024 | 0,8080 | 0,7905 | +0,018 |
+
+Penyebabnya sudah dilacak, dan **bukan bug data**: saya bandingkan tensor yang dihasilkan
+`AblationDataset(baseline)` dengan `WindowDataset` pada 200 window — perbedaan maksimum
+**0,000000** di kedua modalitas, label sama, dan jumlah parameter identik (230.402 untuk
+`proposed` 30 s di kedua jalur). Set test juga identik (4.663 baris, kunci dan label sama).
+
+Yang berbeda adalah **hasil training**: val_loss epoch 1 `resp_only` seed 42 = 0,6059 di ablation
+vs 0,5827 di Eksperimen 2, berjalan di perangkat dan jumlah worker berbeda. Latihan yang sama
+sekali pun bisa berbeda karena (a) urutan batch, (b) non-determinisme kernel GPU, (c) titik
+early-stop yang berbeda. Karena keputusan model diambil dari validation loss, selisih kecil di
+epoch awal bisa menggeser epoch terpilih dan mengubah banyak hal.
+
+Efeknya terlihat di tabel: `proposed` seed 42 memilih **epoch 1** sebagai terbaik (val 0,443) lalu
+berhenti di epoch 4, sedangkan Eksperimen 2 memilih epoch 5 dari 8 epoch. Model berbeda, jadi
+angka test-nya berbeda. Artinya selisih ablation-vs-baseline **tenggelam oleh variasi run**,
+terutama karena validation hanya 6 subjek.
+
+**Konsekuensi yang harus dinyatakan:** dengan `baseline` saja menyimpang sampai 0,23 poin,
+selisih antar arm yang besarnya 0,01–0,09 **tidak bisa ditafsirkan**. Hasil ini hanya menunjukkan
+bahwa protokol ablation belum stabil, bukan efek preprocessing.
+
+**Bukti pendukung bahwa sinyalnya belum terpisah dari noise** (test AUC per seed):
+
+| Model | arm | seed 42 | seed 1337 | seed 2024 |
+|---|---|---|---|---|
+| proposed | baseline | 0,471 | 0,888 | 0,805 |
+| proposed | no_clip | 0,710 | 0,892 | 0,752 |
+| proposed | clip_per_record | 0,751 | 0,896 | 0,761 |
+| proposed | norm_per_record | 0,654 | 0,902 | 0,842 |
+| proposed | no_filter | 0,698 | 0,895 | 0,849 |
+| resp_only | baseline | 0,784 | 0,799 | 0,808 |
+| resp_only | no_clip | 0,780 | 0,798 | 0,812 |
+| resp_only | clip_per_record | 0,773 | 0,793 | 0,816 |
+| resp_only | norm_per_record | 0,797 | 0,801 | 0,813 |
+| resp_only | no_filter | 0,714 | 0,830 | 0,841 |
+
+`resp_only` — model yang paling sensitif terhadap skala karena std per rekamannya 0,55–5,92 —
+menunjukkan perubahan hanya ±0,01 untuk `no_clip` dan `clip_per_record` di semua seed. Itu
+konsisten dengan "clipping hampir tidak berpengaruh pada model ini", tetapi juga konsisten dengan
+"efeknya lebih kecil dari noise run". Dua tafsir itu belum bisa dipisahkan.
+
+**Bug performa yang ditemukan dan diperbaiki (26 Nov 2026).** `AblationDataset` dipakai dengan
+`cache_size` bawaan 8, sedangkan `WindowDataset` memakai 64. Akibatnya setiap epoch membaca ulang
+file `.npy` dari disk: 112 detik/epoch di GPU untuk 605 step, padahal Eksperimen 2 di GPU yang
+sama mencatat 14–24 detik/epoch. Sudah diperbaiki (`cache_size=64` di train/val/test). Ini tidak
+mengubah angka yang sudah ada, tetapi membuat run ulang jauh lebih murah.
+
+**Yang harus dilakukan sebelum hasil ini dipakai:**
+1. Jalankan ulang dengan `cache_size` yang sudah diperbaiki.
+2. Tetapkan protokol determinisme: `torch.use_deterministic_algorithms`, seed untuk DataLoader
+   worker, dan `workers=0` bila konsistensi lebih penting daripada kecepatan.
+3. Verifikasi ulang bahwa `baseline` mereproduksi Eksperimen 2 dalam toleransi yang dinyatakan
+   (misalnya selisih test AUC < 0,02) **sebelum** menafsirkan arm lain.
+4. Bila reproduksi tetap tidak tercapai, laporkan variabilitas run sebagai batas, dan naikkan
+   jumlah seed alih-alih menafsirkan selisih kecil.
+
+Output: `artifacts/ablation/seed42-1337-2024_30s/{ablation_val.csv, ablation_test.csv,
+ablation_per_seed.csv, ablation_runs.csv, ablation_run.json, runs/<arm>_<model>_seed<seed>/}`.
+
+**Definisi lima arm, masing-masing mengubah satu keputusan saja:**
 
 | Arm | Yang berubah vs baseline | Cache sinyal |
 |---|---|---|
@@ -767,8 +841,8 @@ resume di tengah (lanjut dari epoch benar, best epoch dipertahankan), dan run no
 berubah).
 
 **Cara menjalankan:** lokal cepat untuk cek konfigurasi, atau
-`notebooks/colab_ablation_30s.ipynb` untuk run penuh (±80 menit di T4 untuk
-5 arm × 2 model × 3 seed, 30 s).
+`notebooks/colab_ablation_30s.ipynb` untuk run penuh. Dengan `cache_size` yang sudah diperbaiki,
+waktu GPU kembali normal (14–24 detik/epoch, bukan 112 detik).
 
 **Bug kedua: `--out` di luar repo (25 Nov 2026).** Smoke test Colab kedua gagal dengan
 `ValueError: ... is not in the subpath of '/content/Research_v2'` karena skrip memaksa
@@ -779,8 +853,7 @@ tidak) dan `resolve_recorded()` untuk membacanya kembali. `resolve_recorded()` p
 jadi path absolut kini dipakai apa adanya. Diuji: output di luar repo dengan dan tanpa pembacaan
 test, serta reproduksi angka seed 42 30 s yang sudah di-commit dengan nilai identik.
 
-Output nanti: `artifacts/ablation/seed<list>_<duration>s/{ablation_val.csv,
-ablation_test.csv, ablation_per_seed.csv, ablation_run.json, runs/...}`.
+---
 
 ### Pemeriksaan tambahan yang sudah dijalankan
 
@@ -848,6 +921,16 @@ ablation_test.csv, ablation_per_seed.csv, ablation_run.json, runs/...}`.
     sebanding bit-per-bit dengan dua seed lain; ini dicatat sebagai beda perangkat. Selain itu,
     window 30 s overfit lebih cepat (best epoch `ecg_only` = 1 di ketiga seed) di bawah budget
     epoch yang sama, sehingga perbandingan durasi juga tercampur perbedaan jumlah epoch efektif.
+15. **Variasi run lebih besar dari efek ablation — ini yang membatalkan Tahap 7d.** Arm
+    `baseline` ablation (pipeline identik dengan Eksperimen 2) menghasilkan test AUC yang
+    menyimpang **−0,164 sampai +0,229** dari Eksperimen 2. Data loader sudah terbukti identik
+    (selisih tensor 0,000000) dan jumlah parameter sama, jadi penyebabnya adalah variasi
+    training: urutan batch, non-determinisme GPU, dan titik early-stop. Karena validation hanya
+    6 subjek, epoch terbaik yang terpilih bisa berbeda jauh (seed 42: epoch 1 vs epoch 5), dan
+    model yang berbeda menghasilkan angka test berbeda. **Konsekuensinya: selisih antar arm
+    ablation yang besarnya 0,01–0,09 tidak boleh ditafsirkan sampai reproduksi baseline
+    ditegakkan.** Ini bukan alasan menyembunyikan hasil — hasilnya dilaporkan sebagai "protokol
+    belum stabil", bukan sebagai efek preprocessing.
 
 ---
 
@@ -858,7 +941,7 @@ ablation_test.csv, ablation_per_seed.csv, ablation_run.json, runs/...}`.
 | 4 | Model pilot: proposed (dual Transformer + bidirectional cross-attention) + 3 baseline, 1 seed, 10 s, budget kecil | **selesai** — pipeline hidup, tetapi belum generalize (lihat Tahap 4) |
 | 5 | Training penuh + freeze checkpoint/threshold | **selesai** — seed 42, 10 s, 4 model, test belum disentuh |
 | 6 | Prediksi test dengan model beku + 6 metrik | **selesai** — seed 42, 10 s, test dibaca sekali (lihat Tahap 6) |
-| 7 | Analisis komparatif: 4 eksperimen, multi-seed, bootstrap subjek, ablation | **sebagian** — Eksperimen 1 (4 model × 3 seed × 10 s) dan Eksperimen 2 (30 s, 3 seed) selesai. Eksperimen 3 (ablation preprocessing) dan 4 (single vs combined + LODO) belum |
+| 7 | Analisis komparatif: 4 eksperimen, multi-seed, bootstrap subjek, ablation | **sebagian** — Eksperimen 1 dan 2 selesai (3 seed × 2 durasi). Eksperimen 3 dijalankan tapi protokolnya belum stabil sehingga belum dapat ditafsirkan (lihat Tahap 7d). Eksperimen 4 belum |
 | opsional | Lengan ECG-only Apnea-ECG terpisah (disetujui dosen) | belum |
 
 ---

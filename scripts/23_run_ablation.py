@@ -54,10 +54,13 @@ def run_arm(arm: str, model_name: str, seed: int, duration: int, manifest: pd.Da
     stats = abl.record_stats(records, duration, source=abl.ARMS[arm]["source"])
 
     def make_train_ds(rows: pd.DataFrame):
-        return abl.AblationDataset(rows, norm, duration, arm, stats)
+        # cache_size must match WindowDataset's default (64). Leaving it at the
+        # AblationDataset default of 8 made every epoch reload .npy files from disk and
+        # ran ~7x slower than Stage 5 on the same data and device.
+        return abl.AblationDataset(rows, norm, duration, arm, stats, cache_size=64)
 
     val_rows = manifest[(manifest.seed == seed) & (manifest.split == "val")].reset_index(drop=True)
-    val_ds = abl.AblationDataset(val_rows, norm, duration, arm, stats)
+    val_ds = abl.AblationDataset(val_rows, norm, duration, arm, stats, cache_size=64)
     val_loader = DataLoader(val_ds, batch_size=TRAIN_CFG["batch_size"], shuffle=False,
                             num_workers=workers, drop_last=False,
                             pin_memory=(device.type == "cuda"),
@@ -82,7 +85,7 @@ def run_arm(arm: str, model_name: str, seed: int, duration: int, manifest: pd.Da
 
     if use_test:
         test_rows = manifest[(manifest.seed == seed) & (manifest.split == "test")].reset_index(drop=True)
-        test_ds = abl.AblationDataset(test_rows, norm, duration, arm, stats)
+        test_ds = abl.AblationDataset(test_rows, norm, duration, arm, stats, cache_size=64)
         test_loader = DataLoader(test_ds, batch_size=TRAIN_CFG["batch_size"], shuffle=False,
                                  num_workers=workers, drop_last=False,
                                  pin_memory=(device.type == "cuda"),
